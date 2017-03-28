@@ -11,8 +11,6 @@ import android.widget.Toast;
 
 import br.com.valmirosjunior.caronafap.R;
 
-import static com.facebook.FacebookSdk.getApplicationContext;
-
 /**
  * Created by junior on 10/03/17.
  */

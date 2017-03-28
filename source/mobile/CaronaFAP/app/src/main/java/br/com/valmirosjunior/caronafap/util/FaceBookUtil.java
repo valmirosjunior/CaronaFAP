@@ -1,7 +1,6 @@
 package br.com.valmirosjunior.caronafap.util;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 
 import com.facebook.AccessToken;
@@ -11,14 +10,12 @@ import com.facebook.FacebookException;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
-import com.facebook.ProfileTracker;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
 import java.util.Arrays;
 
-import br.com.valmirosjunior.caronafap.PedirCarona;
 
 /**
  * Created by junior on 10/03/17.
@@ -39,7 +36,8 @@ public class FaceBookUtil {
         button.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                activity.startActivity(new Intent(activity, PedirCarona.class));
+                //activity.startActivity(new Intent(activity, PedirCarona.class));
+                DialogsdMessages.showToast("Só sucesso",activity);
             }
 
             @Override

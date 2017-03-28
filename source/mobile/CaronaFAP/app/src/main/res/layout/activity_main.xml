@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context="br.com.valmirosjunior.caronafap.MainActivity">
 
     <ImageView
@@ -13,7 +12,7 @@
         android:layout_height="wrap_content"
         android:src="@drawable/carona"
         tools:layout_constraintTop_creator="1"
-        android:layout_marginStart="15dp"
+        android:layout_marginLeft="15dp"
         android:layout_marginTop="10dp"
         tools:layout_constraintLeft_creator="1"
         app:layout_constraintLeft_toLeftOf="@+id/login_button"
@@ -30,4 +29,5 @@
         app:layout_constraintTop_toBottomOf="@+id/imageView"
         tools:layout_constraintLeft_creator="1"
         app:layout_constraintLeft_toLeftOf="parent" />
+
 </android.support.constraint.ConstraintLayout>
