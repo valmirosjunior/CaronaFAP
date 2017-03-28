@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "905953328230",
+    "firebase_url": "https://caronafap-c1961.firebaseio.com",
+    "project_id": "caronafap-c1961",
+    "storage_bucket": "caronafap-c1961.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:905953328230:android:979ff1494745c954",
+        "android_client_info": {
+          "package_name": "br.com.valmirosjunior.caronafap"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "905953328230-84emfujb40pd867t0g16864fi2gfptbf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "br.com.valmirosjunior.caronafap",
+            "certificate_hash": "3c77ecbe9c225033157de4a2b4f96574e9d15342"
+          }
+        },
+        {
+          "client_id": "905953328230-8tkrej7qtcbof1thgcc7fl0f2e70da1f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAqG_VkeuBh4yE_6yv-LihlNBcdIcqLj4g"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "905953328230-8tkrej7qtcbof1thgcc7fl0f2e70da1f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
