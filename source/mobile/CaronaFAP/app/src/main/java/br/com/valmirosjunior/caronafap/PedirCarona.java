@@ -21,6 +21,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.Random;
 
 import br.com.valmirosjunior.caronafap.model.Carona;
+import br.com.valmirosjunior.caronafap.util.DialogsdMessages;
 import br.com.valmirosjunior.caronafap.util.FaceBookUtil;
 
 public class PedirCarona extends AppCompatActivity {
@@ -50,6 +51,7 @@ public class PedirCarona extends AppCompatActivity {
                 DatabaseReference myRef = database.getReference("Caronas").child("pedidas").child(carona.getCodigo());
                 myRef.child("origem").setValue(carona.getOrigem());
                 myRef.child("destino").setValue(carona.getDedstino());
+                DialogsdMessages.showCustomToast(PedirCarona.this,"Espere um pouco essa parte ainda falta");
                 //faceBookUtil.disconnectFromFacebook();
 
             }
