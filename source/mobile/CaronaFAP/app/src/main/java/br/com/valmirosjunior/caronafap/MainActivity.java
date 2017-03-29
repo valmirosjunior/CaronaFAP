@@ -25,25 +25,24 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("teste");
-
-        myRef.setValue("Hello, World!");
-         DialogsdMessages.showToast("show",this);
-
-//        faceBookUtil=new FaceBookUtil(this);
-
-//        if(faceBookUtil.estaLogado()){
-//            //startActivity(new Intent(this,PedirCarona.class));
-//            DialogsdMessages.showCustomToast(this,"opa já está logado");
-//        }else {
+//        FirebaseDatabase database = FirebaseDatabase.getInstance();
+//        DatabaseReference myRef = database.getReference("teste");
 //
-//            callbackManager = CallbackManager.Factory.create();
-//            loginButton = (LoginButton) findViewById(R.id.login_button);
-//            tx = (TextView) findViewById(R.id.text);
-//
-//            faceBookUtil.prepareLoginButton(loginButton, callbackManager);
-//        }
+//        myRef.setValue("ai tá certo");
+
+        faceBookUtil=new FaceBookUtil(this);
+
+        if(faceBookUtil.estaLogado()){
+            startActivity(new Intent(this,PedirCarona.class));
+            DialogsdMessages.showCustomToast(this,"opa já está logado");
+        }else {
+
+            callbackManager = CallbackManager.Factory.create();
+            loginButton = (LoginButton) findViewById(R.id.login_button);
+            tx = (TextView) findViewById(R.id.text);
+
+            faceBookUtil.prepareLoginButton(loginButton, callbackManager);
+        }
     }
 
 

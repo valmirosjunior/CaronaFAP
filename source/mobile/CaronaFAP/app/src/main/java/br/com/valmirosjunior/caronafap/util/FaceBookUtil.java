@@ -16,6 +16,8 @@ import com.facebook.login.widget.LoginButton;
 
 import java.util.Arrays;
 
+import br.com.valmirosjunior.caronafap.PedirCarona;
+
 
 /**
  * Created by junior on 10/03/17.
@@ -36,7 +38,7 @@ public class FaceBookUtil {
         button.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                //activity.startActivity(new Intent(activity, PedirCarona.class));
+                activity.startActivity(new Intent(activity, PedirCarona.class));
                 DialogsdMessages.showToast("Só sucesso",activity);
             }
 
