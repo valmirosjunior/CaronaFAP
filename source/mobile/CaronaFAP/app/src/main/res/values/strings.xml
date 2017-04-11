@@ -1,6 +1,8 @@
 <resources>
-    <string name="app_name">CaronaFAP</string>
     <string name="facebook_app_id">1233927153388871</string>
-    <string name="title_activity_maps">Map</string>
-    <string name="title_activity_pedir_carona">PedirCarona</string>
+
+    <string name="app_name">CaronaFAP</string>
+    <string name="title_activity_maps">Mapa</string>
+    <string name="title_activity_ask_ride">PedirCarona</string>
+
 </resources>

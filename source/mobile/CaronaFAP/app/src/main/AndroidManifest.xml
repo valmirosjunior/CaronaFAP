@@ -12,13 +12,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -28,11 +21,20 @@
             android:value="@string/google_maps_key" />
 
         <activity
+            android:name="br.com.valmirosjunior.caronafap.MainActivity"
+            android:label=" Main">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" />
         <activity
-            android:name=".PedirCarona"
-            android:label="@string/title_activity_pedir_carona"
+            android:name=".AskRide"
+            android:label="@string/title_activity_ask_ride"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

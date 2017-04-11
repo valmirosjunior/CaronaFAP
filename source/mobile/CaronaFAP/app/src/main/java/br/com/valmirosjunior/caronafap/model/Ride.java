@@ -4,13 +4,13 @@ package br.com.valmirosjunior.caronafap.model;
  * Created by junior on 28/03/17.
  */
 
-public class Carona {
+public class Ride {
 
-    public Carona() {
+    public Ride() {
 
     }
 
-    public Carona(String codigo, String origem, String dedstino) {
+    public Ride(String codigo, String origem, String dedstino) {
         this.codigo = codigo;
         this.origem = origem;
         this.dedstino = dedstino;

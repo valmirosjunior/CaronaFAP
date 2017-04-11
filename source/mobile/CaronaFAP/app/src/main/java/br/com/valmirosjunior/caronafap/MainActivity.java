@@ -8,10 +8,8 @@ import android.widget.TextView;
 import com.facebook.CallbackManager;
 import com.facebook.ProfileTracker;
 import com.facebook.login.widget.LoginButton;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
-import br.com.valmirosjunior.caronafap.util.DialogsdMessages;
+import br.com.valmirosjunior.caronafap.util.MessageUtil;
 import br.com.valmirosjunior.caronafap.util.FaceBookUtil;
 
 public class MainActivity extends AppCompatActivity {
@@ -25,16 +23,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//        FirebaseDatabase database = FirebaseDatabase.getInstance();
-//        DatabaseReference myRef = database.getReference("teste");
-//
-//        myRef.setValue("ai tá certo");
 
         faceBookUtil=new FaceBookUtil(this);
 
         if(faceBookUtil.estaLogado()){
-            startActivity(new Intent(this,PedirCarona.class));
-            DialogsdMessages.showCustomToast(this,"opa já está logado");
+            startActivity(new Intent(this,AskRide.class));
         }else {
 
             callbackManager = CallbackManager.Factory.create();
@@ -44,8 +37,6 @@ public class MainActivity extends AppCompatActivity {
             faceBookUtil.prepareLoginButton(loginButton, callbackManager);
         }
     }
-
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

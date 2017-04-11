@@ -1,6 +1,7 @@
 package br.com.valmirosjunior.caronafap.util;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 
 import com.facebook.AccessToken;
@@ -16,7 +17,7 @@ import com.facebook.login.widget.LoginButton;
 
 import java.util.Arrays;
 
-import br.com.valmirosjunior.caronafap.PedirCarona;
+import br.com.valmirosjunior.caronafap.AskRide;
 
 
 /**
@@ -24,10 +25,12 @@ import br.com.valmirosjunior.caronafap.PedirCarona;
  */
 
 public class FaceBookUtil {
-    private Activity activity;
+    private Context context;
+    private FireBaseUtil fireBaseUtil;
 
-    public FaceBookUtil(Activity activity){
-        this.activity =activity;
+    public FaceBookUtil(Activity context){
+        this.context = context;
+        fireBaseUtil = new FireBaseUtil();
     }
 
     public void prepareLoginButton(LoginButton button,CallbackManager callbackManager){
@@ -38,18 +41,19 @@ public class FaceBookUtil {
         button.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                activity.startActivity(new Intent(activity, PedirCarona.class));
-                DialogsdMessages.showToast("Só sucesso",activity);
+                context.startActivity(new Intent(context, AskRide.class));
+                fireBaseUtil.handleFacebookAccessToken(loginResult.getAccessToken(),context);
+                MessageUtil.showToast(context,"Só sucesso");
             }
 
             @Override
             public void onCancel() {
-                DialogsdMessages.showCustomToast(activity,"Login cancelado Facebook");
+                MessageUtil.showToast(context,"Login cancelado Facebook");
             }
 
             @Override
             public void onError(FacebookException error) {
-                DialogsdMessages.showCustomToast(activity,"Ocorreu um erro ao tentar efetuar o Login");
+                MessageUtil.showToast(context,"Ocorreu um erro ao tentar efetuar o Login");
             }
         });
     }
@@ -64,7 +68,7 @@ public class FaceBookUtil {
                 @Override
                 public void onCompleted(GraphResponse graphResponse) {
                     LoginManager.getInstance().logOut();
-                    DialogsdMessages.showCustomToast(activity,"Você acaba de sair do Facebook");
+                    MessageUtil.showToast(context,"Você acaba de sair do Facebook");
                 }
             }).executeAsync();
 

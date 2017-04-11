@@ -15,12 +15,12 @@ import br.com.valmirosjunior.caronafap.R;
  * Created by junior on 10/03/17.
  */
 
-public class DialogsdMessages {
+public class MessageUtil {
 
-    public DialogsdMessages(){
+    public MessageUtil(){
     }
 
-    public  static void showToast(String content,Context context){
+    public  static void showToast(Context context,String content){
         Toast.makeText(context, content, Toast.LENGTH_SHORT).show();
 
     }

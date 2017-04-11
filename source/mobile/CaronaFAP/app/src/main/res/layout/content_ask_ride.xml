@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="br.com.valmirosjunior.caronafap.PedirCarona"
-    tools:showIn="@layout/activity_pedir_carona">
+    tools:context="br.com.valmirosjunior.caronafap.AskRide"
+    tools:showIn="@layout/activity_ask_ride">
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/textInputLayoutOrigem"

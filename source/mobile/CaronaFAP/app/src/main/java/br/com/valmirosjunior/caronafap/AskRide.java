@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -20,11 +19,11 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Random;
 
-import br.com.valmirosjunior.caronafap.model.Carona;
-import br.com.valmirosjunior.caronafap.util.DialogsdMessages;
+import br.com.valmirosjunior.caronafap.model.Ride;
+import br.com.valmirosjunior.caronafap.util.MessageUtil;
 import br.com.valmirosjunior.caronafap.util.FaceBookUtil;
 
-public class PedirCarona extends AppCompatActivity {
+public class AskRide extends AppCompatActivity {
 
     int PLACE_PICKER_REQUEST = 1;
     FaceBookUtil faceBookUtil=new FaceBookUtil(this);
@@ -34,7 +33,7 @@ public class PedirCarona extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pedir_carona);
+        setContentView(R.layout.activity_ask_ride);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -46,12 +45,12 @@ public class PedirCarona extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Carona carona=makeCarona();
+                Ride ride =makeCarona();
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
-                DatabaseReference myRef = database.getReference("Caronas").child("pedidas").child(carona.getCodigo());
-                myRef.child("origem").setValue(carona.getOrigem());
-                myRef.child("destino").setValue(carona.getDedstino());
-                DialogsdMessages.showCustomToast(PedirCarona.this,"Espere um pouco essa parte ainda falta");
+                DatabaseReference myRef = database.getReference("Caronas").child("pedidas").child(ride.getCodigo());
+                myRef.child("origem").setValue(ride.getOrigem());
+                myRef.child("destino").setValue(ride.getDedstino());
+                MessageUtil.showCustomToast(AskRide.this,"Espere um pouco essa parte ainda falta");
                 //faceBookUtil.disconnectFromFacebook();
 
             }
@@ -83,12 +82,12 @@ public class PedirCarona extends AppCompatActivity {
         }
     }
 
-    private Carona makeCarona(){
+    private Ride makeCarona(){
         String codigo,origem,destino;
         codigo =" cd "+ new Random().nextInt(10000000);
         origem= edOrigem.getText().toString();
         destino= edDestino.getText().toString();
-        return new Carona(codigo,origem,destino);
+        return new Ride(codigo,origem,destino);
     }
 
 }
