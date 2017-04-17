@@ -3,6 +3,19 @@
 
     <string name="app_name">CaronaFAP</string>
     <string name="title_activity_maps">Mapa</string>
-    <string name="title_activity_ask_ride">PedirCarona</string>
+
+    <string name="ask_ride">Pedir Carona</string>
+    <string name="offer_ride">Oferecer Carona</string>
+
+    <string name="ride_ordered">Pedidas</string>
+    <string name="ride_offered">Oferecidas</string>
+    <string name="origim">Origem</string>
+    <string name="destination">Destino</string>
+    <string name="time_ride">Horário</string>
+    <string name="distance">Distância máxima em km de seu ponto de origem</string>
+    <string name="title_activity_user_profile">UserProfile</string>
+    <string name="show_ride">Ver Caronas</string>
+    <string name="logout_facebook">Desconectar Do Facebook</string>
+    <string name="finish_session">Encerrar sessão</string>
 
 </resources>

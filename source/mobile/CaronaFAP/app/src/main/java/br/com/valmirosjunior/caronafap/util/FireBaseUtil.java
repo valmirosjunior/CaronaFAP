@@ -1,7 +1,6 @@
 package br.com.valmirosjunior.caronafap.util;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -16,6 +15,8 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import br.com.valmirosjunior.caronafap.MainActivity;
+
 /**
  * Created by junior on 07/04/17.
  */
@@ -23,7 +24,7 @@ import com.google.firebase.auth.FirebaseUser;
 public class FireBaseUtil {
 
     private String TAG = "Firebase Auth";
-    private ProgressDialog progressDialog;
+
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
@@ -36,23 +37,30 @@ public class FireBaseUtil {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
-                    // User is signed in
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
                 } else {
-                    // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
                 }
-                // ...
             }
         };
 
     }
 
-    public void handleFacebookAccessToken(AccessToken token, final Context context) {
+    public void logout(Context context){
+        mAuth.signOut();
+        ((MainActivity)context).updateUI(false);
+        MessageUtil.hideProgressDialog();
+    }
+
+    public void handleFacebookAccessToken(final AccessToken token, final Context context) {
         Log.d(TAG, "handleFacebookAccessToken:" + token);
-        // [START_EXCLUDE silent]
-        showProgressDialog(context);
-        // [END_EXCLUDE]
+
+        MessageUtil.showProgressDialog(context);
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
         mAuth.signInWithCredential(credential)
@@ -60,30 +68,16 @@ public class FireBaseUtil {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         Log.d(TAG, "signInWithCredential:onComplete:" + task.isSuccessful());
-
-                        // If sign in fails, display a message to the user. If sign in succeeds
-                        // the auth state listener will be notified and logic to handle the
-                        // signed in user can be handled in the listener.
                         if (!task.isSuccessful()) {
                             Log.w(TAG, "signInWithCredential", task.getException());
                             Toast.makeText((Activity) context, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
+                        }else{
+                             ((MainActivity)context).updateUI(true);
                         }
-
-                        // [START_EXCLUDE]
-                        hideProgressDialog();
-                        // [END_EXCLUDE]
+                        MessageUtil.hideProgressDialog();
                     }
                 });
     }
 
-    private void showProgressDialog(Context context){
-        progressDialog=new ProgressDialog(context);
-        progressDialog.setMessage("Loading ....");
-        progressDialog.show();
-    }
-
-    private void hideProgressDialog(){
-        progressDialog.hide();
-    }
 }

@@ -2,7 +2,6 @@ package br.com.valmirosjunior.caronafap.util;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -11,13 +10,14 @@ import com.facebook.FacebookException;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
+import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
 import java.util.Arrays;
 
-import br.com.valmirosjunior.caronafap.AskRide;
+import br.com.valmirosjunior.caronafap.model.User;
 
 
 /**
@@ -41,9 +41,7 @@ public class FaceBookUtil {
         button.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                context.startActivity(new Intent(context, AskRide.class));
                 fireBaseUtil.handleFacebookAccessToken(loginResult.getAccessToken(),context);
-                MessageUtil.showToast(context,"Só sucesso");
             }
 
             @Override
@@ -59,16 +57,18 @@ public class FaceBookUtil {
     }
 
     public void disconnectFromFacebook() {
-        if(!estaLogado())
+        if(!isLoggedIn()) {
             return;
+        }
         try {
 
-            new GraphRequest(AccessToken.getCurrentAccessToken(), "/me/permissions/", null, HttpMethod.DELETE, new GraphRequest
-                    .Callback() {
+            new GraphRequest(AccessToken.getCurrentAccessToken(), "/me/permissions/", null,
+                    HttpMethod.DELETE, new GraphRequest.Callback() {
                 @Override
                 public void onCompleted(GraphResponse graphResponse) {
                     LoginManager.getInstance().logOut();
-                    MessageUtil.showToast(context,"Você acaba de sair do Facebook");
+                    fireBaseUtil.logout(context);
+                    MessageUtil.showToast(context,"Você acaba de sair");
                 }
             }).executeAsync();
 
@@ -78,7 +78,7 @@ public class FaceBookUtil {
         }
     }
 
-    public boolean estaLogado(){
+    public boolean isLoggedIn(){
         return AccessToken.getCurrentAccessToken() != null;
     }
 
@@ -90,9 +90,23 @@ public class FaceBookUtil {
                 HttpMethod.GET,
                 new GraphRequest.Callback() {
                     public void onCompleted(GraphResponse response) {
+                        MessageUtil.showToast(context,"Você está desconectado do facebook");
                     }
                 }
         ).executeAsync();
     }
+
+    public User getCurrentUser(){
+        Profile profile=Profile.getCurrentProfile();
+        User user=new User();
+        user.setName(profile.getName());
+        user.setFacebookId(profile.getId());
+        return user;
+    }
+
+    public static String getCurrentProfileId(){
+        return Profile.getCurrentProfile().getId();
+    }
+
 
 }

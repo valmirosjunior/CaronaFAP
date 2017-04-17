@@ -5,11 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="br.com.valmirosjunior.caronafap.AskRide"
-    tools:showIn="@layout/activity_ask_ride">
+    tools:context="br.com.valmirosjunior.caronafap.RegisterRide"
+    tools:showIn="@layout/activity_register_ride">
 
     <android.support.design.widget.TextInputLayout
-        android:id="@+id/textInputLayoutOrigem"
+        android:id="@+id/textInputLayoutOrigim"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
@@ -22,14 +22,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:editable="false"
-            android:hint="Origem"
+            android:hint="@string/origim"
             android:onClick="openMap"
             tools:clickable="true"
-            android:id="@+id/edOrigemCarona"/>
+            android:id="@+id/editOrigimRide"/>
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
-        android:id="@+id/textInputLayoutDestino"
+        android:id="@+id/textInputLayoutDestination"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
@@ -37,23 +37,48 @@
         android:layout_marginTop="32dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayoutOrigem">
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayoutOrigim">
 
         <EditText
-            android:id="@+id/edDestino"
+            android:id="@+id/editDestinationRide"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="@string/destination"
+            tools:clickable="true"
+            android:onClick="openMap"
+            android:focusable="false"
+            tools:layout_editor_absoluteX="8dp"
+            tools:layout_editor_absoluteY="19dp" />
+
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/textInputLayoutTime"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayoutDestination">
+
+        <EditText
+            android:id="@+id/editTimeRide"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:editable="false"
-            android:hint="Destino"
-            android:onClick="openMap"
-            tools:clickable="true"
+            android:focusable="false"
+            android:hint="@string/time_ride"
+            android:onClick="showTimePickerDialog"
+            android:clickable="true"
             tools:layout_editor_absoluteX="8dp"
             tools:layout_editor_absoluteY="19dp" />
 
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
-        android:id="@+id/textInputLayoutHorario"
+        android:id="@+id/textInputLayoutDistance"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
@@ -61,36 +86,14 @@
         android:layout_marginTop="32dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayoutDestino">
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayoutTime">
 
         <EditText
-            android:id="@+id/editText3"
+            android:id="@+id/editDistance"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="Horário"
-            android:inputType="time"
-            tools:layout_editor_absoluteX="8dp"
-            tools:layout_editor_absoluteY="19dp" />
-
-    </android.support.design.widget.TextInputLayout>
-
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/textInputLayoutDistancia"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="32dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayoutHorario">
-
-        <EditText
-            android:id="@+id/editText4"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:hint="Distância"
-            android:inputType="numberDecimal"
+            android:hint="@string/distance"
+            android:inputType="number"
             tools:layout_editor_absoluteX="8dp"
             tools:layout_editor_absoluteY="19dp" />
 

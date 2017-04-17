@@ -1,6 +1,7 @@
 package br.com.valmirosjunior.caronafap.util;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -16,6 +17,8 @@ import br.com.valmirosjunior.caronafap.R;
  */
 
 public class MessageUtil {
+
+    private static ProgressDialog progressDialog;;
 
     public MessageUtil(){
     }
@@ -38,5 +41,17 @@ public class MessageUtil {
         toast.setDuration(Toast.LENGTH_LONG);
         toast.setView(layout);
         toast.show();
+    }
+
+    public static void showProgressDialog(Context context){
+        if (progressDialog == null){
+            progressDialog=new ProgressDialog(context);
+            progressDialog.setMessage("Loading ....");
+        }
+        progressDialog.show();
+    }
+
+    public static void hideProgressDialog(){
+        progressDialog.hide();
     }
 }

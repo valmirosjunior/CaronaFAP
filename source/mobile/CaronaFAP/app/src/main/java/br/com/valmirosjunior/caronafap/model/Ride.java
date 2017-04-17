@@ -1,44 +1,76 @@
 package br.com.valmirosjunior.caronafap.model;
 
+import java.util.Calendar;
+
 /**
  * Created by junior on 28/03/17.
  */
 
 public class Ride {
 
+    private MyLocation origin, destination;
+    private Calendar dateEvent;
+    private Schedule scheduleRide;
+    private long distance;
+    private User user;
+    private TypeRide typeRide;
+
     public Ride() {
-
     }
 
-    public Ride(String codigo, String origem, String dedstino) {
-        this.codigo = codigo;
-        this.origem = origem;
-        this.dedstino = dedstino;
+    public MyLocation getOrigin() {
+        return origin;
     }
 
-    private String codigo,origem, dedstino;
-
-    public String getCodigo() {
-        return codigo;
+    public void setOrigin(MyLocation origin) {
+        this.origin = origin;
     }
 
-    public void setCodigo(String codigo) {
-        this.codigo = codigo;
+    public MyLocation getDestination() {
+        return destination;
     }
 
-    public String getOrigem() {
-        return origem;
+    public void setDestination(MyLocation destination) {
+        this.destination = destination;
     }
 
-    public void setOrigem(String origem) {
-        this.origem = origem;
+    public Calendar getDateEvent() {
+        return dateEvent;
     }
 
-    public String getDedstino() {
-        return dedstino;
+    public void setDateEvent(Calendar dateEvent) {
+        this.dateEvent = dateEvent;
     }
 
-    public void setDedstino(String dedstino) {
-        this.dedstino = dedstino;
+    public Schedule getScheduleRide() {
+        return scheduleRide;
+    }
+
+    public void setScheduleRide(Schedule scheduleRide) {
+        this.scheduleRide = scheduleRide;
+    }
+
+    public long getDistance() {
+        return distance;
+    }
+
+    public void setDistance(long distance) {
+        this.distance = distance;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public TypeRide getTypeRide() {
+        return typeRide;
+    }
+
+    public void setTypeRide(TypeRide typeRide) {
+        this.typeRide = typeRide;
     }
 }
