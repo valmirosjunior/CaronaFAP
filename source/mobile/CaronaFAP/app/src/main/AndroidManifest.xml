@@ -19,8 +19,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity
-            android:name=".MainActivity">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -33,6 +32,10 @@
         <activity
             android:name=".RegisterRide"
             android:label="@string/ask_ride"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ShowRider"
+            android:label="@string/title_activity_show_rider"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>
 

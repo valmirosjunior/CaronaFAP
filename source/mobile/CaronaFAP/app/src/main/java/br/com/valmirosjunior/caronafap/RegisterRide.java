@@ -1,5 +1,7 @@
 package br.com.valmirosjunior.caronafap;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -58,7 +60,7 @@ public class RegisterRide extends AppCompatActivity {
         locationOrigin =new MyLocation();
         locationDestination = new MyLocation();
 
-        rideDAO = new RideDAO();
+        rideDAO = RideDAO.getInstance();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 
@@ -68,7 +70,7 @@ public class RegisterRide extends AppCompatActivity {
                 MessageUtil.showProgressDialog(RegisterRide.this);
                 rideDAO.saveRide(makeRide());
                 MessageUtil.hideProgressDialog();
-                MessageUtil.showToast(RegisterRide.this,"Só sucesso");
+                showConfirmDialog();
             }
         });
     }
@@ -98,6 +100,8 @@ public class RegisterRide extends AppCompatActivity {
                 locationAdress.setIdPlace(place.getId());
                 locationAdress.setLatitude(place.getLatLng().latitude);
                 locationAdress.setLongitude(place.getLatLng().longitude);
+                locationAdress.setName(place.getName().toString());
+                locationAdress.setAdress(place.getAddress().toString());
                 editAdress.setText(place.getAddress());
             }
 
@@ -112,14 +116,45 @@ public class RegisterRide extends AppCompatActivity {
 
     private Ride makeRide(){
         Ride ride = new Ride();
-        ride.setUser(faceBookUtil.getCurrentUser());
+        ride.setUser(FaceBookUtil.getCurrentUser());
         ride.setTypeRide(TypeRide.values()[ordinalTypeRide]);
         ride.setOrigin(locationOrigin);
         ride.setDestination(locationDestination);
         ride.setDistance(Integer.parseInt(editDistance.getText().toString()));
         ride.setScheduleRide(Util.convertStringTimeToSchedule(editTime.getText().toString()));
-        ride.setDateEvent(Calendar.getInstance());
+        ride.setDateEvent(Calendar.getInstance().getTime());
         return ride;
+    }
+
+    private void showConfirmDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Sua Solicitação de Carona Foi registrada").setTitle("Solicitação Realizada com Sucesso!");
+        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                backToHomeScreen();
+            }
+        });
+
+        builder.setNegativeButton("Nova!", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                continueHere();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void backToHomeScreen(){
+        this.finish();
+    }
+
+    private void continueHere(){
+        editOrigin.setText("");
+        editDestination.setText("");
+        editTime.setText("");
+        editDistance.setText("");
     }
 
 }

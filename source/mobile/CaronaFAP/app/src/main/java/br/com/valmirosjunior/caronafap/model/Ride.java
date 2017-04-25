@@ -1,6 +1,6 @@
 package br.com.valmirosjunior.caronafap.model;
 
-import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by junior on 28/03/17.
@@ -9,7 +9,7 @@ import java.util.Calendar;
 public class Ride {
 
     private MyLocation origin, destination;
-    private Calendar dateEvent;
+    private Date dateEvent;
     private Schedule scheduleRide;
     private long distance;
     private User user;
@@ -34,11 +34,11 @@ public class Ride {
         this.destination = destination;
     }
 
-    public Calendar getDateEvent() {
+    public Date getDateEvent() {
         return dateEvent;
     }
 
-    public void setDateEvent(Calendar dateEvent) {
+    public void setDateEvent(Date dateEvent) {
         this.dateEvent = dateEvent;
     }
 
@@ -72,5 +72,13 @@ public class Ride {
 
     public void setTypeRide(TypeRide typeRide) {
         this.typeRide = typeRide;
+    }
+
+    @Override
+    public String toString() {
+        return  user.getName()+" Está " + ((typeRide == TypeRide.ORDERED) ? "Pedindo " : "Oferecendo ")+
+                "Carona De : "+origin.getName()+
+                " Para : "+destination.getAdress()+
+                " no horário  "+scheduleRide.getHour()+":"+scheduleRide.getMinutes()+" Hs";
     }
 }

@@ -1,18 +1,26 @@
 package br.com.valmirosjunior.caronafap;
 
-import android.support.v4.app.FragmentActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import br.com.valmirosjunior.caronafap.model.MyLocation;
+import br.com.valmirosjunior.caronafap.util.Constants;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    private MyLocation locationOrigin,locationDestination;
+    private MarkerOptions markerOptions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +30,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        Intent intent = getIntent();
+        locationOrigin = (MyLocation) intent.getSerializableExtra(Constants.ORIGIN_RIDE);
+        locationDestination = (MyLocation) intent.getSerializableExtra(Constants.DESTINATION_RIDE);
+
     }
 
 
@@ -37,10 +49,39 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        LatLng origin, destination;
+        origin=new LatLng(locationOrigin.getLatitude(),locationOrigin.getLongitude());
+        destination=new LatLng(locationDestination.getLatitude(),locationDestination.getLongitude());
+//        MarkerOptions markerOptions = new MarkerOptions();
+//        markerOptions.position(origin).title("Marker On the Origin");
+        //markerOptions.position(destination).title("Marker On the Destination");
 
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        addMakerOrigin(origin);
+        addMakerDestination(destination);
+
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(origin));
+        mMap.moveCamera(CameraUpdateFactory.zoomTo(10));
     }
+
+    private void addMakerOrigin(LatLng origin){
+        addMarker(origin,BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+    }
+
+    private void addMakerDestination(LatLng destination){
+        addMarker(destination,BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+    }
+
+   private void addMarker(LatLng point, BitmapDescriptor bitmapDescriptor){
+       markerOptions = new MarkerOptions();
+       markerOptions.position(point);
+       markerOptions.title("someTitle");
+       markerOptions.snippet("someDesc");
+       markerOptions.icon(bitmapDescriptor);
+       mMap.addMarker(markerOptions);
+   }
+
+
+
+
+
 }

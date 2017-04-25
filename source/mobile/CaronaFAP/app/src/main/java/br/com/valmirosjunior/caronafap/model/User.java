@@ -1,11 +1,22 @@
 package br.com.valmirosjunior.caronafap.model;
 
+import java.util.List;
+
 /**
  * Created by junior on 10/04/17.
  */
 
 public class User {
-    private String name,facebookId;
+    private String facebookId, name;
+    private List<Ride> rides;
+
+    public String getFacebookId() {
+        return facebookId;
+    }
+
+    public void setFacebookId(String facebookId) {
+        this.facebookId = facebookId;
+    }
 
     public String getName() {
         return name;
@@ -15,11 +26,12 @@ public class User {
         this.name = name;
     }
 
-    public String getFacebookId() {
-        return facebookId;
+
+    public List<Ride> getRides() {
+        return rides;
     }
 
-    public void setFacebookId(String facebookId) {
-        this.facebookId = facebookId;
+    public void setRides(List<Ride> rides) {
+        this.rides = rides;
     }
 }

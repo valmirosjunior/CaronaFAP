@@ -1,12 +1,11 @@
 package br.com.valmirosjunior.caronafap.model;
 
 /**
- * Created by junior on 16/04/17.
+ * Created by junior on 22/04/17.
  */
 
 public class Schedule {
-    private int hour,minutes;
-
+    private int hour, minutes;
 
     public int getHour() {
         return hour;

@@ -42,22 +42,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void askRide(View view){
-        registerRide(TypeRide.ORDERED);
+        OpenRegisterRide(TypeRide.ORDERED);
     }
 
 
     public void offerRide(View view){
-        registerRide(TypeRide.OFFERED);
+        OpenRegisterRide(TypeRide.OFFERED);
     }
 
-    private void registerRide(TypeRide typeRide){
+    private void OpenRegisterRide(TypeRide typeRide){
         Intent intent =new Intent(this,RegisterRide.class);
         intent.putExtra(Constants.TYPE_RIDE_EXTRA,typeRide.ordinal());
         startActivity(intent);
     }
 
     public void showRide(View view){
-
+        startActivity(new Intent(this,ShowRider.class));
     }
 
     public void logout(View view){

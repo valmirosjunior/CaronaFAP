@@ -17,5 +17,9 @@
     <string name="show_ride">Ver Caronas</string>
     <string name="logout_facebook">Desconectar Do Facebook</string>
     <string name="finish_session">Encerrar sessão</string>
+    <string name="title_activity_show_rider">ShowRider</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancelar</string>
+    <string name="title_activity_profile">ProfileActivity</string>
 
 </resources>

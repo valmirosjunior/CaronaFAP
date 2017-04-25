@@ -96,11 +96,12 @@ public class FaceBookUtil {
         ).executeAsync();
     }
 
-    public User getCurrentUser(){
+    public static User getCurrentUser(){
         Profile profile=Profile.getCurrentProfile();
         User user=new User();
-        user.setName(profile.getName());
         user.setFacebookId(profile.getId());
+        user.setName(profile.getName());
+
         return user;
     }
 

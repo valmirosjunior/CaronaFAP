@@ -17,6 +17,8 @@ import com.google.firebase.auth.FirebaseUser;
 
 import br.com.valmirosjunior.caronafap.MainActivity;
 
+
+
 /**
  * Created by junior on 07/04/17.
  */
@@ -31,6 +33,7 @@ public class FireBaseUtil {
 
     public FireBaseUtil() {
         mAuth = FirebaseAuth.getInstance();
+
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override

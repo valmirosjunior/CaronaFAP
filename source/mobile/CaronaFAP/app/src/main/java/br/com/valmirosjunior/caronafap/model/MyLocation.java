@@ -1,12 +1,15 @@
 package br.com.valmirosjunior.caronafap.model;
 
+import java.io.Serializable;
+
 /**
  * Created by junior on 16/04/17.
  */
 
-public class MyLocation {
+public class MyLocation implements Serializable{
+
     private double latitude,longitude;
-    String idPlace;
+    private String idPlace, name, adress;
 
     public double getLatitude() {
         return latitude;
@@ -31,4 +34,22 @@ public class MyLocation {
     public void setIdPlace(String idPlace) {
         this.idPlace = idPlace;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getAdress() {
+        return adress;
+    }
+
+    public void setAdress(String adress) {
+        this.adress = adress;
+    }
+
+
 }
