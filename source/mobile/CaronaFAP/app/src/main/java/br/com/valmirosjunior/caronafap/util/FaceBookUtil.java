@@ -1,7 +1,7 @@
 package br.com.valmirosjunior.caronafap.util;
 
 import android.app.Activity;
-import android.content.Intent;
+import android.content.Context;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -10,13 +10,14 @@ import com.facebook.FacebookException;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
+import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
 import java.util.Arrays;
 
-import br.com.valmirosjunior.caronafap.PedirCarona;
+import br.com.valmirosjunior.caronafap.model.User;
 
 
 /**
@@ -24,10 +25,12 @@ import br.com.valmirosjunior.caronafap.PedirCarona;
  */
 
 public class FaceBookUtil {
-    private Activity activity;
+    private Context context;
+    private FireBaseUtil fireBaseUtil;
 
-    public FaceBookUtil(Activity activity){
-        this.activity =activity;
+    public FaceBookUtil(Activity context){
+        this.context = context;
+        fireBaseUtil = new FireBaseUtil();
     }
 
     public void prepareLoginButton(LoginButton button,CallbackManager callbackManager){
@@ -38,33 +41,38 @@ public class FaceBookUtil {
         button.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                activity.startActivity(new Intent(activity, PedirCarona.class));
-                DialogsdMessages.showToast("Só sucesso",activity);
+                try{
+                    fireBaseUtil.handleFacebookAccessToken(loginResult.getAccessToken(),context);
+                }catch (Exception e){
+                    MessageUtil.showToast(context, "Um erro aconteceu");
+                }
             }
 
             @Override
             public void onCancel() {
-                DialogsdMessages.showCustomToast(activity,"Login cancelado Facebook");
+                MessageUtil.showToast(context,"Você cancelou o Login!");
             }
 
             @Override
             public void onError(FacebookException error) {
-                DialogsdMessages.showCustomToast(activity,"Ocorreu um erro ao tentar efetuar o Login");
+                MessageUtil.showToast(context,"Ocorreu um erro ao tentar efetuar o Login");
             }
         });
     }
 
     public void disconnectFromFacebook() {
-        if(!estaLogado())
+        if(!isLoggedIn()) {
             return;
+        }
         try {
 
-            new GraphRequest(AccessToken.getCurrentAccessToken(), "/me/permissions/", null, HttpMethod.DELETE, new GraphRequest
-                    .Callback() {
+            new GraphRequest(AccessToken.getCurrentAccessToken(), "/me/permissions/", null,
+                    HttpMethod.DELETE, new GraphRequest.Callback() {
                 @Override
                 public void onCompleted(GraphResponse graphResponse) {
                     LoginManager.getInstance().logOut();
-                    DialogsdMessages.showCustomToast(activity,"Você acaba de sair do Facebook");
+                    fireBaseUtil.logout(context);
+                    MessageUtil.showToast(context,"Você acaba de sair");
                 }
             }).executeAsync();
 
@@ -74,7 +82,7 @@ public class FaceBookUtil {
         }
     }
 
-    public boolean estaLogado(){
+    public boolean isLoggedIn(){
         return AccessToken.getCurrentAccessToken() != null;
     }
 
@@ -86,9 +94,24 @@ public class FaceBookUtil {
                 HttpMethod.GET,
                 new GraphRequest.Callback() {
                     public void onCompleted(GraphResponse response) {
+                        MessageUtil.showToast(context,"Você está desconectado do facebook");
                     }
                 }
         ).executeAsync();
     }
+
+    public static User getCurrentUser(){
+        Profile profile=Profile.getCurrentProfile();
+        User user=new User();
+        user.setFacebookId(profile.getId());
+        user.setName(profile.getName());
+
+        return user;
+    }
+
+    public static String getCurrentProfileId(){
+        return Profile.getCurrentProfile().getId();
+    }
+
 
 }

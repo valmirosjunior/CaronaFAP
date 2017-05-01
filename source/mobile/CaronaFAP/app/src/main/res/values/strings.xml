@@ -1,6 +1,37 @@
 <resources>
-    <string name="app_name">CaronaFAP</string>
     <string name="facebook_app_id">1233927153388871</string>
-    <string name="title_activity_maps">Map</string>
-    <string name="title_activity_pedir_carona">PedirCarona</string>
+
+    <string name="app_name">CaronaFAP</string>
+    <string name="title_activity_maps">Mapa</string>
+
+    <string name="ask_ride" translatable="false">Pedir Carona</string>
+    <string name="offer_ride">Oferecer Carona</string>
+
+    <string name="ride_ordered">Pedidas</string>
+    <string name="ride_offered">Oferecidas</string>
+
+    <string name="origim">Origem</string>
+    <string name="destination">Destino</string>
+    <string name="time_ride">Horário</string>
+
+
+    <string name="show_ride">Ver Caronas</string>
+    <string name="logout_facebook">Desconectar Do Facebook</string>
+    <string name="finish_session">Encerrar sessão</string>
+
+    <string name="title_activity_show_rider">Visualizar Caronas</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancelar</string>
+
+    <string name="title_activity_user_profile">Perfil</string>
+    <string name="title_activity_profile">ProfileActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="register_ride">Registrar Carona</string>
+    <string name="what_do_you_want">O que você deseja fazer agora?</string>
+    <string name="welcome">Bem Vindo</string>
+
 </resources>
