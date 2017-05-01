@@ -22,15 +22,21 @@ public class RideDAO {
     private static RideDAO rideDao;
     private FirebaseDatabase database;
     private DatabaseReference refToRides;
+
     private HashMap<String,Ride> rides;
+
     private ArrayList<ObserverRide> observerRides;
+    private boolean mapReady;
 
     private  RideDAO() {
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         database = FirebaseDatabase.getInstance();
         refToRides = database.getReference("Rides");
-        rides= new HashMap<String, Ride>();
+        refToRides.keepSynced(true);
+        rides = new HashMap<String, Ride>();
         observerRides= new ArrayList<>();
-        addValueEventListener();
+        mapReady=false;
+        addValueEventListenerToOrdereds();
     }
 
     public static RideDAO getInstance (){
@@ -44,20 +50,27 @@ public class RideDAO {
         refToRides.push().setValue(ride);
     }
 
-    private void addValueEventListener(){
+    private void addValueEventListenerToOrdereds(){
         ValueEventListener rideListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                rides= new HashMap<String, Ride>();
                 try {
-                    if(dataSnapshot.exists()){
-                        for(DataSnapshot snapshot : dataSnapshot.getChildren()){
-                            Ride ride = snapshot.getValue(Ride.class);
-                            rides.put(snapshot.getKey(),ride);
-                        }
-                    }
                     for (ObserverRide observerRide: observerRides) {
-                        observerRide.updateUi();
+                        mapReady=false;
+                        observerRide.updateUi(mapReady);
+                    }
+                    if(dataSnapshot.exists()){
+                        rides = new HashMap<String, Ride>();
+                        Ride ride;
+                        for(DataSnapshot rideSnapshot : dataSnapshot.getChildren()){
+                            ride =rideSnapshot.getValue(Ride.class);
+                            rides.put(rideSnapshot.getKey(),ride);
+                        }
+
+                    }
+                    mapReady=true;
+                    for (ObserverRide observerRide: observerRides) {
+                        observerRide.updateUi(mapReady);
                     }
                 }catch (Exception e){
                     e.printStackTrace();
@@ -70,6 +83,8 @@ public class RideDAO {
         };
         refToRides.addValueEventListener(rideListener);
     }
+
+
 
     public HashMap<String,Ride> getMapRide(){
         return rides;
@@ -85,4 +100,7 @@ public class RideDAO {
         }
     }
 
+    public boolean isMapReady() {
+        return mapReady;
+    }
 }

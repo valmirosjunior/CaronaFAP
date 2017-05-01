@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    
 
     <application
         android:allowBackup="true"
@@ -22,21 +23,18 @@
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" />
+
         <activity
-            android:name=".RegisterRide"
-            android:label="@string/ask_ride"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".ShowRider"
-            android:label="@string/title_activity_show_rider"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:name=".ShowRider"/>
+
+        <activity android:name=".RegisterRide" />
+
     </application>
 
 </manifest>

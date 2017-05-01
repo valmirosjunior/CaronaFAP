@@ -6,5 +6,5 @@ package br.com.valmirosjunior.caronafap.model;
 
 public interface ObserverRide {
 
-    public void updateUi();
+    public void updateUi(boolean mapReady);
 }

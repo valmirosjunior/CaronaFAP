@@ -59,12 +59,6 @@ public class FireBaseUtil {
         Log.d(TAG, "handleFacebookAccessToken:" + token);
 
         MessageUtil.showProgressDialog(context);
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener((Activity) context, new OnCompleteListener<AuthResult>() {
@@ -78,9 +72,9 @@ public class FireBaseUtil {
                         }else{
                              ((MainActivity)context).updateUI(true);
                         }
-                        MessageUtil.hideProgressDialog();
                     }
                 });
+        MessageUtil.hideProgressDialog();
     }
 
 }

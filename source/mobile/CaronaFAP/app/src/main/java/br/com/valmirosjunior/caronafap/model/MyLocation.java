@@ -12,6 +12,7 @@ public class MyLocation implements Serializable{
     private String idPlace, name, adress;
 
     public double getLatitude() {
+
         return latitude;
     }
 

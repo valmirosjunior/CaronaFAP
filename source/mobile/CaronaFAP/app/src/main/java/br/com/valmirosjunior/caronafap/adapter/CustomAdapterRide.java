@@ -1,7 +1,8 @@
-package br.com.valmirosjunior.caronafap.util;
+package br.com.valmirosjunior.caronafap.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +14,6 @@ import com.facebook.login.widget.ProfilePictureView;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import br.com.valmirosjunior.caronafap.MapsActivity;
 import br.com.valmirosjunior.caronafap.R;
 import br.com.valmirosjunior.caronafap.model.Ride;
 
@@ -24,7 +24,7 @@ import br.com.valmirosjunior.caronafap.model.Ride;
 public class CustomAdapterRide extends BaseAdapter {
     private ArrayList<Ride> rides;
     private Context context;
-    private TextView tv;
+    private TextView textView;
     private ProfilePictureView profilePictureView;
 
     private static LayoutInflater inflater=null;
@@ -75,18 +75,23 @@ public class CustomAdapterRide extends BaseAdapter {
         final Ride ride = rides.get(position);
         View rowView;
         rowView = inflater.inflate(R.layout.row_ride_list, null);
-        tv =(TextView) rowView.findViewById(R.id.textViewDescriptoinRide);
+        textView =(TextView) rowView.findViewById(R.id.textViewDescriptoinRide);
         profilePictureView = (ProfilePictureView) rowView.findViewById(R.id.profilePictureUserListView);
 
-        tv.setText(ride.toString());
+        textView.setText(ride.toString());
         profilePictureView.setProfileId(ride.getUser().getFacebookId());
 
         rowView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, MapsActivity.class);
-                intent.putExtra(Constants.ORIGIN_RIDE,ride.getOrigin());
-                intent.putExtra(Constants.DESTINATION_RIDE,ride.getDestination());
+                final Intent intent = new Intent(Intent.ACTION_VIEW,
+                        Uri.parse(
+                                "http://maps.google.com/maps?" +
+                                        "saddr="+ride.getOrigin().getAdress()
+                                        +"&daddr="+ride.getDestination().getAdress()));
+                intent.setClassName(
+                        "com.google.android.apps.maps",
+                        "com.google.android.maps.MapsActivity");
                 context.startActivity(intent);
             }
         });

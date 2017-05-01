@@ -39,7 +39,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20sp"
-            android:onClick="askRide"
+            android:onClick="openRegisterRide"
             android:text="@string/ask_ride" />
 
         <Button
@@ -47,8 +47,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20sp"
-            android:onClick="offerRide"
-            android:text="@string/offer_ride" />
+            android:onClick="request"
+            android:text="Request" />
 
         <Button
             android:id="@+id/butShowRide"

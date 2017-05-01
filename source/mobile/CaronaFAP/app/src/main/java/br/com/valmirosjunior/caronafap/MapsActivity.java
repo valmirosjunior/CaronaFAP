@@ -12,6 +12,7 @@ import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import br.com.valmirosjunior.caronafap.model.MyLocation;
 import br.com.valmirosjunior.caronafap.util.Constants;
@@ -52,12 +53,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LatLng origin, destination;
         origin=new LatLng(locationOrigin.getLatitude(),locationOrigin.getLongitude());
         destination=new LatLng(locationDestination.getLatitude(),locationDestination.getLongitude());
-//        MarkerOptions markerOptions = new MarkerOptions();
-//        markerOptions.position(origin).title("Marker On the Origin");
-        //markerOptions.position(destination).title("Marker On the Destination");
-
         addMakerOrigin(origin);
         addMakerDestination(destination);
+        addPolyline(origin,destination);
 
         mMap.moveCamera(CameraUpdateFactory.newLatLng(origin));
         mMap.moveCamera(CameraUpdateFactory.zoomTo(10));
@@ -78,6 +76,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
        markerOptions.snippet("someDesc");
        markerOptions.icon(bitmapDescriptor);
        mMap.addMarker(markerOptions);
+   }
+
+   private void addPolyline(LatLng origin, LatLng destination){
+       PolylineOptions polylineOptions = new PolylineOptions();
+       polylineOptions.add(origin)
+               .add(destination);
+       mMap.addPolyline(polylineOptions);
+
    }
 
 

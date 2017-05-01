@@ -1,6 +1,7 @@
 package br.com.valmirosjunior.caronafap.util;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.view.Gravity;
@@ -52,7 +53,14 @@ public class MessageUtil {
     }
 
     public static void hideProgressDialog(){
-        progressDialog.hide();
+        if(progressDialog.isShowing()) {
+            progressDialog.hide();
+        }
+    }
+
+    public static AlertDialog.Builder createAlertDialogBuilder(Context context){
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        return builder;
     }
 
 }

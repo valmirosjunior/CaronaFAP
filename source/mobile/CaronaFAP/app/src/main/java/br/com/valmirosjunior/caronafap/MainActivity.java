@@ -1,9 +1,12 @@
 package br.com.valmirosjunior.caronafap;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -13,9 +16,8 @@ import com.facebook.ProfileTracker;
 import com.facebook.login.widget.LoginButton;
 import com.facebook.login.widget.ProfilePictureView;
 
-import br.com.valmirosjunior.caronafap.model.TypeRide;
-import br.com.valmirosjunior.caronafap.util.Constants;
 import br.com.valmirosjunior.caronafap.util.FaceBookUtil;
+import br.com.valmirosjunior.caronafap.util.HTTPUtil;
 import br.com.valmirosjunior.caronafap.util.MessageUtil;
 
 public class MainActivity extends AppCompatActivity {
@@ -30,50 +32,42 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
-        faceBookUtil=new FaceBookUtil(this);
+
+        faceBookUtil = new FaceBookUtil(this);
         loginButton = (LoginButton) findViewById(R.id.login_button);
-        if(faceBookUtil.isLoggedIn()){
+        if (faceBookUtil.isLoggedIn()) {
+            //startActivity(this, ProfileActivity.class);
             updateUI(true);
-        }else {
+        } else {
             callbackManager = CallbackManager.Factory.create();
             tx = (TextView) findViewById(R.id.text);
             faceBookUtil.prepareLoginButton(loginButton, callbackManager);
         }
     }
 
-    public void askRide(View view){
-        OpenRegisterRide(TypeRide.ORDERED);
+    public void openRegisterRide(View view) {
+        startActivity(new Intent(this, RegisterRide.class));
     }
 
 
-    public void offerRide(View view){
-        OpenRegisterRide(TypeRide.OFFERED);
+    public void showRide(View view) {
+        startActivity(new Intent(this, ShowRider.class));
     }
 
-    private void OpenRegisterRide(TypeRide typeRide){
-        Intent intent =new Intent(this,RegisterRide.class);
-        intent.putExtra(Constants.TYPE_RIDE_EXTRA,typeRide.ordinal());
-        startActivity(intent);
-    }
-
-    public void showRide(View view){
-        startActivity(new Intent(this,ShowRider.class));
-    }
-
-    public void logout(View view){
+    public void logout(View view) {
         MessageUtil.showProgressDialog(this);
         faceBookUtil.disconnectFromFacebook();
     }
 
-    public void exit (View view){
+    public void exit(View view) {
         logout(view);
         this.finish();
     }
 
-    public void updateUI(boolean logged){
+    public void updateUI(boolean logged) {
         int visibilityLoginButton = logged ? View.INVISIBLE : View.VISIBLE;
-        int visibilityLayout = logged ?  View.VISIBLE : View.INVISIBLE;
-        String profileId= logged ? FaceBookUtil.getCurrentProfileId() : null;
+        int visibilityLayout = logged ? View.VISIBLE : View.INVISIBLE;
+        String profileId = logged ? FaceBookUtil.getCurrentProfileId() : null;
         LinearLayout layout = (LinearLayout) findViewById(R.id.LayoutOptionsLogin);
 
         ProfilePictureView profilePicture = (ProfilePictureView) findViewById(R.id.profilePictureUser);
@@ -86,12 +80,57 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        callbackManager.onActivityResult(requestCode, resultCode, data);
+        try {
+            callbackManager.onActivityResult(requestCode, resultCode, data);
+        } catch (Exception e) {
+            MessageUtil.showToast(this, "Ocorreu erro");
+        }
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        profileTracker.stopTracking();
+        //profileTracker.stopTracking();
     }
+
+    public void request(View view) {
+        try {
+            new GetPoints().execute("");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+
+    private class GetPoints extends AsyncTask<String, Void, String[]> {
+        ProgressDialog dialog;
+
+        @Override
+        protected void onPreExecute() {
+            dialog = new ProgressDialog(MainActivity.this);
+            dialog.show();
+        }
+
+        @Override
+        protected String[] doInBackground(String... params) {
+            try {
+                String url = "https://maps.googleapis.com/maps/api/directions/json?origin=place_id:ChIJh7nL8agiqwcRkFJe5pf4Vzc&destination=place_id:ChIJWQwIca14oQcR_REnbDgiKls&key=AIzaSyAYfYIE7LxDElIo4e8CJwpaEP5ll4QXHtE";
+
+                String resultado = HTTPUtil.doGet(url);
+                Log.i("resultado da consulta: ", resultado);
+
+                return new String[]{"opa"};
+            } catch (Exception e) {
+                return new String[]{e.getMessage()};
+            }
+
+        }
+
+        @Override
+        protected void onPostExecute(String[] strings) {
+            super.onPostExecute(strings);
+            dialog.hide();
+        }
+    }
+
 }

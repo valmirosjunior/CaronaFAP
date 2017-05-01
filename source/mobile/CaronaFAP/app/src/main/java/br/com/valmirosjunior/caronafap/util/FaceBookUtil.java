@@ -41,12 +41,16 @@ public class FaceBookUtil {
         button.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                fireBaseUtil.handleFacebookAccessToken(loginResult.getAccessToken(),context);
+                try{
+                    fireBaseUtil.handleFacebookAccessToken(loginResult.getAccessToken(),context);
+                }catch (Exception e){
+                    MessageUtil.showToast(context, "Um erro aconteceu");
+                }
             }
 
             @Override
             public void onCancel() {
-                MessageUtil.showToast(context,"Login cancelado Facebook");
+                MessageUtil.showToast(context,"Você cancelou o Login!");
             }
 
             @Override

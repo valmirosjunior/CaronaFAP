@@ -11,7 +11,6 @@ public class Ride {
     private MyLocation origin, destination;
     private Date dateEvent;
     private Schedule scheduleRide;
-    private long distance;
     private User user;
     private TypeRide typeRide;
 
@@ -48,14 +47,6 @@ public class Ride {
 
     public void setScheduleRide(Schedule scheduleRide) {
         this.scheduleRide = scheduleRide;
-    }
-
-    public long getDistance() {
-        return distance;
-    }
-
-    public void setDistance(long distance) {
-        this.distance = distance;
     }
 
     public User getUser() {

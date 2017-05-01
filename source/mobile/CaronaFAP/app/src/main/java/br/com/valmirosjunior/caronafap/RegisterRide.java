@@ -4,12 +4,12 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioGroup;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
@@ -23,7 +23,6 @@ import br.com.valmirosjunior.caronafap.model.MyLocation;
 import br.com.valmirosjunior.caronafap.model.Ride;
 import br.com.valmirosjunior.caronafap.model.TypeRide;
 import br.com.valmirosjunior.caronafap.model.dao.RideDAO;
-import br.com.valmirosjunior.caronafap.util.Constants;
 import br.com.valmirosjunior.caronafap.util.FaceBookUtil;
 import br.com.valmirosjunior.caronafap.util.MessageUtil;
 import br.com.valmirosjunior.caronafap.util.Util;
@@ -31,11 +30,11 @@ import br.com.valmirosjunior.caronafap.util.Util;
 public class RegisterRide extends AppCompatActivity {
 
     int PLACE_PICKER_REQUEST = 1;
-    FaceBookUtil faceBookUtil=new FaceBookUtil(this);
-    private EditText editDistance, editAdress,editOrigin, editDestination,editTime;
+    private EditText  editAdress,editOrigin, editDestination,editTime;
+    private RadioGroup radioGroup;
     private RideDAO rideDAO;
     private MyLocation locationOrigin, locationDestination,locationAdress;
-    private int ordinalTypeRide;
+    private Ride ride;
 
     public RegisterRide() {
     }
@@ -45,32 +44,31 @@ public class RegisterRide extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_ride);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        Intent intent = getIntent();
-        ordinalTypeRide =intent.getIntExtra(Constants.TYPE_RIDE_EXTRA,0);
-        setTitle( (ordinalTypeRide==TypeRide.OFFERED.ordinal())? R.string.offer_ride : R.string.ask_ride);
-
 
         editOrigin = (EditText) findViewById(R.id.editOrigimRide);
         editDestination = (EditText) findViewById(R.id.editDestinationRide);
         editTime = (EditText) findViewById(R.id.editTimeRide);
-        editDistance = (EditText) findViewById(R.id.editDistance);
+        radioGroup = (RadioGroup) findViewById(R.id.rgRide);
+
         locationOrigin =new MyLocation();
         locationDestination = new MyLocation();
 
         rideDAO = RideDAO.getInstance();
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        Button butSaveRide = (Button) findViewById(R.id.butSaveRide);
 
-        fab.setOnClickListener(new View.OnClickListener() {
+        butSaveRide.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MessageUtil.showProgressDialog(RegisterRide.this);
-                rideDAO.saveRide(makeRide());
-                MessageUtil.hideProgressDialog();
-                showConfirmDialog();
+                try {
+                    ride =makeRide();
+                    if (ride!=null){
+                        rideDAO.saveRide(ride);
+                        showConfirmDialog();
+                    }
+                }catch (Exception e){
+                    showAlertDialog("Erro!", "Um possivel erro ocorreu tente novamente mais tarde");
+                }
             }
         });
     }
@@ -86,10 +84,6 @@ public class RegisterRide extends AppCompatActivity {
         } catch (GooglePlayServicesNotAvailableException e) {
             e.printStackTrace();
         }
-
-    }
-
-    public void saveRide(View view){
 
     }
 
@@ -115,33 +109,68 @@ public class RegisterRide extends AppCompatActivity {
 
 
     private Ride makeRide(){
+        if(!valideFields()){
+            return null;
+        }
+        TypeRide typeRide = (radioGroup.getCheckedRadioButtonId() == R.id.rbAskRide)?
+                TypeRide.ORDERED: TypeRide.OFFERED;
         Ride ride = new Ride();
         ride.setUser(FaceBookUtil.getCurrentUser());
-        ride.setTypeRide(TypeRide.values()[ordinalTypeRide]);
+        ride.setTypeRide(typeRide);
         ride.setOrigin(locationOrigin);
         ride.setDestination(locationDestination);
-        ride.setDistance(Integer.parseInt(editDistance.getText().toString()));
         ride.setScheduleRide(Util.convertStringTimeToSchedule(editTime.getText().toString()));
         ride.setDateEvent(Calendar.getInstance().getTime());
         return ride;
     }
 
+    private boolean valideFields() {
+        if (radioGroup.getCheckedRadioButtonId() == -1){
+            showAlertDialog("Erro!","É necessário escolher o Que você deseja fazer!!");
+            return false;
+        }
+        if(editOrigin.getText().toString().equals("")){
+            showAlertDialog("Erro!","É necessário escolher um Local de origem!");
+            return false;
+        }
+        if(editDestination.getText().toString().equals("")){
+            showAlertDialog("Erro!","É necessário escolher um Local de Destino!");
+            return false;
+        }
+        if(editTime.getText().toString().equals("")){
+            showAlertDialog("Erro!","É necessário escolher um Horário Desejado!");
+            return false;
+        }
+        return true;
+    }
+
     private void showConfirmDialog(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Sua Solicitação de Carona Foi registrada").setTitle("Solicitação Realizada com Sucesso!");
+        AlertDialog.Builder builder = MessageUtil.createAlertDialogBuilder(this);
+        builder.setMessage("Sua Solicitação de Carona Foi registrada");
+        builder.setTitle("Solicitação Realizada com Sucesso!");
+
         builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 backToHomeScreen();
             }
         });
-
-        builder.setNegativeButton("Nova!", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton("Nova", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 continueHere();
             }
         });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void showAlertDialog(String title,String message){
+        AlertDialog.Builder builder = MessageUtil.createAlertDialogBuilder(this);
+        builder.setMessage(message);
+        builder.setTitle(title);
+        builder.setPositiveButton("OK", null);
         AlertDialog dialog = builder.create();
         dialog.show();
     }
@@ -154,7 +183,6 @@ public class RegisterRide extends AppCompatActivity {
         editOrigin.setText("");
         editDestination.setText("");
         editTime.setText("");
-        editDistance.setText("");
     }
 
 }
