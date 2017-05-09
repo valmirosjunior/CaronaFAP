@@ -1,31 +1,28 @@
 package br.com.valmirosjunior.caronafap;
 
-import android.app.ProgressDialog;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.facebook.CallbackManager;
-import com.facebook.ProfileTracker;
 import com.facebook.login.widget.LoginButton;
-import com.facebook.login.widget.ProfilePictureView;
 
-import br.com.valmirosjunior.caronafap.util.FaceBookUtil;
-import br.com.valmirosjunior.caronafap.util.HTTPUtil;
+import java.util.IllegalFormatConversionException;
+import java.util.Observable;
+import java.util.Observer;
+
+import br.com.valmirosjunior.caronafap.model.enums.Status;
+import br.com.valmirosjunior.caronafap.network.FaceBookManager;
 import br.com.valmirosjunior.caronafap.util.MessageUtil;
 
-public class MainActivity extends AppCompatActivity {
-    CallbackManager callbackManager;
-    ProfileTracker profileTracker;
-    LoginButton loginButton;
-    TextView tx;
-    FaceBookUtil faceBookUtil;
+public class MainActivity extends AppCompatActivity implements Observer{
+    private CallbackManager callbackManager;
+    private LoginButton loginButton;
+    private TextView tx;
+    private FaceBookManager faceBookManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,49 +30,20 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
 
-        faceBookUtil = new FaceBookUtil(this);
-        loginButton = (LoginButton) findViewById(R.id.login_button);
-        if (faceBookUtil.isLoggedIn()) {
-            //startActivity(this, ProfileActivity.class);
-            updateUI(true);
+        faceBookManager = new FaceBookManager(this);
+        faceBookManager.addObserver(this);
+        if (faceBookManager.isLoggedIn()) {
+            startActivity(new Intent(this,ProfileUser.class));
+            this.finish();
         } else {
+            loginButton = (LoginButton) findViewById(R.id.login_button);
             callbackManager = CallbackManager.Factory.create();
             tx = (TextView) findViewById(R.id.text);
-            faceBookUtil.prepareLoginButton(loginButton, callbackManager);
+            faceBookManager.prepareLoginButton(loginButton, callbackManager);
         }
     }
 
-    public void openRegisterRide(View view) {
-        startActivity(new Intent(this, RegisterRide.class));
-    }
 
-
-    public void showRide(View view) {
-        startActivity(new Intent(this, ShowRider.class));
-    }
-
-    public void logout(View view) {
-        MessageUtil.showProgressDialog(this);
-        faceBookUtil.disconnectFromFacebook();
-    }
-
-    public void exit(View view) {
-        logout(view);
-        this.finish();
-    }
-
-    public void updateUI(boolean logged) {
-        int visibilityLoginButton = logged ? View.INVISIBLE : View.VISIBLE;
-        int visibilityLayout = logged ? View.VISIBLE : View.INVISIBLE;
-        String profileId = logged ? FaceBookUtil.getCurrentProfileId() : null;
-        LinearLayout layout = (LinearLayout) findViewById(R.id.LayoutOptionsLogin);
-
-        ProfilePictureView profilePicture = (ProfilePictureView) findViewById(R.id.profilePictureUser);
-        profilePicture.setProfileId(profileId);
-        loginButton.setEnabled(!logged);
-        loginButton.setVisibility(visibilityLoginButton);
-        layout.setVisibility(visibilityLayout);
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -88,49 +56,40 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        //profileTracker.stopTracking();
-    }
-
-    public void request(View view) {
+    public void update(Observable observable, Object o) {
+        MessageUtil.showProgressDialog(this);
+        Status status;
+        AlertDialog.Builder buider = MessageUtil.createAlertDialogBuilder(this);
         try {
-            new GetPoints().execute("");
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
+            status = (Status) o;
+            switch (status){
 
+                case SUCCESS:
+                    buider.setTitle(R.string.success);
+                    buider.setMessage(R.string.login_success);
+                    buider.show();
+                    startActivity(new Intent(this, ProfileUser.class));
+                    this.finish();
+                    break;
 
-    private class GetPoints extends AsyncTask<String, Void, String[]> {
-        ProgressDialog dialog;
+                case CANCELED:
+                    buider.setTitle(R.string.canceled_operation);
+                    buider.setMessage(R.string.login_canceled);
+                    buider.show();
+                    break;
 
-        @Override
-        protected void onPreExecute() {
-            dialog = new ProgressDialog(MainActivity.this);
-            dialog.show();
-        }
+                case ERROR:
+                    buider.setTitle(R.string.error);
+                    buider.setMessage(R.string.internal_error);
+                    buider.show();
 
-        @Override
-        protected String[] doInBackground(String... params) {
-            try {
-                String url = "https://maps.googleapis.com/maps/api/directions/json?origin=place_id:ChIJh7nL8agiqwcRkFJe5pf4Vzc&destination=place_id:ChIJWQwIca14oQcR_REnbDgiKls&key=AIzaSyAYfYIE7LxDElIo4e8CJwpaEP5ll4QXHtE";
-
-                String resultado = HTTPUtil.doGet(url);
-                Log.i("resultado da consulta: ", resultado);
-
-                return new String[]{"opa"};
-            } catch (Exception e) {
-                return new String[]{e.getMessage()};
             }
-
-        }
-
-        @Override
-        protected void onPostExecute(String[] strings) {
-            super.onPostExecute(strings);
-            dialog.hide();
+        }catch (IllegalFormatConversionException i){
+            buider.setTitle(R.string.error);
+            buider.setMessage(R.string.internal_error);
+            buider.show();
+        }finally {
+          MessageUtil.hideProgressDialog();
         }
     }
-
 }

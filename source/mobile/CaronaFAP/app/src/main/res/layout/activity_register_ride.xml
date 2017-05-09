@@ -49,7 +49,7 @@
             android:layout_height="wrap_content"
             android:focusable="false"
             android:hint="@string/origim"
-            android:onClick="openMap"
+            android:onClick="openPlacePicker"
             tools:clickable="true"
             android:id="@+id/editOrigimRide"/>
 
@@ -66,7 +66,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/destination"
             tools:clickable="true"
-            android:onClick="openMap"
+            android:onClick="openPlacePicker"
             android:focusable="false" />
     </android.support.design.widget.TextInputLayout>
 

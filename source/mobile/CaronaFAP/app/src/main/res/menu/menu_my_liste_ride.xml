@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/edit_ride"
+        android:title="@string/edit" />
+
+    <item
+        android:id="@+id/delete"
+        android:title="Excluir" />
+
+    <item
+        android:id="@+id/viewOnmap"
+        android:title="@string/see_on_map" />
+
+    <item
+        android:id="@+id/viewProfile"
+        android:title="@string/see_profile_on_facebook" />
+
+    <item
+        android:id="@+id/search"
+        android:title="@string/search" />
+</menu>

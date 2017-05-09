@@ -1,6 +1,7 @@
 package br.com.valmirosjunior.caronafap.model;
 
-import java.util.Date;
+import br.com.valmirosjunior.caronafap.model.enums.Status;
+import br.com.valmirosjunior.caronafap.model.enums.Type;
 
 /**
  * Created by junior on 28/03/17.
@@ -8,13 +9,31 @@ import java.util.Date;
 
 public class Ride {
 
-    private MyLocation origin, destination;
-    private Date dateEvent;
-    private Schedule scheduleRide;
+    private String idRide;
     private User user;
-    private TypeRide typeRide;
+    private MyLocation origin, destination;
+    private int hourInMinutes;
+    private Status status;
+    private Type type;
+
 
     public Ride() {
+    }
+
+    public String getIdRide() {
+        return idRide;
+    }
+
+    public void setIdRide(String idRide) {
+        this.idRide = idRide;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public MyLocation getOrigin() {
@@ -29,47 +48,56 @@ public class Ride {
         return destination;
     }
 
+    public int getHourInMinutes() {
+        return hourInMinutes;
+    }
+
+    public void setHourInMinutes(int hourInMinutes) {
+        this.hourInMinutes = hourInMinutes;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
     public void setDestination(MyLocation destination) {
         this.destination = destination;
     }
 
-    public Date getDateEvent() {
-        return dateEvent;
+    public Type getType() {
+        return type;
     }
 
-    public void setDateEvent(Date dateEvent) {
-        this.dateEvent = dateEvent;
+    public void setType(Type type) {
+        this.type = type;
     }
 
-    public Schedule getScheduleRide() {
-        return scheduleRide;
+    public String formaterTime(){
+        int hour, minutes;
+        String time="";
+        hour =hourInMinutes/60;
+        minutes = hourInMinutes % 60;
+        time += (hour<10)? "0"+hour : hour;
+        time += ":";
+        time += ((minutes<10)? "0"+minutes:minutes);
+        return time;
     }
 
-    public void setScheduleRide(Schedule scheduleRide) {
-        this.scheduleRide = scheduleRide;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public TypeRide getTypeRide() {
-        return typeRide;
-    }
-
-    public void setTypeRide(TypeRide typeRide) {
-        this.typeRide = typeRide;
+    public String toString(String userName){
+        return userName+" "+toString();
     }
 
     @Override
     public String toString() {
-        return  user.getName()+" Está " + ((typeRide == TypeRide.ORDERED) ? "Pedindo " : "Oferecendo ")+
-                "Carona De : "+origin.getName()+
-                " Para : "+destination.getAdress()+
-                " no horário  "+scheduleRide.getHour()+":"+scheduleRide.getMinutes()+" Hs";
+        return  "Está " + ((type == Type.ORDERED) ?
+                "Pedindo " : "Oferecendo ")+"Carona as: "+formaterTime()+"Hs"+
+                "\nDe : "+origin.getAdress()+
+                "\nPara : "+destination.getAdress();
     }
+
+
 }

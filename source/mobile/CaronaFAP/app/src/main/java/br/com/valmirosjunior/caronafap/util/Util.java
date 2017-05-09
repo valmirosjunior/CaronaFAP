@@ -10,8 +10,6 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
-import br.com.valmirosjunior.caronafap.model.Schedule;
-
 /**
  * Created by junior on 10/04/17.
  */
@@ -22,15 +20,12 @@ public class Util {
         return Resources.getSystem().getString(stringId);
     }
 
-    public static Schedule convertStringTimeToSchedule(String time){
+    public static int convertStringTimeToSchedule(String time){
         String[] timeSplit = time.split(":");
         int hour, minutes;
         hour = Integer.parseInt(timeSplit[0]);
         minutes = Integer.parseInt(timeSplit[1]);
-        Schedule schedule= new Schedule();
-        schedule.setHour(hour);
-        schedule.setMinutes(minutes);
-        return  schedule;
+        return (hour *60) +minutes;
     }
 
     public static String getDateFormaterFromCalendar (Calendar calendar){

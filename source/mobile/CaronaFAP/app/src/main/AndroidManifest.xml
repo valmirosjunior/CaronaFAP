@@ -4,7 +4,6 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    
 
     <application
         android:allowBackup="true"
@@ -20,21 +19,32 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
+        <service android:name=".CaronaFapFMS">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" />
 
-        <activity
-            android:name=".ShowRider"/>
+        <activity android:name=".ShowRider" />
 
         <activity android:name=".RegisterRide" />
 
+        <activity
+            android:name=".ProfileUser"
+            android:label="@string/title_activity_profile_user"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

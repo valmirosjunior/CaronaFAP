@@ -3,17 +3,16 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_registe_ride"
-            android:icon="@android:drawable/ic_input_add"
+            android:id="@+id/nav_register"
+            android:icon="@android:drawable/ic_menu_add"
             android:title="@string/register_ride" />
         <item
-            android:id="@+id/nav_show_rider"
+            android:id="@+id/nav_seeRides"
             android:icon="@android:drawable/ic_menu_search"
-            android:title="@string/show_ride" />
-
+            android:title="@string/see_rides" />
     </group>
 
-    <!--item android:title="Communicate">
+    <item android:title="@string/comunicate">
         <menu>
             <item
                 android:id="@+id/nav_share"
@@ -24,6 +23,6 @@
                 android:icon="@drawable/ic_menu_send"
                 android:title="Send" />
         </menu>
-    </item-->
+    </item>
 
 </menu>

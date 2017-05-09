@@ -16,14 +16,13 @@ import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 
-import java.util.Calendar;
-
 import br.com.valmirosjunior.caronafap.fragments.TimePickerFragment;
 import br.com.valmirosjunior.caronafap.model.MyLocation;
 import br.com.valmirosjunior.caronafap.model.Ride;
-import br.com.valmirosjunior.caronafap.model.TypeRide;
 import br.com.valmirosjunior.caronafap.model.dao.RideDAO;
-import br.com.valmirosjunior.caronafap.util.FaceBookUtil;
+import br.com.valmirosjunior.caronafap.model.enums.Type;
+import br.com.valmirosjunior.caronafap.network.FaceBookManager;
+import br.com.valmirosjunior.caronafap.util.Constants;
 import br.com.valmirosjunior.caronafap.util.MessageUtil;
 import br.com.valmirosjunior.caronafap.util.Util;
 
@@ -34,11 +33,7 @@ public class RegisterRide extends AppCompatActivity {
     private RadioGroup radioGroup;
     private RideDAO rideDAO;
     private MyLocation locationOrigin, locationDestination,locationAdress;
-    private Ride ride;
-
-    public RegisterRide() {
-    }
-
+    private String idRide;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,14 +50,18 @@ public class RegisterRide extends AppCompatActivity {
 
         rideDAO = RideDAO.getInstance();
 
+
+        checkIsNewRideOrUpdate();
+
         Button butSaveRide = (Button) findViewById(R.id.butSaveRide);
 
         butSaveRide.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 try {
-                    ride =makeRide();
+                    Ride ride = fillRide();
                     if (ride!=null){
+                        ride.setIdRide(idRide);
                         rideDAO.saveRide(ride);
                         showConfirmDialog();
                     }
@@ -73,7 +72,7 @@ public class RegisterRide extends AppCompatActivity {
         });
     }
 
-    public void openMap(View view) {
+    public void openPlacePicker(View view) {
         editAdress =(EditText) view;
         locationAdress = (editAdress.getId() == R.id.editOrigimRide) ? locationOrigin : locationDestination;
         PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
@@ -88,17 +87,22 @@ public class RegisterRide extends AppCompatActivity {
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == PLACE_PICKER_REQUEST) {
-            if (resultCode == RESULT_OK) {
-                Place place = PlacePicker.getPlace(this,data);
-                locationAdress.setIdPlace(place.getId());
-                locationAdress.setLatitude(place.getLatLng().latitude);
-                locationAdress.setLongitude(place.getLatLng().longitude);
-                locationAdress.setName(place.getName().toString());
-                locationAdress.setAdress(place.getAddress().toString());
-                editAdress.setText(place.getAddress());
-            }
+        try {
+            if (requestCode == PLACE_PICKER_REQUEST) {
+                if (resultCode == RESULT_OK) {
+                    Place place = PlacePicker.getPlace(this, data);
+                    locationAdress.setIdPlace(place.getId());
+                    locationAdress.setLatitude(place.getLatLng().latitude);
+                    locationAdress.setLongitude(place.getLatLng().longitude);
+                    locationAdress.setName(place.getName().toString());
+                    locationAdress.setAdress(place.getAddress().toString());
+                    editAdress.setText(place.getAddress());
+                }
 
+            }
+        }catch (Exception e ){
+            showAlertDialog(getString(R.string.error),getString(R.string.internal_error));
+            e.printStackTrace();
         }
     }
 
@@ -108,19 +112,18 @@ public class RegisterRide extends AppCompatActivity {
     }
 
 
-    private Ride makeRide(){
+    private Ride fillRide(){
         if(!valideFields()){
             return null;
         }
-        TypeRide typeRide = (radioGroup.getCheckedRadioButtonId() == R.id.rbAskRide)?
-                TypeRide.ORDERED: TypeRide.OFFERED;
         Ride ride = new Ride();
-        ride.setUser(FaceBookUtil.getCurrentUser());
-        ride.setTypeRide(typeRide);
+        ride.setUser(FaceBookManager.getCurrentUser());
+        Type type = (radioGroup.getCheckedRadioButtonId() == R.id.rbAskRide)?
+                Type.ORDERED: Type.OFFERED;
+        ride.setType(type);
         ride.setOrigin(locationOrigin);
         ride.setDestination(locationDestination);
-        ride.setScheduleRide(Util.convertStringTimeToSchedule(editTime.getText().toString()));
-        ride.setDateEvent(Calendar.getInstance().getTime());
+        ride.setHourInMinutes(Util.convertStringTimeToSchedule(editTime.getText().toString()));
         return ride;
     }
 
@@ -183,6 +186,22 @@ public class RegisterRide extends AppCompatActivity {
         editOrigin.setText("");
         editDestination.setText("");
         editTime.setText("");
+    }
+
+    private void checkIsNewRideOrUpdate(){
+        Intent intent = getIntent();
+        idRide =intent.getStringExtra(Constants.ID_RIDE);
+        if(idRide != null){
+            Ride ride;
+            ride = rideDAO.getRide(idRide);
+            editOrigin.setText(ride.getOrigin().getAdress());
+            editDestination.setText(ride.getDestination().getAdress());
+            editTime.setText(ride.formaterTime());
+            radioGroup.check((ride.getType()== Type.ORDERED?
+                              R.id.rbAskRide : R.id.rbOferrRide ));
+            locationOrigin =ride.getOrigin();
+            locationDestination= ride.getDestination();
+        }
     }
 
 }

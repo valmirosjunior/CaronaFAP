@@ -1,4 +1,4 @@
-package br.com.valmirosjunior.caronafap.util;
+package br.com.valmirosjunior.caronafap.network;
 
 /**
  * Created by junior on 22/04/17.
