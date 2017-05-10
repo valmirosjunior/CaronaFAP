@@ -1,5 +1,6 @@
 package br.com.valmirosjunior.caronafap.model.dao;
 
+import android.location.Location;
 import android.util.Log;
 
 import com.google.firebase.database.ChildEventListener;
@@ -17,6 +18,8 @@ import java.util.Observable;
 import java.util.Observer;
 
 import br.com.valmirosjunior.caronafap.model.Ride;
+import br.com.valmirosjunior.caronafap.model.User;
+import br.com.valmirosjunior.caronafap.network.FaceBookManager;
 
 /**
  * Created by junior on 10/04/17.
@@ -36,7 +39,7 @@ public class RideDAO extends Observable{
         refToRides.keepSynced(true);
         rideMap = new HashMap<>();
         observers = new ArrayList<>();
-        refToRides.addValueEventListener(addValueEventListiner());
+        addChildAddEventListenerToRides();
     }
 
     public static RideDAO getInstance() {
@@ -47,29 +50,36 @@ public class RideDAO extends Observable{
     }
 
     public void saveRide(Ride ride) {
-        ref = refToRides.push();
         if (ride.getIdRide() == null) {
-            ride.setIdRide(ref.getKey());
+            ride.setIdRide(refToRides.push().getKey());
         }
-        ref.setValue(ride);
+        refToRides.child(ride.getIdRide()).setValue(ride);
     }
 
-    private ValueEventListener addValueEventListiner(){
+    public void removeRide(String idRide) {
+        refToRides.child(idRide).removeValue();
+
+    }
+
+    private ValueEventListener valueEventListiner(){
         ValueEventListener rideListener = new ValueEventListener() {
+            HashMap<String, Ride> rideMapTemp;
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 try {
                     if (dataSnapshot.exists()) {
-                        rideMap = new HashMap<>();
+                        rideMapTemp = new HashMap<>();
                         for (DataSnapshot rideSnapshot : dataSnapshot.getChildren()) {
-                            rideMap.put(rideSnapshot.getKey(), rideSnapshot.getValue(Ride.class));
+                            rideMapTemp.put(rideSnapshot.getKey(), rideSnapshot.getValue(Ride.class));
                         }
                     }
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
                 finally {
+                    rideMap = rideMapTemp;
                     notifyObservers();
                     addChildAddEventListenerToRides();
                 }
@@ -86,7 +96,6 @@ public class RideDAO extends Observable{
     }
 
     private void addChildAddEventListenerToRides() {
-        refToRides.removeEventListener(addValueEventListiner());
         ChildEventListener childEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -120,8 +129,63 @@ public class RideDAO extends Observable{
         refToRides.addChildEventListener(childEventListener);
     }
 
+    public Ride getRide(String idRide) {
+        return rideMap.get(idRide);
+    }
 
+    public List<Ride> getRides() {
+        rides= new ArrayList<>();
+        for (Map.Entry<String, Ride> rideEntry : rideMap.entrySet()){
+            rides.add(rideEntry.getValue());
+        }
+        return rides;
+    }
 
+    public List<Ride> getMyRides(){
+        User user = FaceBookManager.getCurrentUser();
+        Ride ride;
+        rides= new ArrayList<>();
+        for (Map.Entry<String, Ride> rideEntry : rideMap.entrySet()){
+            ride= rideEntry.getValue();
+            if(ride.getUser().equals(user)){
+                rides.add(rideEntry.getValue());
+            }
+        }
+        return rides;
+
+    }
+
+    public List<Ride> getEspecifRides(Ride myRide){
+        Location la,lb;
+        la = new Location("A");
+        lb = new Location("B");
+
+        User user = FaceBookManager.getCurrentUser();
+        Ride ride;
+        int timeRide,timeMyRide;
+        rides= new ArrayList<>();
+        for (Map.Entry<String, Ride> rideEntry : rideMap.entrySet()){
+            ride= rideEntry.getValue();
+            if(!ride.getUser().equals(user)){
+                if(ride.getType()== myRide.getType()){
+                    timeRide=ride.getHourInMinutes();
+                    timeMyRide=myRide.getHourInMinutes();
+                    if(timeRide>=(timeMyRide-30) && timeRide <= (timeMyRide+30)){
+                        la.setLatitude(ride.getOrigin().getLatitude());
+                        la.setLongitude(ride.getDestination().getLongitude());
+                        lb.setLatitude(myRide.getOrigin().getLatitude());
+                        lb.setLongitude(myRide.getDestination().getLongitude());
+                        if(la.distanceTo(lb)< 1000){
+                            rides.add(ride);
+                        }
+                    }
+                }
+                rides.add(rideEntry.getValue());
+            }
+        }
+        return rides;
+
+    }
 
     @Override
     public synchronized void addObserver(Observer o) {
@@ -140,22 +204,9 @@ public class RideDAO extends Observable{
         }
     }
 
+
     @Override
     public synchronized void deleteObservers() {
         observers = new ArrayList<>();
     }
-
-    public Ride getRide(String idRide) {
-        return rideMap.get(idRide);
-    }
-
-    public List<Ride> getRides() {
-
-        rides= new ArrayList<>();
-        for (Map.Entry<String, Ride> rideEntry : rideMap.entrySet()){
-            rides.add(rideEntry.getValue());
-        }
-        return rides;
-    }
-
 }

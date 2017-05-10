@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -19,7 +18,6 @@ import android.widget.TextView;
 
 import com.facebook.login.widget.ProfilePictureView;
 
-import java.util.IllegalFormatConversionException;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -38,47 +36,50 @@ public class ProfileUser extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile_user);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        try {
+            setContentView(R.layout.activity_profile_user);
+            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+            setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(ProfileUser.this, RegisterRide.class));
+                }
+            });
+
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                    this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+            drawer.setDrawerListener(toggle);
+            toggle.syncState();
+
+
+            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+            navigationView.setNavigationItemSelectedListener(this);
+
+
+            faceBookManager = new FaceBookManager(this);
+            faceBookManager.addObserver(this);
+            user = faceBookManager.getCurrentUser();
+
+            textViewWelcome = (TextView) findViewById(R.id.textViewWelcome);
+            textViewUser = (TextView) navigationView.getHeaderView(0).findViewById(R.id.text_navHeader);
+
+            profilePictureMain = (ProfilePictureView) findViewById(R.id.profilePictureUser);
+            profilePictureNav = (ProfilePictureView)
+                    navigationView.getHeaderView(0).findViewById(R.id.profilePictureUserNavBar);
+
+            try {
+                textViewWelcome.append(" " + user.getName());
+                textViewUser.setText(user.getName());
+                profilePictureMain.setProfileId(user.getId());
+                profilePictureNav.setProfileId(user.getId());
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        });
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
-
-        faceBookManager = new FaceBookManager(this);
-        faceBookManager.addObserver(this);
-        user = faceBookManager.getCurrentUser();
-
-        textViewWelcome = (TextView) findViewById(R.id.textViewWelcome);
-        textViewUser = (TextView) navigationView.getHeaderView(0).findViewById(R.id.text_navHeader);
-
-        profilePictureMain = (ProfilePictureView) findViewById(R.id.profilePictureUser);
-        profilePictureNav = (ProfilePictureView)
-                navigationView.getHeaderView(0).findViewById(R.id.profilePictureUserNavBar);
-
-        try{
-            textViewWelcome.append(" "+user.getName());
-            textViewUser.setText(user.getName());
-            profilePictureMain.setProfileId(user.getId());
-            profilePictureNav.setProfileId(user.getId());
-        } catch (Exception e){
+        }catch (Exception e){
             e.printStackTrace();
         }
 
@@ -142,7 +143,6 @@ public class ProfileUser extends AppCompatActivity
         builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                MessageUtil.showProgressDialog(ProfileUser.this);
                 faceBookManager.logout();
             }
         });
@@ -160,6 +160,7 @@ public class ProfileUser extends AppCompatActivity
             switch (status) {
                 case SUCCESS:
                     startActivity(new Intent(this,MainActivity.class));
+                    faceBookManager.deleteObserver(this);
                     this.finish();
                     break;
                 case ERROR:
@@ -168,12 +169,10 @@ public class ProfileUser extends AppCompatActivity
                     buider.show();
                     break;
             }
-        }catch (IllegalFormatConversionException i){
+        }catch (Exception e){
             buider.setTitle(R.string.error);
             buider.setMessage(R.string.internal_error);
             buider.show();
-        }finally {
-            MessageUtil.hideProgressDialog();
         }
     }
 }

@@ -21,15 +21,12 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.IllegalFormatConversionException;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
 import br.com.valmirosjunior.caronafap.model.User;
-import br.com.valmirosjunior.caronafap.model.dao.UserDAO;
 import br.com.valmirosjunior.caronafap.model.enums.Status;
-import br.com.valmirosjunior.caronafap.util.MessageUtil;
 
 
 /**
@@ -60,7 +57,6 @@ public class FaceBookManager extends Observable {
             public void onSuccess(LoginResult loginResult) {
                 try {
                     handleFacebookAccessToken(loginResult.getAccessToken());
-                    FaceBookManager.this.notifyObservers(Status.SUCCESS);
                 }catch (Exception e){
                     e.printStackTrace();
                 }
@@ -117,9 +113,6 @@ public class FaceBookManager extends Observable {
 
 
     public void handleFacebookAccessToken(final AccessToken token) {
-        final UserDAO userDAO = UserDAO.getInstance();
-
-        MessageUtil.showProgressDialog(context);
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
         firebaseAuth.signInWithCredential(credential)
                 .addOnCompleteListener((Activity) context, new OnCompleteListener<AuthResult>() {
@@ -127,10 +120,9 @@ public class FaceBookManager extends Observable {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         FaceBookManager.this.setStatus(Status.NEUTRAL);
                         if (!task.isSuccessful()) {
-                            FaceBookManager.this.notifyObservers(Status.ERROR.getValue());
+                            FaceBookManager.this.notifyObservers(Status.ERROR);
                         }else{
-                            userDAO.saveUser(getCurrentUser());
-                            FaceBookManager.this.notifyObservers(Status.SUCCESS.getValue());
+                            FaceBookManager.this.notifyObservers(Status.SUCCESS);
                         }
                     }
                 });
@@ -158,14 +150,14 @@ public class FaceBookManager extends Observable {
         try {
             setStatus((Status) arg);
             notifyObservers();
-        }catch (IllegalFormatConversionException i){
-            i.printStackTrace();
+        }catch (Exception e){
+            e.printStackTrace();
         }
     }
 
     @Override
     public synchronized void deleteObservers() {
-        this.observers.clear();
+        this.observers= new ArrayList<>();
     }
 
     @Override

@@ -8,6 +8,15 @@
     tools:context="br.com.valmirosjunior.caronafap.ShowRider"
     android:orientation="vertical">
 
+    <TextView
+        android:id="@+id/textViewMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:visibility="invisible"
+        android:gravity="center"
+        />
+
     <ListView
         android:id="@+id/listViewShowRides"
         android:layout_width="match_parent"

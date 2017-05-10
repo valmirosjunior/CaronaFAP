@@ -10,7 +10,6 @@ import android.widget.TextView;
 import com.facebook.CallbackManager;
 import com.facebook.login.widget.LoginButton;
 
-import java.util.IllegalFormatConversionException;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -57,7 +56,6 @@ public class MainActivity extends AppCompatActivity implements Observer{
 
     @Override
     public void update(Observable observable, Object o) {
-        MessageUtil.showProgressDialog(this);
         Status status;
         AlertDialog.Builder buider = MessageUtil.createAlertDialogBuilder(this);
         try {
@@ -68,6 +66,7 @@ public class MainActivity extends AppCompatActivity implements Observer{
                     buider.setTitle(R.string.success);
                     buider.setMessage(R.string.login_success);
                     buider.show();
+                    faceBookManager.deleteObserver(this);
                     startActivity(new Intent(this, ProfileUser.class));
                     this.finish();
                     break;
@@ -75,6 +74,7 @@ public class MainActivity extends AppCompatActivity implements Observer{
                 case CANCELED:
                     buider.setTitle(R.string.canceled_operation);
                     buider.setMessage(R.string.login_canceled);
+                    buider.setNeutralButton(R.string.ok,null);
                     buider.show();
                     break;
 
@@ -84,12 +84,10 @@ public class MainActivity extends AppCompatActivity implements Observer{
                     buider.show();
 
             }
-        }catch (IllegalFormatConversionException i){
+        }catch (Exception e){
             buider.setTitle(R.string.error);
             buider.setMessage(R.string.internal_error);
             buider.show();
-        }finally {
-          MessageUtil.hideProgressDialog();
         }
     }
 }

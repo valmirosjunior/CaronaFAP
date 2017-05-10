@@ -47,14 +47,16 @@ public class MessageUtil {
     public static void showProgressDialog(Context context){
         if (progressDialog == null){
             progressDialog=new ProgressDialog(context);
-            progressDialog.setMessage("Loading ....");
+            progressDialog.setMessage("...........");
         }
         progressDialog.show();
     }
 
     public static void hideProgressDialog(){
-        if(progressDialog.isShowing()) {
-            progressDialog.hide();
+        if (progressDialog != null){
+            if(progressDialog.isShowing()) {
+                progressDialog.hide();
+            }
         }
     }
 

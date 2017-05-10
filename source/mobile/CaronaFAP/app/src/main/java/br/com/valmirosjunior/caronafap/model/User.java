@@ -23,4 +23,14 @@ public class User {
         this.name = name;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof User){
+            User otherUser =(User) obj;
+            if (this.getId().equals(otherUser.getId())){
+                return true;
+            }
+        }
+        return false;
+    }
 }
