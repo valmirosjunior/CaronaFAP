@@ -5,7 +5,10 @@ package br.com.valmirosjunior.caronafap.util;
  */
 
 public class Constants {
-    public static String ORIGIN_RIDE = "OriginRide";
-    public static String DESTINATION_RIDE = "DestinationRide";
-    public static String ID_RIDE = "idRide";
+    public static String ORIGIN_RIDE = "ORIGIN_RIDE";
+    public static String DESTINATION_RIDE = "DESTINATION_RIDE";
+    public static String ID_RIDE = "ID_RIDE";
+    public static String TYPE_OBSERVER = "TYPE_OBSERVER";
+
+
 }

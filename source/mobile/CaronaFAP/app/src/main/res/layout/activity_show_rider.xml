@@ -5,8 +5,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="br.com.valmirosjunior.caronafap.ShowRider"
+    tools:context="br.com.valmirosjunior.caronafap.ShowRiderActivity"
     android:orientation="vertical">
+
 
     <TextView
         android:id="@+id/textViewMessage"

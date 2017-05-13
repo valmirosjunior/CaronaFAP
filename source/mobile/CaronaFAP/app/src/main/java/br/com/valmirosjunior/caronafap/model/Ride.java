@@ -87,6 +87,12 @@ public class Ride {
         return time;
     }
 
+    public int diferenceTime(Ride ride){
+        int timeRide=ride.getHourInMinutes();
+        int dif = timeRide-hourInMinutes;
+        return (dif>0) ? dif : (-1)* dif;
+    }
+
     public String toString(String userName){
         return userName+" "+toString();
     }
@@ -98,6 +104,8 @@ public class Ride {
                 "\nDe : "+origin.getAdress()+
                 "\nPara : "+destination.getAdress();
     }
+
+
 
 
 }

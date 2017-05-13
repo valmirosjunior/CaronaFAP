@@ -1,41 +1,39 @@
 package br.com.valmirosjunior.caronafap.model.dao;
 
-import android.location.Location;
 import android.util.Log;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Observable;
-import java.util.Observer;
 
+import br.com.valmirosjunior.caronafap.model.Observable;
+import br.com.valmirosjunior.caronafap.model.Observer;
 import br.com.valmirosjunior.caronafap.model.Ride;
 import br.com.valmirosjunior.caronafap.model.User;
+import br.com.valmirosjunior.caronafap.model.enums.Type;
 import br.com.valmirosjunior.caronafap.network.FaceBookManager;
 
 /**
  * Created by junior on 10/04/17.
  */
 
-public class RideDAO extends Observable{
+public class RideDAO implements Observable {
     private static RideDAO rideDao;
+    private DatabaseReference refToRides;
     private List<Observer> observers;
-    private DatabaseReference refToRides, ref;
     private HashMap<String,Ride> rideMap;
     private List<Ride> rides;
+    private Ride ride;
 
 
     private RideDAO() {
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
-        refToRides = FirebaseDatabase.getInstance().getReference("Rides");
+        refToRides = FirebaseFactory.getInstance().getReference("Rides");
         refToRides.keepSynced(true);
         rideMap = new HashMap<>();
         observers = new ArrayList<>();
@@ -49,6 +47,14 @@ public class RideDAO extends Observable{
         return rideDao;
     }
 
+    public Ride getRide() {
+        return ride;
+    }
+
+    public void setRide(Ride ride) {
+        this.ride = ride;
+    }
+
     public void saveRide(Ride ride) {
         if (ride.getIdRide() == null) {
             ride.setIdRide(refToRides.push().getKey());
@@ -58,40 +64,6 @@ public class RideDAO extends Observable{
 
     public void removeRide(String idRide) {
         refToRides.child(idRide).removeValue();
-
-    }
-
-    private ValueEventListener valueEventListiner(){
-        ValueEventListener rideListener = new ValueEventListener() {
-            HashMap<String, Ride> rideMapTemp;
-
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                try {
-                    if (dataSnapshot.exists()) {
-                        rideMapTemp = new HashMap<>();
-                        for (DataSnapshot rideSnapshot : dataSnapshot.getChildren()) {
-                            rideMapTemp.put(rideSnapshot.getKey(), rideSnapshot.getValue(Ride.class));
-                        }
-                    }
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                finally {
-                    rideMap = rideMapTemp;
-                    notifyObservers();
-                    addChildAddEventListenerToRides();
-                }
-            }
-
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.w("Cancelled Read Firebase", "loadPost:onCancelled", databaseError.toException());
-            }
-        };
-        return rideListener;
 
     }
 
@@ -155,58 +127,68 @@ public class RideDAO extends Observable{
 
     }
 
-    public List<Ride> getEspecifRides(Ride myRide){
-        Location la,lb;
-        la = new Location("A");
-        lb = new Location("B");
-
+    public List<Ride> getOtherRides(Ride myRide){
         User user = FaceBookManager.getCurrentUser();
         Ride ride;
-        int timeRide,timeMyRide;
         rides= new ArrayList<>();
         for (Map.Entry<String, Ride> rideEntry : rideMap.entrySet()){
             ride= rideEntry.getValue();
             if(!ride.getUser().equals(user)){
-                if(ride.getType()== myRide.getType()){
-                    timeRide=ride.getHourInMinutes();
-                    timeMyRide=myRide.getHourInMinutes();
-                    if(timeRide>=(timeMyRide-30) && timeRide <= (timeMyRide+30)){
-                        la.setLatitude(ride.getOrigin().getLatitude());
-                        la.setLongitude(ride.getDestination().getLongitude());
-                        lb.setLatitude(myRide.getOrigin().getLatitude());
-                        lb.setLongitude(myRide.getDestination().getLongitude());
-                        if(la.distanceTo(lb)< 1000){
+                if(ride.getType()!= myRide.getType()){
+                    if (ride.diferenceTime(myRide)<30){
+                        if(myRide.getOrigin().distanceToLocation(ride.getOrigin())< 1000 &&
+                           myRide.getDestination().distanceToLocation(ride.getDestination())<1000){
                             rides.add(ride);
                         }
                     }
                 }
-                rides.add(rideEntry.getValue());
             }
         }
         return rides;
 
     }
 
-    @Override
-    public synchronized void addObserver(Observer o) {
-        observers.add(o);
-    }
 
-    @Override
-    public synchronized void deleteObserver(Observer o) {
-        observers.remove(o);
-    }
+
+
 
     @Override
     public void notifyObservers() {
-        for (Observer o: observers) {
-            o.update(this, getRides());
+        Type type = null;
+        List<Ride> myRides =null, otherRides = null;
+        for (Observer observer: observers){
+            type = observer.getType();
+            if(type == Type.MY_RIDE){
+                if( myRides == null){
+                    myRides = getMyRides();
+                }
+                observer.update(this,myRides);
+            } else {
+                if (otherRides == null){
+                    if (ride !=   null)
+                        otherRides = getOtherRides(ride);
+                }
+                observer.update(this,otherRides);
+            }
+
         }
     }
 
 
-    @Override
+
+
     public synchronized void deleteObservers() {
         observers = new ArrayList<>();
+    }
+
+    public void addObserver(Observer o) {
+        if (!observers.contains(o)){
+        observers.add(o);
+        }
+
+    }
+
+    public void deleteObserver(Observer o) {
+        observers.remove(o);
     }
 }

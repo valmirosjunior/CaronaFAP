@@ -10,14 +10,14 @@ import android.widget.TextView;
 import com.facebook.CallbackManager;
 import com.facebook.login.widget.LoginButton;
 
-import java.util.Observable;
-import java.util.Observer;
-
+import br.com.valmirosjunior.caronafap.model.Observable;
+import br.com.valmirosjunior.caronafap.model.Observer;
 import br.com.valmirosjunior.caronafap.model.enums.Status;
+import br.com.valmirosjunior.caronafap.model.enums.Type;
 import br.com.valmirosjunior.caronafap.network.FaceBookManager;
 import br.com.valmirosjunior.caronafap.util.MessageUtil;
 
-public class MainActivity extends AppCompatActivity implements Observer{
+public class MainActivity extends AppCompatActivity implements Observer {
     private CallbackManager callbackManager;
     private LoginButton loginButton;
     private TextView tx;
@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity implements Observer{
         faceBookManager = new FaceBookManager(this);
         faceBookManager.addObserver(this);
         if (faceBookManager.isLoggedIn()) {
-            startActivity(new Intent(this,ProfileUser.class));
+            startActivity(new Intent(this,ProfileUserActivity.class));
             this.finish();
         } else {
             loginButton = (LoginButton) findViewById(R.id.login_button);
@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements Observer{
                     buider.setMessage(R.string.login_success);
                     buider.show();
                     faceBookManager.deleteObserver(this);
-                    startActivity(new Intent(this, ProfileUser.class));
+                    startActivity(new Intent(this, ProfileUserActivity.class));
                     this.finish();
                     break;
 
@@ -89,5 +89,10 @@ public class MainActivity extends AppCompatActivity implements Observer{
             buider.setMessage(R.string.internal_error);
             buider.show();
         }
+    }
+
+    @Override
+    public Type getType() {
+        return null;
     }
 }

@@ -5,20 +5,7 @@ package br.com.valmirosjunior.caronafap.model.enums;
  */
 
 public enum Type {
+    ORDERED,OFFERED,MY_RIDE,OTHER_RIDES, REQUEST, CONFIRM;
 
-    ORDERED("ORDERED"),OFFERED("OFFERED");
 
-   private String value;
-
-    /**
-     * @param value {@link String}
-     */
-    Type(String value) {
-        this.value=value;
-    }
-
-    /*public String getValue() {
-        return this.value;
-    }
-    */
 }

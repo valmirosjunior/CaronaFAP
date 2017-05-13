@@ -14,24 +14,33 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.facebook.login.widget.ProfilePictureView;
 
-import java.util.Observable;
-import java.util.Observer;
+import java.util.ArrayList;
+import java.util.List;
 
+import br.com.valmirosjunior.caronafap.adapter.NotificationAdapter;
+import br.com.valmirosjunior.caronafap.model.Notification;
+import br.com.valmirosjunior.caronafap.model.Observable;
+import br.com.valmirosjunior.caronafap.model.Observer;
 import br.com.valmirosjunior.caronafap.model.User;
+import br.com.valmirosjunior.caronafap.model.dao.NotificationDAO;
 import br.com.valmirosjunior.caronafap.model.enums.Status;
+import br.com.valmirosjunior.caronafap.model.enums.Type;
 import br.com.valmirosjunior.caronafap.network.FaceBookManager;
 import br.com.valmirosjunior.caronafap.util.MessageUtil;
 
-public class ProfileUser extends AppCompatActivity
+public class ProfileUserActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, Observer {
-    private FaceBookManager faceBookManager;
     private User user;
+    private FaceBookManager faceBookManager;
+    private NotificationDAO notificationDAO;
+    private NotificationAdapter notificationAdapter;
     private ProfilePictureView profilePictureNav,profilePictureMain;
-    private TextView textViewUser, textViewWelcome;
+    private TextView textViewUser, textViewWelcome,textViewMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +54,7 @@ public class ProfileUser extends AppCompatActivity
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    startActivity(new Intent(ProfileUser.this, RegisterRide.class));
+                    startActivity(new Intent(ProfileUserActivity.this, RegisterRideActivity.class));
                 }
             });
 
@@ -59,9 +68,18 @@ public class ProfileUser extends AppCompatActivity
             NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
             navigationView.setNavigationItemSelectedListener(this);
 
+            notificationAdapter = new NotificationAdapter(this,new ArrayList<Notification>());
+            ListView listView = (ListView) findViewById(R.id.listViewShowNotifications);
+            listView.setAdapter(notificationAdapter);
+
 
             faceBookManager = new FaceBookManager(this);
+            notificationDAO = NotificationDAO.getInstance();
             faceBookManager.addObserver(this);
+
+            notificationDAO.addObserver(this);
+
+
             user = faceBookManager.getCurrentUser();
 
             textViewWelcome = (TextView) findViewById(R.id.textViewWelcome);
@@ -71,18 +89,28 @@ public class ProfileUser extends AppCompatActivity
             profilePictureNav = (ProfilePictureView)
                     navigationView.getHeaderView(0).findViewById(R.id.profilePictureUserNavBar);
 
-            try {
-                textViewWelcome.append(" " + user.getName());
-                textViewUser.setText(user.getName());
-                profilePictureMain.setProfileId(user.getId());
-                profilePictureNav.setProfileId(user.getId());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            textViewWelcome.append(" " + user.getName());
+            textViewUser.setText(user.getName());
+            profilePictureMain.setProfileId(user.getId());
+            profilePictureNav.setProfileId(user.getId());
+
         }catch (Exception e){
             e.printStackTrace();
         }
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        notificationDAO.addObserver(this);
+        update(notificationDAO,notificationDAO.getNotifications());
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        notificationDAO.deleteObserver(this);
     }
 
     @Override
@@ -117,13 +145,13 @@ public class ProfileUser extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
+
         int id = item.getItemId();
 
         if (id == R.id.nav_register) {
-            startActivity(new Intent(this, RegisterRide.class));
+            startActivity(new Intent(this, RegisterRideActivity.class));
         } else if (id == R.id.nav_seeRides) {
-            startActivity(new Intent(this, ShowRider.class));
+            startActivity(new Intent(this, ShowRiderActivity.class));
         } else if (id == R.id.nav_share) {
             MessageUtil.showToast(this, "Ainda não está pronto!");
         } else if (id == R.id.nav_send) {
@@ -153,26 +181,39 @@ public class ProfileUser extends AppCompatActivity
 
     @Override
     public void update(Observable observable, Object o) {
-        Status status;
-        AlertDialog.Builder buider = MessageUtil.createAlertDialogBuilder(this);
-        try {
-            status = (Status) o;
-            switch (status) {
-                case SUCCESS:
-                    startActivity(new Intent(this,MainActivity.class));
-                    faceBookManager.deleteObserver(this);
-                    this.finish();
-                    break;
-                case ERROR:
-                    buider.setTitle(R.string.error);
-                    buider.setMessage(R.string.internal_error);
-                    buider.show();
-                    break;
+        if ( observable instanceof FaceBookManager ){
+            Status status;
+            AlertDialog.Builder buider = MessageUtil.createAlertDialogBuilder(this);
+            try {
+                status = (Status) o;
+                switch (status) {
+                    case SUCCESS:
+                        startActivity(new Intent(this,MainActivity.class));
+                        faceBookManager.deleteObserver(this);
+                        this.finish();
+                        break;
+                    case ERROR:
+                        buider.setTitle(R.string.error);
+                        buider.setMessage(R.string.internal_error);
+                        buider.show();
+                        break;
+                }
+            }catch (Exception e){
+                buider.setTitle(R.string.error);
+                buider.setMessage(R.string.internal_error);
+                buider.show();
             }
-        }catch (Exception e){
-            buider.setTitle(R.string.error);
-            buider.setMessage(R.string.internal_error);
-            buider.show();
+        }else {
+            List<Notification> notifications = (List<Notification>)o;
+            notificationAdapter.notifyDataSetInvalidated();
+            notificationAdapter.setNotifications(notifications);
+            notificationAdapter.notifyDataSetChanged();
         }
+    }
+
+
+    @Override
+    public Type getType() {
+        return null;
     }
 }

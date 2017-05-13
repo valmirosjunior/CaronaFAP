@@ -2,14 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/edit_ride"
-        android:title="@string/edit" />
-
-    <item
-        android:id="@+id/delete"
-        android:title="Excluir" />
-
-    <item
         android:id="@+id/viewOnmap"
         android:title="@string/see_on_map" />
 
@@ -18,6 +10,6 @@
         android:title="@string/see_profile_on_facebook" />
 
     <item
-        android:id="@+id/findRide"
-        android:title="@string/find_patner" />
+        android:id="@+id/requestRide"
+        android:title="@string/request_ride" />
 </menu>

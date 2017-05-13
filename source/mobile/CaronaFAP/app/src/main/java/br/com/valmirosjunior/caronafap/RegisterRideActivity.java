@@ -26,7 +26,7 @@ import br.com.valmirosjunior.caronafap.util.Constants;
 import br.com.valmirosjunior.caronafap.util.MessageUtil;
 import br.com.valmirosjunior.caronafap.util.Util;
 
-public class RegisterRide extends AppCompatActivity {
+public class RegisterRideActivity extends AppCompatActivity {
 
     int PLACE_PICKER_REQUEST = 1;
     private EditText  editAdress,editOrigin, editDestination,editTime;
@@ -127,6 +127,22 @@ public class RegisterRide extends AppCompatActivity {
         return ride;
     }
 
+    private void checkIsNewRideOrUpdate(){
+        Intent intent = getIntent();
+        idRide =intent.getStringExtra(Constants.ID_RIDE);
+        if(idRide != null){
+            Ride ride;
+            ride = rideDAO.getRide(idRide);
+            editOrigin.setText(ride.getOrigin().getAdress());
+            editDestination.setText(ride.getDestination().getAdress());
+            editTime.setText(ride.formaterTime());
+            radioGroup.check((ride.getType()== Type.ORDERED?
+                    R.id.rbAskRide : R.id.rbOferrRide ));
+            locationOrigin =ride.getOrigin();
+            locationDestination= ride.getDestination();
+        }
+    }
+
     private boolean valideFields() {
         if (radioGroup.getCheckedRadioButtonId() == -1){
             showAlertDialog("Erro!","É necessário escolher o Que você deseja fazer!!");
@@ -152,16 +168,26 @@ public class RegisterRide extends AppCompatActivity {
         builder.setMessage("Sua Solicitação de Carona Foi registrada");
         builder.setTitle("Solicitação Realizada com Sucesso!");
 
-        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(R.string.search, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                backToHomeScreen();
+                Intent intent = new Intent (RegisterRideActivity.this, ShowRiderActivity.class);
+                intent.putExtra(Constants.TYPE_OBSERVER,Type.OTHER_RIDES);
+                RegisterRideActivity.this.finish();
+                startActivity(intent);
+                RegisterRideActivity.this.finish();
             }
         });
-        builder.setNegativeButton("Nova", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(R.string.new_ride, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 continueHere();
+            }
+        });
+        builder.setNeutralButton(R.string.back, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                backToHomeScreen();
             }
         });
 
@@ -186,22 +212,6 @@ public class RegisterRide extends AppCompatActivity {
         editOrigin.setText("");
         editDestination.setText("");
         editTime.setText("");
-    }
-
-    private void checkIsNewRideOrUpdate(){
-        Intent intent = getIntent();
-        idRide =intent.getStringExtra(Constants.ID_RIDE);
-        if(idRide != null){
-            Ride ride;
-            ride = rideDAO.getRide(idRide);
-            editOrigin.setText(ride.getOrigin().getAdress());
-            editDestination.setText(ride.getDestination().getAdress());
-            editTime.setText(ride.formaterTime());
-            radioGroup.check((ride.getType()== Type.ORDERED?
-                              R.id.rbAskRide : R.id.rbOferrRide ));
-            locationOrigin =ride.getOrigin();
-            locationDestination= ride.getDestination();
-        }
     }
 
 }

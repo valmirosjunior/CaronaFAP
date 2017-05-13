@@ -22,9 +22,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
 
+import br.com.valmirosjunior.caronafap.model.Observable;
+import br.com.valmirosjunior.caronafap.model.Observer;
 import br.com.valmirosjunior.caronafap.model.User;
 import br.com.valmirosjunior.caronafap.model.enums.Status;
 
@@ -33,7 +33,7 @@ import br.com.valmirosjunior.caronafap.model.enums.Status;
  * Created by junior on 10/03/17.
  */
 
-public class FaceBookManager extends Observable {
+public class FaceBookManager implements Observable {
     private Context context;
     private FirebaseAuth firebaseAuth;
     private static User user;
@@ -145,8 +145,8 @@ public class FaceBookManager extends Observable {
         }
     }
 
-    @Override
-    public void notifyObservers(Object arg) {
+
+    private void notifyObservers(Object arg) {
         try {
             setStatus((Status) arg);
             notifyObservers();
@@ -158,10 +158,5 @@ public class FaceBookManager extends Observable {
     @Override
     public synchronized void deleteObservers() {
         this.observers= new ArrayList<>();
-    }
-
-    @Override
-    public synchronized int countObservers() {
-        return this.observers.size();
     }
 }

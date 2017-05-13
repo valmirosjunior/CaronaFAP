@@ -18,7 +18,7 @@ import br.com.valmirosjunior.caronafap.model.Ride;
  * Created by junior on 22/04/17.
  */
 
-public class CustomAdapterRide extends BaseAdapter {
+public class RideAdapter extends BaseAdapter {
     private List<Ride> rides;
     private Context context;
     private TextView textView;
@@ -35,7 +35,7 @@ public class CustomAdapterRide extends BaseAdapter {
         this.rides = rides;
     }
 
-    public CustomAdapterRide(Context context, List<Ride> rides ) {
+    public RideAdapter(Context context, List<Ride> rides ) {
         this.rides =rides;
         this.context = context;
         inflater = (LayoutInflater) context.

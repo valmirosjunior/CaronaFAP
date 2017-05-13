@@ -1,5 +1,7 @@
 package br.com.valmirosjunior.caronafap.model;
 
+import android.location.Location;
+
 import java.io.Serializable;
 
 /**
@@ -50,6 +52,18 @@ public class MyLocation implements Serializable{
 
     public void setAdress(String adress) {
         this.adress = adress;
+    }
+
+
+    public double distanceToLocation(MyLocation otherLocation){
+        Location la,lb;
+        la= new Location("this");
+        lb = new Location("other");
+        la.setLatitude(latitude);
+        la.setLongitude(longitude);
+        lb.setLatitude(otherLocation.latitude);
+        lb.setLongitude(otherLocation.longitude);
+        return la.distanceTo(lb);
     }
 
 
