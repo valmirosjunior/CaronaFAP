@@ -10,8 +10,8 @@ import android.widget.TextView;
 import com.facebook.CallbackManager;
 import com.facebook.login.widget.LoginButton;
 
-import br.com.valmirosjunior.caronafap.model.Observable;
-import br.com.valmirosjunior.caronafap.model.Observer;
+import br.com.valmirosjunior.caronafap.patners.Observable;
+import br.com.valmirosjunior.caronafap.patners.Observer;
 import br.com.valmirosjunior.caronafap.model.enums.Status;
 import br.com.valmirosjunior.caronafap.model.enums.Type;
 import br.com.valmirosjunior.caronafap.network.FaceBookManager;
@@ -52,6 +52,11 @@ public class MainActivity extends AppCompatActivity implements Observer {
         } catch (Exception e) {
             MessageUtil.showToast(this, "Ocorreu erro");
         }
+    }
+
+    @Override
+    public void update(Object object) {
+
     }
 
     @Override

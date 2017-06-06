@@ -6,6 +6,7 @@ package br.com.valmirosjunior.caronafap.model;
 
 public class User {
     private String id, name;
+    private double note;
 
     public String getId() {
         return id;
@@ -21,6 +22,15 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+
+    public double getNote() {
+        return note;
+    }
+
+    public void setNote(double note) {
+        this.note = note;
     }
 
     @Override

@@ -10,19 +10,16 @@
             android:id="@+id/nav_seeRides"
             android:icon="@android:drawable/ic_menu_search"
             android:title="@string/see_rides" />
+        <item
+            android:id="@+id/nav_seeMessages"
+            android:icon="@android:drawable/ic_menu_search"
+            android:title="@string/messages" />
+        <item
+            android:id="@+id/nav_seeSolicitation"
+            android:icon="@android:drawable/ic_menu_search"
+            android:title="@string/solicitations" />
     </group>
 
-    <item android:title="@string/comunicate">
-        <menu>
-            <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
-            <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
-        </menu>
-    </item>
+
 
 </menu>

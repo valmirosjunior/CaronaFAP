@@ -7,17 +7,17 @@ import br.com.valmirosjunior.caronafap.model.enums.Type;
  */
 
 public class Notification {
-    private String idNotification;
+    private String id;
     private User sender,receiver;
     private String idRide;
-    private Type type;
+    private Type send, receive;
 
-    public String getIdNotification() {
-        return idNotification;
+    public String getId() {
+        return id;
     }
 
-    public void setIdNotification(String idNotification) {
-        this.idNotification = idNotification;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public User getSender() {
@@ -40,20 +40,30 @@ public class Notification {
         return idRide;
     }
 
-    public void setIdRide(String idRide) {
-        this.idRide = idRide;
+    public void setIdRide(String idRideReceiver) {
+        this.idRide = idRideReceiver;
     }
 
-    public Type getType() {
-        return type;
+
+    public Type getSend() {
+        return send;
     }
 
-    public void setType(Type type) {
-        this.type = type;
+    public void setSend(Type send) {
+        this.send = send;
+    }
+
+    public Type getReceive() {
+        return receive;
+    }
+
+    public void setReceive(Type receive) {
+        this.receive = receive;
     }
 
     @Override
     public String toString() {
-        return sender.getName()+ "\n"+((type == Type.REQUEST)? "Enviou uma solicitação" : "Ofereceu uma carona");
+        return sender.getName()+ "\n"+((send == Type.REQUEST)? "Enviou uma solicitação" :
+                ((send == Type.CONFIRM)? "Aceitou sua solicitação" :"Rejeitou sua  Solicitação"));
     }
 }

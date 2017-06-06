@@ -61,7 +61,7 @@ public class RegisterRideActivity extends AppCompatActivity {
                 try {
                     Ride ride = fillRide();
                     if (ride!=null){
-                        ride.setIdRide(idRide);
+                        ride.setId(idRide);
                         rideDAO.saveRide(ride);
                         showConfirmDialog();
                     }
@@ -168,26 +168,16 @@ public class RegisterRideActivity extends AppCompatActivity {
         builder.setMessage("Sua Solicitação de Carona Foi registrada");
         builder.setTitle("Solicitação Realizada com Sucesso!");
 
-        builder.setPositiveButton(R.string.search, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent (RegisterRideActivity.this, ShowRiderActivity.class);
-                intent.putExtra(Constants.TYPE_OBSERVER,Type.OTHER_RIDES);
-                RegisterRideActivity.this.finish();
-                startActivity(intent);
-                RegisterRideActivity.this.finish();
-            }
-        });
-        builder.setNegativeButton(R.string.new_ride, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                continueHere();
-            }
-        });
-        builder.setNeutralButton(R.string.back, new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(R.string.back, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 backToHomeScreen();
+            }
+        });
+        builder.setPositiveButton(R.string.new_ride, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                continueHere();
             }
         });
 

@@ -1,6 +1,9 @@
 package br.com.valmirosjunior.caronafap.util;
 
+import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 
 import java.text.DateFormat;
@@ -39,6 +42,28 @@ public class Util {
             list.add(entry.getValue());
         }
         return list;
+    }
+
+    public static void seeProfile(Context context,String idUser){
+        Intent intent ;
+        try {
+            context.getPackageManager().getPackageInfo("com.facebook.katana", 0);
+            intent = new Intent(Intent.ACTION_VIEW, Uri.parse("fb://profile/"+idUser));
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
+        } catch (Exception e) {
+            try{
+                context.getPackageManager().getPackageInfo("com.facebook.lite", 0);
+                intent = new Intent(Intent.ACTION_VIEW, Uri.parse("fb://profile/"+idUser));
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
+            }catch (Exception ex){
+                intent = new Intent(Intent.ACTION_VIEW,
+                        Uri.parse("https://facebook.com/"+idUser));
+                context.startActivity(intent);
+            }
+        }
+
     }
 
 }

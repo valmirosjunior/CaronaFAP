@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="br.com.valmirosjunior.caronafap.Conversation">
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/floatingActionButton"
+        android:layout_width="47dp"
+        android:layout_height="47dp"
+        android:layout_marginRight="33dp"
+        android:clickable="true"
+        app:backgroundTint="@android:color/holo_blue_dark"
+        app:fabSize="mini"
+        app:layout_constraintRight_toRightOf="parent"
+        app:srcCompat="@drawable/ic_menu_send"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="27dp"
+        android:layout_marginEnd="33dp" />
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="274dp"
+        android:layout_height="66dp"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/floatingActionButton"
+        android:layout_marginRight="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:id="@+id/textInputLayout">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Digite a Mensagem" />
+    </android.support.design.widget.TextInputLayout>
+
+    <ListView
+        android:layout_width="335dp"
+        android:layout_height="403dp"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/textInputLayout"
+        tools:layout_editor_absoluteY="-49dp"
+        tools:layout_editor_absoluteX="6dp" />
+
+
+</android.support.constraint.ConstraintLayout>

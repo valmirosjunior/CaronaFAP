@@ -19,8 +19,8 @@ import java.util.List;
 
 import br.com.valmirosjunior.caronafap.adapter.RideAdapter;
 import br.com.valmirosjunior.caronafap.model.Notification;
-import br.com.valmirosjunior.caronafap.model.Observable;
-import br.com.valmirosjunior.caronafap.model.Observer;
+import br.com.valmirosjunior.caronafap.patners.Observable;
+import br.com.valmirosjunior.caronafap.patners.Observer;
 import br.com.valmirosjunior.caronafap.model.Ride;
 import br.com.valmirosjunior.caronafap.model.dao.NotificationDAO;
 import br.com.valmirosjunior.caronafap.model.dao.RideDAO;
@@ -28,6 +28,7 @@ import br.com.valmirosjunior.caronafap.model.enums.Type;
 import br.com.valmirosjunior.caronafap.network.FaceBookManager;
 import br.com.valmirosjunior.caronafap.util.Constants;
 import br.com.valmirosjunior.caronafap.util.MessageUtil;
+import br.com.valmirosjunior.caronafap.util.Util;
 
 public class ShowRiderActivity extends AppCompatActivity implements Observer {
     private RideDAO rideDAO;
@@ -54,7 +55,7 @@ public class ShowRiderActivity extends AppCompatActivity implements Observer {
             typeObserver = (Type) intent.getSerializableExtra(Constants.TYPE_OBSERVER);
 
         }else {
-            typeObserver = Type.MY_RIDE;
+            typeObserver = Type.MINE;
         }
 
         updateMessage();
@@ -84,7 +85,7 @@ public class ShowRiderActivity extends AppCompatActivity implements Observer {
 
     @Override
     public void onBackPressed(){
-        if(typeObserver == Type.MY_RIDE){
+        if(typeObserver == Type.MINE){
             super.onBackPressed();
         }else{
             changeTypeObserver();
@@ -96,7 +97,7 @@ public class ShowRiderActivity extends AppCompatActivity implements Observer {
         updateMessage();
         MessageUtil.showProgressDialog(this);
         rideDAO.setRide(ride);
-        typeObserver = typeObserver== Type.MY_RIDE ? Type.OTHER_RIDES: Type.MY_RIDE;
+        typeObserver = typeObserver== Type.MINE ? Type.OTHER_RIDES: Type.MINE;
         rideDAO.notifyObservers();
         updateMessage();
         MessageUtil.hideProgressDialog();
@@ -123,12 +124,12 @@ public class ShowRiderActivity extends AppCompatActivity implements Observer {
         switch (item.getItemId()) {
             case R.id.edit_ride:
                 intent = new Intent(this, RegisterRideActivity.class);
-                intent.putExtra(Constants.ID_RIDE,ride.getIdRide());
+                intent.putExtra(Constants.ID_RIDE,ride.getId());
                 startActivity(intent);
                 return true;
 
             case R.id.delete:
-                showConfirmDeleteRide(ride.getIdRide());
+                showConfirmDeleteRide(ride.getId());
                 return true;
 
             case R.id.viewOnmap :
@@ -142,23 +143,7 @@ public class ShowRiderActivity extends AppCompatActivity implements Observer {
 
             case R.id.viewProfile :
                 String idUSer= ride.getUser().getId();
-                try {
-                    this.getPackageManager().getPackageInfo("com.facebook.katana", 0);
-                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse("fb://profile/"+idUSer));
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
-                } catch (Exception e) {
-                    try{
-                        this.getPackageManager().getPackageInfo("com.facebook.lite", 0);
-                        intent = new Intent(Intent.ACTION_VIEW, Uri.parse("fb://profile/"+idUSer));
-                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(intent);
-                    }catch (Exception ex){
-                        intent = new Intent(Intent.ACTION_VIEW,
-                                Uri.parse("https://facebook.com/"+idUSer));
-                        startActivity(intent);
-                    }
-                }
+                Util.seeProfile(this,idUSer);
                 return true;
 
             case R.id.findRide:
@@ -177,7 +162,7 @@ public class ShowRiderActivity extends AppCompatActivity implements Observer {
 
     }
         private void updateMessage (){
-            if(typeObserver ==  Type.MY_RIDE){
+            if(typeObserver ==  Type.MINE){
                 setTitle(R.string.your_rides);
             }else{
                 setTitle(R.string.result_search);
@@ -209,9 +194,9 @@ public class ShowRiderActivity extends AppCompatActivity implements Observer {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Notification notification = new Notification();
-                notification.setIdRide(ride.getIdRide());
+                notification.setIdRide(ride.getId());
                 notification.setReceiver(ride.getUser());
-                notification.setType(Type.REQUEST);
+                notification.setSend(Type.REQUEST);
                 notification.setSender(FaceBookManager.getCurrentUser());
                 NotificationDAO.getInstance().sendNotification(notification);
                 startActivity(new Intent(ShowRiderActivity.this, ProfileUserActivity.class));
@@ -227,11 +212,10 @@ public class ShowRiderActivity extends AppCompatActivity implements Observer {
 
     @Override
     public void update(Observable observable, Object o) {
-        //List<Ride> rides = rideDAO.getMyRides();
         List<Ride> rides = (List<Ride>) o;
         if (rides.size()==0){
             textViewMessage.setVisibility(View.VISIBLE);
-            if(typeObserver == Type.MY_RIDE){
+            if(typeObserver == Type.MINE){
                 textViewMessage.setText(R.string.no_register_rides);
             }else{
                 textViewMessage.setText(R.string.no_found_rides);
@@ -251,6 +235,8 @@ public class ShowRiderActivity extends AppCompatActivity implements Observer {
         return typeObserver;
     }
 
-
-
+    @Override
+    public void update(Object object) {
+        update(null, object);
+    }
 }

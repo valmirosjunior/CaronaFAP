@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -24,13 +25,14 @@ import java.util.List;
 
 import br.com.valmirosjunior.caronafap.adapter.NotificationAdapter;
 import br.com.valmirosjunior.caronafap.model.Notification;
-import br.com.valmirosjunior.caronafap.model.Observable;
-import br.com.valmirosjunior.caronafap.model.Observer;
+import br.com.valmirosjunior.caronafap.patners.Observable;
+import br.com.valmirosjunior.caronafap.patners.Observer;
 import br.com.valmirosjunior.caronafap.model.User;
 import br.com.valmirosjunior.caronafap.model.dao.NotificationDAO;
 import br.com.valmirosjunior.caronafap.model.enums.Status;
 import br.com.valmirosjunior.caronafap.model.enums.Type;
 import br.com.valmirosjunior.caronafap.network.FaceBookManager;
+import br.com.valmirosjunior.caronafap.util.Constants;
 import br.com.valmirosjunior.caronafap.util.MessageUtil;
 
 public class ProfileUserActivity extends AppCompatActivity
@@ -72,13 +74,23 @@ public class ProfileUserActivity extends AppCompatActivity
             ListView listView = (ListView) findViewById(R.id.listViewShowNotifications);
             listView.setAdapter(notificationAdapter);
 
+            listView.setOnItemClickListener(new android.widget.AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
+                    Notification notification = (Notification) parent.getItemAtPosition(position);
+
+                    Intent intent = new Intent(ProfileUserActivity.this, SeeNotificationActivity.class);
+                    intent.putExtra(Constants.ID_NOTIFICATION, notification.getId());
+                    startActivity(intent);
+                }
+            });
+
 
             faceBookManager = new FaceBookManager(this);
             notificationDAO = NotificationDAO.getInstance();
             faceBookManager.addObserver(this);
 
             notificationDAO.addObserver(this);
-
 
             user = faceBookManager.getCurrentUser();
 
@@ -93,6 +105,8 @@ public class ProfileUserActivity extends AppCompatActivity
             textViewUser.setText(user.getName());
             profilePictureMain.setProfileId(user.getId());
             profilePictureNav.setProfileId(user.getId());
+
+
 
         }catch (Exception e){
             e.printStackTrace();
@@ -152,16 +166,14 @@ public class ProfileUserActivity extends AppCompatActivity
             startActivity(new Intent(this, RegisterRideActivity.class));
         } else if (id == R.id.nav_seeRides) {
             startActivity(new Intent(this, ShowRiderActivity.class));
-        } else if (id == R.id.nav_share) {
-            MessageUtil.showToast(this, "Ainda não está pronto!");
-        } else if (id == R.id.nav_send) {
-            MessageUtil.showToast(this, "Ainda não está pronto!");
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
 
     private void showConfirmDialog(){
         AlertDialog.Builder builder = MessageUtil.createAlertDialogBuilder(this);
@@ -177,6 +189,11 @@ public class ProfileUserActivity extends AppCompatActivity
         builder.setNegativeButton(R.string.no, null);
         AlertDialog dialog = builder.create();
         dialog.show();
+    }
+
+    @Override
+    public void update(Object object) {
+
     }
 
     @Override

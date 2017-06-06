@@ -1,99 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context="br.com.valmirosjunior.caronafap.RegisterRideActivity">
 
-    <TextView
-        android:id="@+id/tvWhatDoYouWant"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-        android:text="@string/what_do_you_want" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <RadioGroup
-        android:id="@+id/rgRide"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="center">
-
-        <RadioButton
-            android:id="@+id/rbAskRide"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/ask_ride" />
-
-        <RadioButton
-            android:id="@+id/rbOferrRide"
+        <TextView
+            android:id="@+id/tvWhatDoYouWant"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/offer_ride" />
-    </RadioGroup>
+            android:layout_gravity="center"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            android:text="@string/what_do_you_want" />
 
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10sp"
-        android:orientation="vertical"
-        android:weightSum="1">
+        <RadioGroup
+            android:id="@+id/rgRide"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center">
 
+            <RadioButton
+                android:id="@+id/rbAskRide"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/ask_ride" />
 
-        <EditText
+            <RadioButton
+                android:id="@+id/rbOferrRide"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/offer_ride" />
+        </RadioGroup>
+
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:focusable="false"
-            android:hint="@string/origim"
-            android:onClick="openPlacePicker"
-            tools:clickable="true"
-            android:id="@+id/editOrigimRide"/>
+            android:layout_marginTop="10sp"
+            android:orientation="vertical"
+            android:weightSum="1">
 
-    </android.support.design.widget.TextInputLayout>
 
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10sp">
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:hint="@string/origim"
+                android:onClick="openPlacePicker"
+                tools:clickable="true"
+                android:id="@+id/editOrigimRide"/>
 
-        <EditText
-            android:id="@+id/editDestinationRide"
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/destination"
-            tools:clickable="true"
-            android:onClick="openPlacePicker"
-            android:focusable="false" />
-    </android.support.design.widget.TextInputLayout>
+            android:layout_marginTop="10sp">
+
+            <EditText
+                android:id="@+id/editDestinationRide"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/destination"
+                tools:clickable="true"
+                android:onClick="openPlacePicker"
+                android:focusable="false" />
+        </android.support.design.widget.TextInputLayout>
 
 
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10sp">
-
-        <EditText
-            android:id="@+id/editTimeRide"
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:focusable="false"
-            android:hint="@string/time_ride"
-            android:onClick="showTimePickerDialog"
-            android:clickable="true"/>
+            android:layout_marginTop="10sp">
 
-    </android.support.design.widget.TextInputLayout>
+            <EditText
+                android:id="@+id/editTimeRide"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:hint="@string/time_ride"
+                android:onClick="showTimePickerDialog"
+                android:clickable="true"/>
 
-    <Button
-        android:id="@+id/butSaveRide"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/register_ride"
-        android:layout_marginTop="10sp"/>
+        </android.support.design.widget.TextInputLayout>
+
+        <Button
+            android:id="@+id/butSaveRide"
+            style="@style/Base.TextAppearance.AppCompat.Large"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10sp"
+            android:background="@color/colorPrimary"
+            android:text="@string/register_ride"
+            android:textColor="@android:color/background_light" />
+
+    </LinearLayout>
 
 
-
-</LinearLayout>
+</ScrollView>

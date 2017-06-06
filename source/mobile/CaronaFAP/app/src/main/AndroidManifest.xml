@@ -12,6 +12,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <!--service
+            android:name=".MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".MyFirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+            </intent-filter>
+        </service-->
+
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
@@ -30,12 +45,17 @@
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" />
         <activity android:name=".ShowRiderActivity" />
-
         <activity android:name=".RegisterRideActivity" />
         <activity
             android:name=".ProfileUserActivity"
             android:label="@string/title_activity_profile_user"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".SeeNotificationActivity" />
+        <activity
+            android:name=".SeeProfile"
+            android:label="@string/title_activity_see_profile"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Conversation"></activity>
     </application>
 
 </manifest>

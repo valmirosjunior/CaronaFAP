@@ -1,4 +1,4 @@
-package br.com.valmirosjunior.caronafap.model;
+package br.com.valmirosjunior.caronafap.patners;
 
 import br.com.valmirosjunior.caronafap.model.enums.Type;
 
@@ -7,6 +7,8 @@ import br.com.valmirosjunior.caronafap.model.enums.Type;
  */
 
 public interface Observer {
+
+    public void update (Object object);
 
     public void update (Observable observable, Object object);
 

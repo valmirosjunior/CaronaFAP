@@ -1,5 +1,7 @@
 package br.com.valmirosjunior.caronafap.model;
 
+import java.util.Calendar;
+
 import br.com.valmirosjunior.caronafap.model.enums.Status;
 import br.com.valmirosjunior.caronafap.model.enums.Type;
 
@@ -9,23 +11,24 @@ import br.com.valmirosjunior.caronafap.model.enums.Type;
 
 public class Ride {
 
-    private String idRide;
+    private String id;
     private User user;
     private MyLocation origin, destination;
     private int hourInMinutes;
     private Status status;
     private Type type;
+    private Calendar date;
 
 
     public Ride() {
     }
 
-    public String getIdRide() {
-        return idRide;
+    public String getId() {
+        return id;
     }
 
-    public void setIdRide(String idRide) {
-        this.idRide = idRide;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public User getUser() {
@@ -106,6 +109,10 @@ public class Ride {
     }
 
 
-
-
+    public String getDescription() {
+        return  " A Carona que você está: "+((type == Type.ORDERED) ?
+                "Pedindo " : "Oferecendo ")+" as: "+formaterTime()+"Hs"+
+                "\nDe : "+origin.getAdress()+
+                "\nPara : "+destination.getAdress();
+    }
 }

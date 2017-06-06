@@ -4,7 +4,7 @@
     <string name="app_name">CaronaFAP</string>
     <string name="title_activity_maps">Mapa</string>
     <string name="title_activity_show_rider">Visualizar Caronas</string>
-    <string name="title_activity_profile_user">Tela Inicial</string>
+    <string name="title_activity_profile_user">Bem Vindo Ao Carona FAP</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -65,5 +65,15 @@
     <string name="your_rides">Suas Caronas</string>
     <string name="result_search">Resultado da pesquisa</string>
     <string name="back">Voltar</string>
+    <string name="accept">Confirmar</string>
+    <string name="reject">Recusar</string>
+    <string name="reject_ride">Você deseja Realmente rejeitar essa solicitação?</string>
+    <string name="confirm_accept_request">Deseja confirmar solicitação</string>
+    <string name="reject_accept_request">Deseja realmente Rejeitar solicitção?</string>
+    <string name="title_activity_see_profile">SeeProfile</string>
+    <string name="title_activity_conversation">Conversation</string>
+    <string name="send">Enviar</string>
+    <string name="solicitations">Solicitações</string>
+    <string name="messages">Solicitações</string>
 
 </resources>

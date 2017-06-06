@@ -1,4 +1,4 @@
-package br.com.valmirosjunior.caronafap.model;
+package br.com.valmirosjunior.caronafap.patners;
 
 /**
  * Created by junior on 10/05/17.

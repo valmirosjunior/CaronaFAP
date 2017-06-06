@@ -6,6 +6,7 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,17 +14,18 @@ import java.util.List;
 import java.util.Map;
 
 import br.com.valmirosjunior.caronafap.model.Notification;
-import br.com.valmirosjunior.caronafap.model.Observable;
-import br.com.valmirosjunior.caronafap.model.Observer;
 import br.com.valmirosjunior.caronafap.model.User;
 import br.com.valmirosjunior.caronafap.model.enums.Type;
 import br.com.valmirosjunior.caronafap.network.FaceBookManager;
+import br.com.valmirosjunior.caronafap.patners.Observable;
+import br.com.valmirosjunior.caronafap.patners.Observer;
 
 /**
  * Created by junior on 10/05/17.
  */
 
 public class NotificationDAO implements Observable{
+
     private static NotificationDAO notificationDAO;
     private DatabaseReference refToNotification,refToSendNotification,ref;
     private List<Observer> observers;
@@ -49,27 +51,21 @@ public class NotificationDAO implements Observable{
         return notificationDAO;
     }
 
-
-
-    private  String getIdUser(){
-        return FaceBookManager.getCurrentUser().getId();
-    }
-
     public void sendNotification(Notification notification){
-        if(notification.getIdNotification() == null){
+        if(notification.getId() == null){
             ref=refToSendNotification.child(notification.getReceiver().getId()).push();
-            notification.setIdRide(ref.getKey());
+            notification.setId(ref.getKey());
             ref.setValue(notification);
         }else{
             refToSendNotification.child(notification.getReceiver().getId()).
-                    child(notification.getIdNotification()).setValue(notification);
+                    child(notification.getId()).setValue(notification);
         }
 
     }
 
     public void removeNotifications(Notification notification) {
         refToNotification.child(notification.getReceiver().getId()).
-                child(notification.getIdNotification()).removeValue();
+                child(notification.getId()).removeValue();
     }
 
     private void addChildAddEventListenerToNotifications() {
@@ -110,6 +106,26 @@ public class NotificationDAO implements Observable{
         return notificationMap.get(idNotfication);
     }
 
+    public void getNotification(String idNotification, final Observer observer) {
+        Notification notification = notificationMap.get(idNotification);
+        if (notification== null){
+            refToNotification.child(idNotification).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    observer.update(dataSnapshot.getValue(User.class));
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    observer.update(null);
+                }
+            });
+        }else{
+            observer.update(user);
+        }
+    }
+
+
     public List<Notification> getNotifications() {
         notifications = new ArrayList<>();
         for (Map.Entry<String, Notification> notificationEntry : notificationMap.entrySet()){
@@ -117,6 +133,9 @@ public class NotificationDAO implements Observable{
         }
         return notifications;
     }
+
+
+
 
     @Override
     public void notifyObservers() {
@@ -129,9 +148,6 @@ public class NotificationDAO implements Observable{
             }
         }
     }
-
-
-
 
     public synchronized void deleteObservers() {
         observers = new ArrayList<>();

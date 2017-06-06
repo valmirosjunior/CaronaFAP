@@ -6,14 +6,15 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import br.com.valmirosjunior.caronafap.model.Observable;
-import br.com.valmirosjunior.caronafap.model.Observer;
+import br.com.valmirosjunior.caronafap.patners.Observable;
+import br.com.valmirosjunior.caronafap.patners.Observer;
 import br.com.valmirosjunior.caronafap.model.Ride;
 import br.com.valmirosjunior.caronafap.model.User;
 import br.com.valmirosjunior.caronafap.model.enums.Type;
@@ -24,12 +25,12 @@ import br.com.valmirosjunior.caronafap.network.FaceBookManager;
  */
 
 public class RideDAO implements Observable {
-    private static RideDAO rideDao;
     private DatabaseReference refToRides;
     private List<Observer> observers;
     private HashMap<String,Ride> rideMap;
     private List<Ride> rides;
     private Ride ride;
+    private static RideDAO rideDao;
 
 
     private RideDAO() {
@@ -56,10 +57,10 @@ public class RideDAO implements Observable {
     }
 
     public void saveRide(Ride ride) {
-        if (ride.getIdRide() == null) {
-            ride.setIdRide(refToRides.push().getKey());
+        if (ride.getId() == null) {
+            ride.setId(refToRides.push().getKey());
         }
-        refToRides.child(ride.getIdRide()).setValue(ride);
+        refToRides.child(ride.getId()).setValue(ride);
     }
 
     public void removeRide(String idRide) {
@@ -105,6 +106,25 @@ public class RideDAO implements Observable {
         return rideMap.get(idRide);
     }
 
+    public void getRide(String idRide, final Observer observer) {
+        Ride ride = rideMap.get(idRide);
+        if (ride== null){
+            refToRides.child(idRide).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    observer.update(dataSnapshot.getValue(Ride.class));
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    observer.update(null);
+                }
+            });
+        }else{
+            observer.update(ride);
+        }
+    }
+
     public List<Ride> getRides() {
         rides= new ArrayList<>();
         for (Map.Entry<String, Ride> rideEntry : rideMap.entrySet()){
@@ -148,17 +168,13 @@ public class RideDAO implements Observable {
 
     }
 
-
-
-
-
     @Override
     public void notifyObservers() {
         Type type = null;
         List<Ride> myRides =null, otherRides = null;
         for (Observer observer: observers){
             type = observer.getType();
-            if(type == Type.MY_RIDE){
+            if(type == Type.MINE){
                 if( myRides == null){
                     myRides = getMyRides();
                 }
@@ -174,13 +190,12 @@ public class RideDAO implements Observable {
         }
     }
 
-
-
-
-    public synchronized void deleteObservers() {
+    @Override
+    public void deleteObservers() {
         observers = new ArrayList<>();
     }
 
+    @Override
     public void addObserver(Observer o) {
         if (!observers.contains(o)){
         observers.add(o);
@@ -188,6 +203,7 @@ public class RideDAO implements Observable {
 
     }
 
+    @Override
     public void deleteObserver(Observer o) {
         observers.remove(o);
     }

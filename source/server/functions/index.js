@@ -16,8 +16,10 @@ exports.addMessage = functions.https.onRequest((req, res) => {
   // Push it into the Realtime Database then send a response
   admin.database().ref('/messages').push({original: original}).then(snapshot => {
     // Redirect with 303 SEE OTHER to the URL of the pushed object in the Firebase console.
-    res.redirect(303, snapshot.ref);
-});
+    //res.redirect(303, snapshot.ref);
+    res.send("Hello World!");
+    console.log("hello World!")
+  });
 });
 
 exports.makeUppercase = functions.database.ref('/messages/{pushId}/original')
@@ -30,4 +32,22 @@ exports.makeUppercase = functions.database.ref('/messages/{pushId}/original')
       // writing to the Firebase Realtime Database.
       // Setting an "uppercase" sibling in the Realtime Database returns a Promise.
       return event.data.ref.parent.child('uppercase').set(uppercase);
+    });
+
+exports.findPatner= functions.https.onRequest((req, res) =>{
+    var idRide = req.query.idRide;
+    var ref = functions.database.ref('/rides/'+idRide);
+    ref.once('value').then(function(snapshot) {
+      res.status(200).json(snapshot)
   });
+})
+
+exports.date = functions.https.onRequest((req, res) => {
+  var id = req.query.id
+  admin.database().ref('/rides/' + id).once('value').then(function(snapshot) {
+    var response = snapshot.val
+    console.log(response)
+    res.send(response+" isso que é bacana");
+  });
+});
+

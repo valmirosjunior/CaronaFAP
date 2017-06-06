@@ -3,6 +3,7 @@ package br.com.valmirosjunior.caronafap.network;
 import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -18,15 +19,16 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import br.com.valmirosjunior.caronafap.model.Observable;
-import br.com.valmirosjunior.caronafap.model.Observer;
 import br.com.valmirosjunior.caronafap.model.User;
 import br.com.valmirosjunior.caronafap.model.enums.Status;
+import br.com.valmirosjunior.caronafap.patners.Observable;
+import br.com.valmirosjunior.caronafap.patners.Observer;
 
 
 /**
@@ -37,6 +39,7 @@ public class FaceBookManager implements Observable {
     private Context context;
     private FirebaseAuth firebaseAuth;
     private static User user;
+    private static String fierbaseToken;
     private List<Observer> observers;
     private Status status;
 
@@ -50,7 +53,6 @@ public class FaceBookManager implements Observable {
     public void prepareLoginButton(LoginButton button,CallbackManager callbackManager){
         button.setReadPermissions(Arrays.asList(
                 "public_profile", "email", "user_friends"));
-
 
         button.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -95,9 +97,10 @@ public class FaceBookManager implements Observable {
 
     private static void saveCurrentUserOnSession(){
         Profile profile = Profile.getCurrentProfile();
-        FaceBookManager.user = new User();
-        FaceBookManager.user.setId(profile.getId());
-        FaceBookManager.user.setName(profile.getName());
+        User user= new User();
+        user.setId(profile.getId());
+        user.setName(profile.getName());
+        FaceBookManager.user = user;
     }
 
     public static User getCurrentUser(){
@@ -122,6 +125,8 @@ public class FaceBookManager implements Observable {
                         if (!task.isSuccessful()) {
                             FaceBookManager.this.notifyObservers(Status.ERROR);
                         }else{
+                            fierbaseToken = FirebaseInstanceId .getInstance().getToken();
+                            Log.i("token::::;",fierbaseToken);
                             FaceBookManager.this.notifyObservers(Status.SUCCESS);
                         }
                     }

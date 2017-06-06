@@ -5,7 +5,7 @@ package br.com.valmirosjunior.caronafap.model.enums;
  */
 
 public enum Type {
-    ORDERED,OFFERED,MY_RIDE,OTHER_RIDES, REQUEST, CONFIRM;
+    ORDERED,OFFERED, MINE,OTHER_RIDES, REQUEST, CONFIRM, REJECT;
 
 
 }

@@ -10,14 +10,6 @@
         android:title="Excluir" />
 
     <item
-        android:id="@+id/viewOnmap"
-        android:title="@string/see_on_map" />
-
-    <item
-        android:id="@+id/viewProfile"
-        android:title="@string/see_profile_on_facebook" />
-
-    <item
         android:id="@+id/findRide"
         android:title="@string/find_patner" />
 </menu>
