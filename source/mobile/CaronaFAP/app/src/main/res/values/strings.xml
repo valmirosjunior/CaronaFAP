@@ -76,5 +76,7 @@
     <string name="solicitations">Solicitações</string>
     <string name="messages">Conversas</string>
     <string name="description">Descrição</string>
+    <string name="confirm_send_coment">Deseja Enviar o Comentário?</string>
+    <string name="send_coment_succes">Comentário enviado com susseo</string>
 
 </resources>

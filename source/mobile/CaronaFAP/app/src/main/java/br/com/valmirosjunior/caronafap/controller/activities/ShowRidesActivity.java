@@ -2,6 +2,7 @@ package br.com.valmirosjunior.caronafap.controller.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
@@ -36,7 +37,7 @@ public class ShowRidesActivity extends AppCompatActivity implements Observer {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_show_rider);
+        setContentView(R.layout.activity_show_rides);
         init();
         updateMessage();
         rideDAO =RideDAO.getInstance();
@@ -62,6 +63,13 @@ public class ShowRidesActivity extends AppCompatActivity implements Observer {
         }else {
             typeObserver = Type.MINE;
         }
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(ShowRidesActivity.this, RegisterRideActivity.class));
+            }
+        });
     }
 
     @Override

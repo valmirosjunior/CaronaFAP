@@ -1,17 +1,17 @@
 package br.com.valmirosjunior.caronafap.model;
 
-import java.util.Calendar;
+import com.google.firebase.database.Exclude;
 
 /**
  * Created by junior on 02/06/17.
  */
 
 public class Coment {
-    private String id;
-    private double note;
-    private User user,author;
+    private String id,idAuthor;
+    private float note;
+    private User author;
     private String coment;
-    private Calendar date;
+    private Long timeInMillis;
 
     public String getId() {
         return id;
@@ -21,22 +21,24 @@ public class Coment {
         this.id = id;
     }
 
-    public double getNote() {
+    public String getIdAuthor() {
+        return idAuthor;
+    }
+
+    public void setIdAuthor(String idAuthor) {
+        this.idAuthor = idAuthor;
+    }
+
+    public float getNote() {
         return note;
     }
 
-    public void setNote(double note) {
+    public void setNote(float note) {
         this.note = note;
     }
 
-    public User getUser() {
-        return user;
-    }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
-
+    @Exclude
     public User getAuthor() {
         return author;
     }
@@ -53,11 +55,11 @@ public class Coment {
         this.coment = coment;
     }
 
-    public Calendar getDate() {
-        return date;
+    public Long getTimeInMillis() {
+        return timeInMillis;
     }
 
-    public void setDate(Calendar date) {
-        this.date = date;
+    public void setTimeInMillis(Long timeInMillis) {
+        this.timeInMillis = timeInMillis;
     }
 }

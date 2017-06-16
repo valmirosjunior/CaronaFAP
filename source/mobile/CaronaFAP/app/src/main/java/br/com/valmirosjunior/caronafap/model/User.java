@@ -9,8 +9,8 @@ import java.util.Map;
 
 public class User {
     private String id, name;
-    private double note;
     private List<Map<String,String>> conversations;
+    private List<Coment> coments;
 
     public String getId() {
         return id;
@@ -28,21 +28,12 @@ public class User {
         this.name = name;
     }
 
-
-    public double getNote() {
-        return note;
+    public List<Coment> getComents() {
+        return coments;
     }
 
-    public void setNote(double note) {
-        this.note = note;
-    }
-
-    public List<Map<String, String>> getConversations() {
-        return conversations;
-    }
-
-    public void setConversations(List<Map<String, String>> conversations) {
-        this.conversations = conversations;
+    public void setComents(List<Coment> coments) {
+        this.coments = coments;
     }
 
     @Override

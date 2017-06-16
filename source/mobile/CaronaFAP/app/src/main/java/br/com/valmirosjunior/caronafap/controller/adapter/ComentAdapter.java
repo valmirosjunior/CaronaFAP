@@ -24,10 +24,18 @@ public class ComentAdapter extends BaseAdapter {
     private TextView textView;
     private RatingBar ratingBar;
 
-    public ComentAdapter(List<Coment> coments, Context context) {
+    public ComentAdapter(Context context,List<Coment> coments) {
         this.coments = coments;
         this.context = context;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    }
+
+    public List<Coment> getComents() {
+        return coments;
+    }
+
+    public void setComents(List<Coment> coments) {
+        this.coments = coments;
     }
 
     @Override
@@ -47,10 +55,19 @@ public class ComentAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View view, ViewGroup viewGroup) {
+        Coment coment =coments.get(position);
         View rowview = inflater.inflate(R.layout.row_coment,null);
-        textView = (TextView) rowview.findViewById(R.id.textView);
-        ratingBar = (RatingBar) rowview.findViewById(R.id.ratingBar);
-
+        textView = (TextView) rowview.findViewById(R.id.tvComent);
+        ratingBar = (RatingBar) rowview.findViewById(R.id.rbComent);
+        textView.setText(coment.getComent());
+        ratingBar.setRating(coment.getNote());
         return rowview;
     }
+     public float getNote(){
+         float note =0;
+         for (Coment coment: coments) {
+             note += coment.getNote();
+         }
+         return  note/coments.size();
+     }
 }

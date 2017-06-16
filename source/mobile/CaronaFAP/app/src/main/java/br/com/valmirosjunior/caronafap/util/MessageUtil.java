@@ -45,6 +45,13 @@ public class MessageUtil {
         return builder;
     }
 
+    public static void showAlertDialogBuilder(Context context,String title, String message){
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle(title);
+        builder.setMessage(message);
+        builder.show();
+    }
+
     public static void showConfirm(Context context, String message,
                                    DialogInterface.OnClickListener listener){
         AlertDialog.Builder builder = MessageUtil.createAlertDialogBuilder(context);

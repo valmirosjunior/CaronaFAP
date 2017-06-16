@@ -83,4 +83,10 @@ public class ShowOneRideActivity extends AppCompatActivity {
     public void requestRide(View view){
         MessageUtil.showConfirm(this, getString(R.string.confirm_delete_ride),functionsRide.requestRide(ride));
     }
+
+    public void seeComents(View view) {
+        Intent intent = new Intent(this,ShowProfileActivity.class);
+        intent.putExtra(Constants.ID_USER, ride.getIdUser());
+        startActivity(intent);
+    }
 }

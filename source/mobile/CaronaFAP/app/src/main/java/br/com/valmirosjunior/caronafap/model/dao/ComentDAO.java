@@ -51,6 +51,7 @@ public class ComentDAO implements Observable {
         }
         return comentDAO;
     }
+    /*
 
     public void sendComent(Coment coment){
         if(coment.getId() == null){
@@ -68,7 +69,7 @@ public class ComentDAO implements Observable {
         refToMyComents.child(coment.getUser().getId()).
                 child(coment.getId()).removeValue();
     }
-
+*/
     public Coment getComent(String idNotfication) {
         return comentMap.get(idNotfication);
     }

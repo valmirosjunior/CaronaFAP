@@ -5,7 +5,7 @@
     android:layout_height="wrap_content">
 
     <RatingBar
-        android:id="@+id/ratingBarComent"
+        android:id="@+id/rbComent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
@@ -18,7 +18,7 @@
         android:layout_margin="5dp">
 
         <EditText
-            android:id="@+id/editTextComent"
+            android:id="@+id/etComent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Deixe Seu comentário"

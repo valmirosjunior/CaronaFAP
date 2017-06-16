@@ -1,8 +1,7 @@
 package br.com.valmirosjunior.caronafap.model;
 
-import java.util.Calendar;
+import com.google.firebase.database.Exclude;
 
-import br.com.valmirosjunior.caronafap.model.enums.Status;
 import br.com.valmirosjunior.caronafap.model.enums.Type;
 import br.com.valmirosjunior.caronafap.util.FaceBookManager;
 
@@ -12,17 +11,16 @@ import br.com.valmirosjunior.caronafap.util.FaceBookManager;
 
 public class Ride {
 
-    private String id;
+    private String id,idUser;
     private User user;
     private MyLocation origin, destination;
     private int hourInMinutes;
-    private Status status;
     private Type type;
-    private Calendar date;
 
 
     public Ride() {
     }
+
 
     public String getId() {
         return id;
@@ -32,6 +30,15 @@ public class Ride {
         this.id = id;
     }
 
+    public String getIdUser() {
+        return idUser;
+    }
+
+    public void setIdUser(String idUser) {
+        this.idUser = idUser;
+    }
+
+    @Exclude
     public User getUser() {
         return user;
     }
@@ -58,14 +65,6 @@ public class Ride {
 
     public void setHourInMinutes(int hourInMinutes) {
         this.hourInMinutes = hourInMinutes;
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
     }
 
     public void setDestination(MyLocation destination) {

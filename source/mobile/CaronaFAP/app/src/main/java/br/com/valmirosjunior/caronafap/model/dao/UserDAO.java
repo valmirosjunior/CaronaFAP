@@ -6,13 +6,12 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
+import br.com.valmirosjunior.caronafap.model.Coment;
 import br.com.valmirosjunior.caronafap.model.User;
 import br.com.valmirosjunior.caronafap.pattern.Observable;
 import br.com.valmirosjunior.caronafap.pattern.Observer;
@@ -55,31 +54,37 @@ public class UserDAO implements Observable {
     }
 
     public void saveUser(User user) {
-        if (userMap.get(user.getId()) != null){
-            Map<String,Object> nameMap = new HashMap<>();
-            nameMap.put("name",user.getName());
-            refToUsers.child(user.getId()).updateChildren(nameMap);
-        }else{
-            refToUsers.child(user.getId()).setValue(user);
+//        if (userMap.get(user.getId()) != null){
+//            Map<String,Object> nameMap = new HashMap<>();
+//            nameMap.put("name",user.getName());
+//            refToUsers.child(user.getId()).updateChildren(nameMap);
+//        }else{
+//            refToUsers.child(user.getId()).setValue(user);
+//        }
+        refToUsers.child(user.getId()).setValue(user);
+    }
+
+    public void sendComment(User user, Coment coment){
+        if (user == null){
+            return;
         }
+        if (user.getComents()== null){
+            user.setComents(new ArrayList<Coment>());
+        }
+        user.getComents().add(coment);
+        saveUser(user);
     }
 
     private void addChildAddEventListener() {
         ChildEventListener childEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                user = dataSnapshot.getValue(User.class);
-                userMap.put(dataSnapshot.getKey(),user);
-                users.add(user);
-                notifyObservers();
+                updateListUser(dataSnapshot);
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                user = dataSnapshot.getValue(User.class);
-                userMap.put(dataSnapshot.getKey(),user);
-                users.add(user);
-                notifyObservers();
+               updateListUser(dataSnapshot);
             }
 
             @Override
@@ -108,25 +113,6 @@ public class UserDAO implements Observable {
         return userMap.get(idUser);
     }
 
-    public void getUser(String idUser, final Observer observer) {
-        User user = userMap.get(idUser);
-        if (user== null){
-            refToUsers.child(idUser).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    observer.update(dataSnapshot.getValue(User.class));
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    observer.update(null);
-                }
-            });
-        }else{
-            observer.update(user);
-        }
-    }
-
     public List<User> getUsers() {
         return users;
     }
@@ -135,6 +121,7 @@ public class UserDAO implements Observable {
         user = dataSnapshot.getValue(User.class);
         userMap.put(dataSnapshot.getKey(),user);
         users.add(user);
+        notifyObservers();
     }
 
     @Override
@@ -154,6 +141,7 @@ public class UserDAO implements Observable {
         if (!observers.contains(o)){
             observers.add(o);
         }
+        notifyObservers();
     }
 
     @Override

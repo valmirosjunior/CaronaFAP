@@ -24,19 +24,22 @@ import br.com.valmirosjunior.caronafap.util.FaceBookManager;
  * Created by junior on 10/04/17.
  */
 
-public class RideDAO implements Observable {
+public class RideDAO implements Observable,Observer {
     private DatabaseReference refToRides;
     private List<Observer> observers;
-    private HashMap<String,Ride> rideMap;
+    private HashMap<String,Ride> rideMap,auxMap;
     private List<Ride> rides;
     private Ride ride;
     private static RideDAO rideDao;
+    private UserDAO userDAO;
 
 
     private RideDAO() {
+        userDAO = UserDAO.getInstance();
         refToRides = FirebaseFactory.getInstance().getReference("Rides");
         refToRides.keepSynced(true);
         rideMap = new HashMap<>();
+        auxMap= new HashMap<>();
         observers = new ArrayList<>();
         addChildAddEventListenerToRides();
     }
@@ -57,6 +60,8 @@ public class RideDAO implements Observable {
     }
 
     public void saveRide(Ride ride) {
+        ride.setIdUser(ride.getUser().getId());
+
         if (ride.getId() == null) {
             ride.setId(refToRides.push().getKey());
         }
@@ -68,18 +73,27 @@ public class RideDAO implements Observable {
 
     }
 
+    private void updateMapRide(DataSnapshot dataSnapshot){
+        ride = dataSnapshot.getValue(Ride.class);
+        User user = userDAO.getUser(ride.getIdUser());
+        if(user ==null){
+            auxMap.put(dataSnapshot.getKey(),ride);
+        }
+        ride.setUser(user);
+        rideMap.put(dataSnapshot.getKey(),ride);
+        notifyObservers();
+    }
+
     private void addChildAddEventListenerToRides() {
         ChildEventListener childEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                rideMap.put(dataSnapshot.getKey(),dataSnapshot.getValue(Ride.class));
-                notifyObservers();
+                updateMapRide(dataSnapshot);
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                rideMap.put(dataSnapshot.getKey(), dataSnapshot.getValue(Ride.class));
-                notifyObservers();
+                updateMapRide(dataSnapshot);
             }
 
             @Override
@@ -170,6 +184,9 @@ public class RideDAO implements Observable {
 
     @Override
     public void notifyObservers() {
+        if(auxMap.size()>0){
+            userDAO.addObserver(this);
+        }else{
         Type type = null;
         List<Ride> myRides =null, otherRides = null;
         for (Observer observer: observers){
@@ -187,6 +204,7 @@ public class RideDAO implements Observable {
                 observer.update(this,otherRides);
             }
 
+        }
         }
     }
 
@@ -206,5 +224,29 @@ public class RideDAO implements Observable {
     @Override
     public void deleteObserver(Observer o) {
         observers.remove(o);
+    }
+
+
+    @Override
+    public void update(Object object) {
+        User user;
+        for (Map.Entry<String, Ride> rideEntry : auxMap.entrySet()){
+            user = userDAO.getUser(rideEntry.getValue().getIdUser());
+            if(user!= null){
+                rideEntry.getValue().setUser(user);
+                auxMap.remove(rideEntry.getKey());
+            }
+        }
+        notifyObservers();
+    }
+
+    @Override
+    public void update(Observable observable, Object object) {
+        update(object);
+    }
+
+    @Override
+    public Type getType() {
+        return null;
     }
 }

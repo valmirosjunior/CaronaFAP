@@ -40,7 +40,7 @@ public class ShowNotificationActivity extends AppCompatActivity implements Obser
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_see_notification);
+        setContentView(R.layout.activity_show_notification);
         rideDAO= RideDAO.getInstance();
         layout = (LinearLayout) findViewById(R.id.layoutButtons);
         butSeeProfile = (Button) findViewById(R.id.butSeeProfile);
