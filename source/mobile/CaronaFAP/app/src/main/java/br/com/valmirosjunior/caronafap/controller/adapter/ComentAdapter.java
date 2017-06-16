@@ -1,4 +1,4 @@
-package br.com.valmirosjunior.caronafap.adapter;
+package br.com.valmirosjunior.caronafap.controller.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;

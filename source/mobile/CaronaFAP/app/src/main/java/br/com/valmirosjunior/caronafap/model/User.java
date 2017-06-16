@@ -1,5 +1,8 @@
 package br.com.valmirosjunior.caronafap.model;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * Created by junior on 10/04/17.
  */
@@ -7,6 +10,7 @@ package br.com.valmirosjunior.caronafap.model;
 public class User {
     private String id, name;
     private double note;
+    private List<Map<String,String>> conversations;
 
     public String getId() {
         return id;
@@ -31,6 +35,14 @@ public class User {
 
     public void setNote(double note) {
         this.note = note;
+    }
+
+    public List<Map<String, String>> getConversations() {
+        return conversations;
+    }
+
+    public void setConversations(List<Map<String, String>> conversations) {
+        this.conversations = conversations;
     }
 
     @Override

@@ -11,10 +11,11 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import br.com.valmirosjunior.caronafap.model.User;
-import br.com.valmirosjunior.caronafap.patners.Observable;
-import br.com.valmirosjunior.caronafap.patners.Observer;
+import br.com.valmirosjunior.caronafap.pattern.Observable;
+import br.com.valmirosjunior.caronafap.pattern.Observer;
 
 /**
  * Created by junior on 02/06/17.
@@ -54,12 +55,13 @@ public class UserDAO implements Observable {
     }
 
     public void saveUser(User user) {
-        refToUsers.child(user.getId()).setValue(user);
-    }
-
-    public void removeRide(String idRide) {
-        refToUsers.child(idRide).removeValue();
-
+        if (userMap.get(user.getId()) != null){
+            Map<String,Object> nameMap = new HashMap<>();
+            nameMap.put("name",user.getName());
+            refToUsers.child(user.getId()).updateChildren(nameMap);
+        }else{
+            refToUsers.child(user.getId()).setValue(user);
+        }
     }
 
     private void addChildAddEventListener() {

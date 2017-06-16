@@ -7,8 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import br.com.valmirosjunior.caronafap.model.User;
 import br.com.valmirosjunior.caronafap.model.dao.UserDAO;
 import br.com.valmirosjunior.caronafap.model.enums.Type;
-import br.com.valmirosjunior.caronafap.patners.Observable;
-import br.com.valmirosjunior.caronafap.patners.Observer;
+import br.com.valmirosjunior.caronafap.pattern.Observable;
+import br.com.valmirosjunior.caronafap.pattern.Observer;
 import br.com.valmirosjunior.caronafap.util.Constants;
 
 public class Conversation extends AppCompatActivity implements Observer{

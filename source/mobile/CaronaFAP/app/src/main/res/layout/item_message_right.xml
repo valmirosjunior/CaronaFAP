@@ -13,7 +13,7 @@
         android:layout_gravity="end"
         android:padding="5dp"
         android:textAlignment="textEnd"
-        android:text="ABCDEFGHIJKLMNOPRSTUVWXYZ"
+        android:text="textView"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
 </LinearLayout>

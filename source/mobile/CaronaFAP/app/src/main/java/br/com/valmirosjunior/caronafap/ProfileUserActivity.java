@@ -23,15 +23,15 @@ import com.facebook.login.widget.ProfilePictureView;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.valmirosjunior.caronafap.adapter.NotificationAdapter;
+import br.com.valmirosjunior.caronafap.controller.adapter.NotificationAdapter;
 import br.com.valmirosjunior.caronafap.model.Notification;
-import br.com.valmirosjunior.caronafap.patners.Observable;
-import br.com.valmirosjunior.caronafap.patners.Observer;
+import br.com.valmirosjunior.caronafap.pattern.Observable;
+import br.com.valmirosjunior.caronafap.pattern.Observer;
 import br.com.valmirosjunior.caronafap.model.User;
 import br.com.valmirosjunior.caronafap.model.dao.NotificationDAO;
 import br.com.valmirosjunior.caronafap.model.enums.Status;
 import br.com.valmirosjunior.caronafap.model.enums.Type;
-import br.com.valmirosjunior.caronafap.network.FaceBookManager;
+import br.com.valmirosjunior.caronafap.util.FaceBookManager;
 import br.com.valmirosjunior.caronafap.util.Constants;
 import br.com.valmirosjunior.caronafap.util.MessageUtil;
 
@@ -79,7 +79,7 @@ public class ProfileUserActivity extends AppCompatActivity
                 public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
                     Notification notification = (Notification) parent.getItemAtPosition(position);
 
-                    Intent intent = new Intent(ProfileUserActivity.this, SeeNotificationActivity.class);
+                    Intent intent = new Intent(ProfileUserActivity.this, ShowNotificationActivity.class);
                     intent.putExtra(Constants.ID_NOTIFICATION, notification.getId());
                     startActivity(intent);
                 }
@@ -165,7 +165,7 @@ public class ProfileUserActivity extends AppCompatActivity
         if (id == R.id.nav_register) {
             startActivity(new Intent(this, RegisterRideActivity.class));
         } else if (id == R.id.nav_seeRides) {
-            startActivity(new Intent(this, ShowRiderActivity.class));
+            startActivity(new Intent(this, ShowRidesActivity.class));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

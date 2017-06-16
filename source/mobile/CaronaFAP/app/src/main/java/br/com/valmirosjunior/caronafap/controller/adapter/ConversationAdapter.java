@@ -1,4 +1,4 @@
-package br.com.valmirosjunior.caronafap.adapter;
+package br.com.valmirosjunior.caronafap.controller.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,7 +12,7 @@ import java.util.List;
 import br.com.valmirosjunior.caronafap.R;
 import br.com.valmirosjunior.caronafap.model.Message;
 import br.com.valmirosjunior.caronafap.model.User;
-import br.com.valmirosjunior.caronafap.network.FaceBookManager;
+import br.com.valmirosjunior.caronafap.util.FaceBookManager;
 
 /**
  * Created by junior on 04/06/17.

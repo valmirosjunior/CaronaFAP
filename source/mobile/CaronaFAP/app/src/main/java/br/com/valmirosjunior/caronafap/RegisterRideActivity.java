@@ -21,7 +21,7 @@ import br.com.valmirosjunior.caronafap.model.MyLocation;
 import br.com.valmirosjunior.caronafap.model.Ride;
 import br.com.valmirosjunior.caronafap.model.dao.RideDAO;
 import br.com.valmirosjunior.caronafap.model.enums.Type;
-import br.com.valmirosjunior.caronafap.network.FaceBookManager;
+import br.com.valmirosjunior.caronafap.util.FaceBookManager;
 import br.com.valmirosjunior.caronafap.util.Constants;
 import br.com.valmirosjunior.caronafap.util.MessageUtil;
 import br.com.valmirosjunior.caronafap.util.Util;

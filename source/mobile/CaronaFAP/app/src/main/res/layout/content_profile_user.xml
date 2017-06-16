@@ -35,7 +35,7 @@
         app:layout_constraintHorizontal_bias="0.432"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        facebook:com_facebook_preset_size="normal"
+        facebook:com_facebook_preset_size="large"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="26dp"
         android:layout_marginStart="8dp"

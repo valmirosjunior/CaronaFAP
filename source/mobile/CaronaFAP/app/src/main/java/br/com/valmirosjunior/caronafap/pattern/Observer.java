@@ -1,4 +1,4 @@
-package br.com.valmirosjunior.caronafap.patners;
+package br.com.valmirosjunior.caronafap.pattern;
 
 import br.com.valmirosjunior.caronafap.model.enums.Type;
 

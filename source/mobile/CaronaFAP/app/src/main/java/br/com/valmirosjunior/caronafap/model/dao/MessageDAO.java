@@ -16,9 +16,9 @@ import java.util.Map;
 import br.com.valmirosjunior.caronafap.model.Message;
 import br.com.valmirosjunior.caronafap.model.Ride;
 import br.com.valmirosjunior.caronafap.model.User;
-import br.com.valmirosjunior.caronafap.network.FaceBookManager;
-import br.com.valmirosjunior.caronafap.patners.Observable;
-import br.com.valmirosjunior.caronafap.patners.Observer;
+import br.com.valmirosjunior.caronafap.util.FaceBookManager;
+import br.com.valmirosjunior.caronafap.pattern.Observable;
+import br.com.valmirosjunior.caronafap.pattern.Observer;
 
 /**
  * Created by junior on 04/06/17.

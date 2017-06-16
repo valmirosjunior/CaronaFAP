@@ -66,5 +66,14 @@ public class MyLocation implements Serializable{
         return la.distanceTo(lb);
     }
 
+    public String shortAdress(){
+        String fields[]= adress.split(",");
+        String result =" ";
+        for(int i=0;i<fields.length -2 ; i++){
+            result += fields[i]+", ";
+        }
+        return result.substring(0,result.length()-2);
+    }
+
 
 }

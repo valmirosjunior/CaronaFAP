@@ -4,6 +4,7 @@ import java.util.Calendar;
 
 import br.com.valmirosjunior.caronafap.model.enums.Status;
 import br.com.valmirosjunior.caronafap.model.enums.Type;
+import br.com.valmirosjunior.caronafap.util.FaceBookManager;
 
 /**
  * Created by junior on 28/03/17.
@@ -96,6 +97,10 @@ public class Ride {
         return (dif>0) ? dif : (-1)* dif;
     }
 
+    public boolean isMine(){
+        return user.equals(FaceBookManager.getCurrentUser());
+    }
+
     public String toString(String userName){
         return userName+" "+toString();
     }
@@ -103,16 +108,26 @@ public class Ride {
     @Override
     public String toString() {
         return  "Está " + ((type == Type.ORDERED) ?
-                "Pedindo " : "Oferecendo ")+"Carona as: "+formaterTime()+"Hs"+
+                "Pedindo " : "Oferecendo ")+" as: "+formaterTime()+" Hs!"+
                 "\nDe : "+origin.getAdress()+
                 "\nPara : "+destination.getAdress();
     }
 
 
-    public String getDescription() {
-        return  " A Carona que você está: "+((type == Type.ORDERED) ?
-                "Pedindo " : "Oferecendo ")+" as: "+formaterTime()+"Hs"+
-                "\nDe : "+origin.getAdress()+
-                "\nPara : "+destination.getAdress();
+    public String showDescription() {
+        String name = isMine()? "Você": user.getName();
+        return  "<strong>"+name+"</strong> está: "+((type == Type.ORDERED) ?
+                "Pedindo " : "Oferecendo ")+" Carona!" +
+                "<br><strong>Horário: </strong>"+formaterTime()+"Hs"+
+                "<br><strong>Origem: </strong> "+origin.getAdress()+
+                "<br><strong>Para: </strong> "+destination.getAdress();
+    }
+
+    public String showShortDescrpition(){
+        return  getUser().getName()+" Está " + ((type == Type.ORDERED) ?
+                "Pedindo " : "Oferecendo ")+ "uma Carona! "+
+                "<br><strong>Horário:</strong> "+formaterTime()+"Hs"+
+                "<br><strong>De: </strong> "+origin.shortAdress()+
+                "<br><strong>Para: </strong> "+destination.shortAdress();
     }
 }

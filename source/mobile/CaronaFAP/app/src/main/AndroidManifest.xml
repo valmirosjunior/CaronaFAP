@@ -13,7 +13,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <!--service
+        <!--
+        service
             android:name=".MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
@@ -25,7 +26,8 @@
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
             </intent-filter>
-        </service-->
+        </service
+        -->
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -44,18 +46,19 @@
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" />
-        <activity android:name=".ShowRiderActivity" />
+        <activity android:name=".ShowRidesActivity" />
         <activity android:name=".RegisterRideActivity" />
         <activity
             android:name=".ProfileUserActivity"
             android:label="@string/title_activity_profile_user"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".SeeNotificationActivity" />
+        <activity android:name=".ShowNotificationActivity" />
         <activity
-            android:name=".SeeProfile"
+            android:name=".ShowProfileActivity"
             android:label="@string/title_activity_see_profile"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Conversation"></activity>
+        <activity android:name=".Conversation" />
+        <activity android:name=".ShowOneRideActivity"></activity>
     </application>
 
 </manifest>

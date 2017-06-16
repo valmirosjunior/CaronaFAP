@@ -13,12 +13,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import br.com.valmirosjunior.caronafap.patners.Observable;
-import br.com.valmirosjunior.caronafap.patners.Observer;
+import br.com.valmirosjunior.caronafap.pattern.Observable;
+import br.com.valmirosjunior.caronafap.pattern.Observer;
 import br.com.valmirosjunior.caronafap.model.Ride;
 import br.com.valmirosjunior.caronafap.model.User;
 import br.com.valmirosjunior.caronafap.model.enums.Type;
-import br.com.valmirosjunior.caronafap.network.FaceBookManager;
+import br.com.valmirosjunior.caronafap.util.FaceBookManager;
 
 /**
  * Created by junior on 10/04/17.

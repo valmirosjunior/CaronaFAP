@@ -5,17 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
-    android:layout_marginTop="5sp"
-    android:layout_marginBottom="5sp">
+    android:layout_marginTop="5dp"   >
 
     <com.facebook.login.widget.ProfilePictureView
         android:id="@+id/profilePictureUserListView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        facebook:com_facebook_preset_size="small"
-        android:layout_marginLeft="20sp"
-        android:layout_marginRight="20sp"
-        android:layout_marginTop="20sp"
+        facebook:com_facebook_preset_size="normal"
+        android:layout_margin="2dp"
         />
 
     <TextView
@@ -23,6 +20,8 @@
         android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:text="TextView"
+        android:layout_margin="2dp"/>
+
 
 </LinearLayout>

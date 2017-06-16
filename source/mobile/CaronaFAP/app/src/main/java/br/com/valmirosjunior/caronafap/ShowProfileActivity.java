@@ -12,16 +12,22 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RatingBar;
 
+import com.facebook.login.widget.ProfilePictureView;
+
 import java.util.Calendar;
 
 import br.com.valmirosjunior.caronafap.model.Coment;
 import br.com.valmirosjunior.caronafap.model.User;
 import br.com.valmirosjunior.caronafap.model.dao.ComentDAO;
 import br.com.valmirosjunior.caronafap.model.dao.UserDAO;
-import br.com.valmirosjunior.caronafap.network.FaceBookManager;
+import br.com.valmirosjunior.caronafap.model.enums.Type;
+import br.com.valmirosjunior.caronafap.util.FaceBookManager;
+import br.com.valmirosjunior.caronafap.pattern.Observable;
+import br.com.valmirosjunior.caronafap.pattern.Observer;
 import br.com.valmirosjunior.caronafap.util.Constants;
+import br.com.valmirosjunior.caronafap.util.Util;
 
-public class SeeProfile extends AppCompatActivity {
+public class ShowProfileActivity extends AppCompatActivity implements Observer{
     private LayoutInflater inflater;
     private EditText editText;
     private RatingBar ratingBar;
@@ -50,6 +56,11 @@ public class SeeProfile extends AppCompatActivity {
         comentDAO = ComentDAO.getInstance();
     }
 
+    public void openProfile (View view){
+        ProfilePictureView profile = (ProfilePictureView) findViewById(R.id.profilePictureUser);
+        Util.seeProfile(this,profile.getProfileId());
+    }
+
     private void sendComent(){
         Coment coment = new Coment();
         coment.setAuthor(FaceBookManager.getCurrentUser());
@@ -76,5 +87,20 @@ public class SeeProfile extends AppCompatActivity {
     private void clearFieldDialog(){
         ratingBar.setRating(0);
         editText.setText("");
+    }
+
+    @Override
+    public void update(Object object) {
+
+    }
+
+    @Override
+    public void update(Observable observable, Object object) {
+
+    }
+
+    @Override
+    public Type getType() {
+        return null;
     }
 }

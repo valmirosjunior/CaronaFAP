@@ -10,11 +10,11 @@ import android.widget.TextView;
 import com.facebook.CallbackManager;
 import com.facebook.login.widget.LoginButton;
 
-import br.com.valmirosjunior.caronafap.patners.Observable;
-import br.com.valmirosjunior.caronafap.patners.Observer;
+import br.com.valmirosjunior.caronafap.pattern.Observable;
+import br.com.valmirosjunior.caronafap.pattern.Observer;
 import br.com.valmirosjunior.caronafap.model.enums.Status;
 import br.com.valmirosjunior.caronafap.model.enums.Type;
-import br.com.valmirosjunior.caronafap.network.FaceBookManager;
+import br.com.valmirosjunior.caronafap.util.FaceBookManager;
 import br.com.valmirosjunior.caronafap.util.MessageUtil;
 
 public class MainActivity extends AppCompatActivity implements Observer {

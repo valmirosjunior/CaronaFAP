@@ -1,9 +1,6 @@
 package br.com.valmirosjunior.caronafap;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.ContextMenu;
@@ -17,22 +14,20 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.valmirosjunior.caronafap.adapter.RideAdapter;
-import br.com.valmirosjunior.caronafap.model.Notification;
-import br.com.valmirosjunior.caronafap.patners.Observable;
-import br.com.valmirosjunior.caronafap.patners.Observer;
+import br.com.valmirosjunior.caronafap.controller.adapter.RideAdapter;
+import br.com.valmirosjunior.caronafap.controller.functions.FunctionsRide;
 import br.com.valmirosjunior.caronafap.model.Ride;
-import br.com.valmirosjunior.caronafap.model.dao.NotificationDAO;
 import br.com.valmirosjunior.caronafap.model.dao.RideDAO;
 import br.com.valmirosjunior.caronafap.model.enums.Type;
-import br.com.valmirosjunior.caronafap.network.FaceBookManager;
+import br.com.valmirosjunior.caronafap.pattern.Observable;
+import br.com.valmirosjunior.caronafap.pattern.Observer;
 import br.com.valmirosjunior.caronafap.util.Constants;
 import br.com.valmirosjunior.caronafap.util.MessageUtil;
-import br.com.valmirosjunior.caronafap.util.Util;
 
-public class ShowRiderActivity extends AppCompatActivity implements Observer {
+public class ShowRidesActivity extends AppCompatActivity implements Observer {
     private RideDAO rideDAO;
     private Ride ride;
+    private FunctionsRide functionsRide;
     private RideAdapter rideAdapter;
     private TextView textViewMessage;
     private Type typeObserver;
@@ -41,26 +36,36 @@ public class ShowRiderActivity extends AppCompatActivity implements Observer {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_rider);
+        init();
+        updateMessage();
+        rideDAO =RideDAO.getInstance();
+        rideDAO.addObserver(this);
+        rideDAO.notifyObservers();
+        functionsRide = new FunctionsRide(this,rideDAO);
+    }
 
-
+    private void init(){
         rideAdapter = new RideAdapter(this,new ArrayList<Ride>());
         ListView listView = (ListView) findViewById(R.id.listViewShowRides);
         listView.setAdapter(rideAdapter);
+        listView.setOnItemClickListener(rideAdapter);
+
         textViewMessage = (TextView) findViewById(R.id.textViewMessage);
 
         registerForContextMenu(listView);
         Intent intent = getIntent();
 
         if (intent.hasExtra(Constants.TYPE_OBSERVER)){
-            typeObserver = (Type) intent.getSerializableExtra(Constants.TYPE_OBSERVER);
-
+            String nameType = intent.getStringExtra(Constants.TYPE_OBSERVER);
+            typeObserver = Type.valueOf(nameType);
         }else {
             typeObserver = Type.MINE;
         }
+    }
 
-        updateMessage();
-
-        rideDAO =RideDAO.getInstance();
+    @Override
+    protected void onStart() {
+        super.onStart();
         rideDAO.addObserver(this);
         rideDAO.notifyObservers();
     }
@@ -69,6 +74,7 @@ public class ShowRiderActivity extends AppCompatActivity implements Observer {
     protected void onResume() {
         super.onResume();
         rideDAO.addObserver(this);
+        rideDAO.notifyObservers();
     }
 
     @Override
@@ -81,16 +87,6 @@ public class ShowRiderActivity extends AppCompatActivity implements Observer {
     protected void onDestroy() {
         super.onDestroy();
         rideDAO.deleteObserver(this);
-    }
-
-    @Override
-    public void onBackPressed(){
-        if(typeObserver == Type.MINE){
-            super.onBackPressed();
-        }else{
-            changeTypeObserver();
-        }
-
     }
 
     private void changeTypeObserver() {
@@ -123,92 +119,41 @@ public class ShowRiderActivity extends AppCompatActivity implements Observer {
         Ride ride = rideAdapter.getRides().get(info.position);
         switch (item.getItemId()) {
             case R.id.edit_ride:
-                intent = new Intent(this, RegisterRideActivity.class);
-                intent.putExtra(Constants.ID_RIDE,ride.getId());
-                startActivity(intent);
+                functionsRide.editRide(ride);
                 return true;
 
             case R.id.delete:
-                showConfirmDeleteRide(ride.getId());
+                functionsRide.deleteRide(ride);
                 return true;
 
             case R.id.viewOnmap :
-                intent = new Intent(android.content.Intent.ACTION_VIEW,
-                        Uri.parse("http://maps.google.com/maps?saddr=" +
-                                ride.getOrigin().getAdress()+
-                                "&daddr=" +
-                                ride.getDestination().getAdress()));
-                startActivity(intent);
+                functionsRide.seeRouteOnMap(ride);
                 return true;
 
             case R.id.viewProfile :
                 String idUSer= ride.getUser().getId();
-                Util.seeProfile(this,idUSer);
+                functionsRide.seeProfile(idUSer);
                 return true;
 
             case R.id.findRide:
-                rideDAO.setRide(ride);
-                typeObserver = Type.OTHER_RIDES;
-                rideDAO.notifyObservers();
-                updateMessage();
+                functionsRide.findPatner(ride);
                 return true;
 
             case R.id.requestRide:
-                showConfirmRequestRide(ride);
+                functionsRide.requestRide(ride);
                 return true;
             default:
                 return super.onContextItemSelected(item);
         }
 
     }
-        private void updateMessage (){
-            if(typeObserver ==  Type.MINE){
-                setTitle(R.string.your_rides);
-            }else{
-                setTitle(R.string.result_search);
-            }
+    private void updateMessage (){
+        if(typeObserver ==  Type.MINE){
+            setTitle(R.string.your_rides);
+        }else{
+            setTitle(R.string.result_search);
         }
-
-    private void showConfirmDeleteRide(final String idRide){
-        AlertDialog.Builder builder = MessageUtil.createAlertDialogBuilder(this);
-        builder.setTitle(R.string.alert);
-        builder.setMessage(R.string.confirm_delete_ride);
-
-        builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                rideDAO.removeRide(idRide);
-            }
-        });
-        builder.setNegativeButton(R.string.no, null);
-        AlertDialog dialog = builder.create();
-        dialog.show();
     }
-
-    private void showConfirmRequestRide(final Ride ride){
-        AlertDialog.Builder builder = MessageUtil.createAlertDialogBuilder(this);
-        builder.setTitle(R.string.alert);
-        builder.setMessage(R.string.confirm_request_ride);
-
-        builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Notification notification = new Notification();
-                notification.setIdRide(ride.getId());
-                notification.setReceiver(ride.getUser());
-                notification.setSend(Type.REQUEST);
-                notification.setSender(FaceBookManager.getCurrentUser());
-                NotificationDAO.getInstance().sendNotification(notification);
-                startActivity(new Intent(ShowRiderActivity.this, ProfileUserActivity.class));
-                ShowRiderActivity.this.finish();
-
-            }
-        });
-        builder.setNegativeButton(R.string.no, null);
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
-
 
     @Override
     public void update(Observable observable, Object o) {

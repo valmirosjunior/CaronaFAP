@@ -74,6 +74,7 @@
     <string name="title_activity_conversation">Conversation</string>
     <string name="send">Enviar</string>
     <string name="solicitations">Solicitações</string>
-    <string name="messages">Solicitações</string>
+    <string name="messages">Conversas</string>
+    <string name="description">Descrição</string>
 
 </resources>

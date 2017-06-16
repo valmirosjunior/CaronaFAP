@@ -1,4 +1,8 @@
-package br.com.valmirosjunior.caronafap.adapter;
+package br.com.valmirosjunior.caronafap.controller.adapter;
+
+/**
+ * Created by junior on 11/05/17.
+ */
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,14 +16,11 @@ import com.facebook.login.widget.ProfilePictureView;
 import java.util.List;
 
 import br.com.valmirosjunior.caronafap.R;
-import br.com.valmirosjunior.caronafap.model.Ride;
+import br.com.valmirosjunior.caronafap.model.Notification;
 
-/**
- * Created by junior on 22/04/17.
- */
+public class NotificationAdapter extends BaseAdapter {
 
-public class RideAdapter extends BaseAdapter {
-    private List<Ride> rides;
+    private List<Notification> notifications;
     private Context context;
     private TextView textView;
     private ProfilePictureView profilePictureView;
@@ -27,30 +28,29 @@ public class RideAdapter extends BaseAdapter {
     private static LayoutInflater inflater=null;
 
 
-    public List<Ride> getRides() {
-        return rides;
+    public List<Notification> getNotifications() {
+        return notifications;
     }
 
-    public void setRides(List<Ride> rides) {
-        this.rides = rides;
+    public void setNotifications(List<Notification> notifications) {
+        this.notifications = notifications;
     }
 
-    public RideAdapter(Context context, List<Ride> rides ) {
-        this.rides =rides;
+    public NotificationAdapter(Context context, List<Notification> notifications) {
+        this.notifications = notifications;
         this.context = context;
         inflater = (LayoutInflater) context.
                 getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
-
     @Override
     public int getCount() {
-        return rides.size();
+        return notifications.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return rides.get(position);
+        return notifications.get(position);
     }
 
     @Override
@@ -61,14 +61,14 @@ public class RideAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        final Ride ride = rides.get(position);
+        final Notification notification = notifications.get(position);
         View rowView;
-        rowView = inflater.inflate(R.layout.row_ride_list, null);
+        rowView = inflater.inflate(R.layout.row_notication_list, null);
         textView =(TextView) rowView.findViewById(R.id.textViewDescriptoinRide);
         profilePictureView = (ProfilePictureView) rowView.findViewById(R.id.profilePictureUserListView);
 
-        textView.setText(ride.toString());
-        profilePictureView.setProfileId(ride.getUser().getId());
+        textView.setText(notification.toString());
+        profilePictureView.setProfileId(notification.getSender().getId());
         return rowView;
     }
 

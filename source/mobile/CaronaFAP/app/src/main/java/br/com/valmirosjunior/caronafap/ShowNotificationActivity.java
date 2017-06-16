@@ -18,13 +18,13 @@ import br.com.valmirosjunior.caronafap.model.User;
 import br.com.valmirosjunior.caronafap.model.dao.NotificationDAO;
 import br.com.valmirosjunior.caronafap.model.dao.RideDAO;
 import br.com.valmirosjunior.caronafap.model.enums.Type;
-import br.com.valmirosjunior.caronafap.patners.Observable;
-import br.com.valmirosjunior.caronafap.patners.Observer;
+import br.com.valmirosjunior.caronafap.pattern.Observable;
+import br.com.valmirosjunior.caronafap.pattern.Observer;
 import br.com.valmirosjunior.caronafap.util.Constants;
 import br.com.valmirosjunior.caronafap.util.MessageUtil;
 import br.com.valmirosjunior.caronafap.util.Util;
 
-public class SeeNotificationActivity extends AppCompatActivity implements Observer {
+public class ShowNotificationActivity extends AppCompatActivity implements Observer {
 
     private RideDAO rideDAO;
     private Ride ride;
@@ -81,7 +81,7 @@ public class SeeNotificationActivity extends AppCompatActivity implements Observ
         ride = (Ride) object;
         profilePicture.setProfileId(sender.getId());
         String action = ((notification.getSend()== Type.REQUEST)? "Solicitou" : "Aceitou");
-        tvDescriprition.setText(sender.getName()+ "\n"+action+ "\n"+ride.getDescription());
+        tvDescriprition.setText(sender.getName()+ "\n"+action+ "\n"+ride.showDescription());
     }
 
     @Override

@@ -1,9 +1,8 @@
-package br.com.valmirosjunior.caronafap.network;
+package br.com.valmirosjunior.caronafap.util;
 
 import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -26,9 +25,10 @@ import java.util.Arrays;
 import java.util.List;
 
 import br.com.valmirosjunior.caronafap.model.User;
+import br.com.valmirosjunior.caronafap.model.dao.UserDAO;
 import br.com.valmirosjunior.caronafap.model.enums.Status;
-import br.com.valmirosjunior.caronafap.patners.Observable;
-import br.com.valmirosjunior.caronafap.patners.Observer;
+import br.com.valmirosjunior.caronafap.pattern.Observable;
+import br.com.valmirosjunior.caronafap.pattern.Observer;
 
 
 /**
@@ -126,8 +126,8 @@ public class FaceBookManager implements Observable {
                             FaceBookManager.this.notifyObservers(Status.ERROR);
                         }else{
                             fierbaseToken = FirebaseInstanceId .getInstance().getToken();
-                            Log.i("token::::;",fierbaseToken);
                             FaceBookManager.this.notifyObservers(Status.SUCCESS);
+                            UserDAO.getInstance().saveUser(getCurrentUser());
                         }
                     }
                 });

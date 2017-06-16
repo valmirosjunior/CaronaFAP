@@ -16,9 +16,9 @@ import java.util.Map;
 import br.com.valmirosjunior.caronafap.model.Notification;
 import br.com.valmirosjunior.caronafap.model.User;
 import br.com.valmirosjunior.caronafap.model.enums.Type;
-import br.com.valmirosjunior.caronafap.network.FaceBookManager;
-import br.com.valmirosjunior.caronafap.patners.Observable;
-import br.com.valmirosjunior.caronafap.patners.Observer;
+import br.com.valmirosjunior.caronafap.util.FaceBookManager;
+import br.com.valmirosjunior.caronafap.pattern.Observable;
+import br.com.valmirosjunior.caronafap.pattern.Observer;
 
 /**
  * Created by junior on 10/05/17.
@@ -53,7 +53,8 @@ public class NotificationDAO implements Observable{
 
     public void sendNotification(Notification notification){
         if(notification.getId() == null){
-            ref=refToSendNotification.child(notification.getReceiver().getId()).push();
+            ref=refToSendNotification.child(notification.getReceiver().getId())
+                    .child(notification.getSender().getId());
             notification.setId(ref.getKey());
             ref.setValue(notification);
         }else{
