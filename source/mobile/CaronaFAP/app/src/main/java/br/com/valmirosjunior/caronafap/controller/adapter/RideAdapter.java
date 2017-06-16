@@ -16,7 +16,7 @@ import com.facebook.login.widget.ProfilePictureView;
 import java.util.List;
 
 import br.com.valmirosjunior.caronafap.R;
-import br.com.valmirosjunior.caronafap.ShowOneRideActivity;
+import br.com.valmirosjunior.caronafap.controller.activities.ShowOneRideActivity;
 import br.com.valmirosjunior.caronafap.model.Ride;
 import br.com.valmirosjunior.caronafap.util.Constants;
 

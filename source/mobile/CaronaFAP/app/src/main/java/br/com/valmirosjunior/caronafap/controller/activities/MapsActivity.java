@@ -1,4 +1,4 @@
-package br.com.valmirosjunior.caronafap;
+package br.com.valmirosjunior.caronafap.controller.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,6 +14,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import br.com.valmirosjunior.caronafap.R;
 import br.com.valmirosjunior.caronafap.model.MyLocation;
 import br.com.valmirosjunior.caronafap.util.Constants;
 

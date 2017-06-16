@@ -1,4 +1,4 @@
-package br.com.valmirosjunior.caronafap;
+package br.com.valmirosjunior.caronafap.controller.activities;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -16,7 +16,8 @@ import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 
-import br.com.valmirosjunior.caronafap.fragments.TimePickerFragment;
+import br.com.valmirosjunior.caronafap.R;
+import br.com.valmirosjunior.caronafap.controller.fragments.TimePickerFragment;
 import br.com.valmirosjunior.caronafap.model.MyLocation;
 import br.com.valmirosjunior.caronafap.model.Ride;
 import br.com.valmirosjunior.caronafap.model.dao.RideDAO;

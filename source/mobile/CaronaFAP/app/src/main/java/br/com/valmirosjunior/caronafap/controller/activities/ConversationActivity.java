@@ -1,9 +1,10 @@
-package br.com.valmirosjunior.caronafap;
+package br.com.valmirosjunior.caronafap.controller.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import br.com.valmirosjunior.caronafap.R;
 import br.com.valmirosjunior.caronafap.model.User;
 import br.com.valmirosjunior.caronafap.model.dao.UserDAO;
 import br.com.valmirosjunior.caronafap.model.enums.Type;
@@ -11,7 +12,7 @@ import br.com.valmirosjunior.caronafap.pattern.Observable;
 import br.com.valmirosjunior.caronafap.pattern.Observer;
 import br.com.valmirosjunior.caronafap.util.Constants;
 
-public class Conversation extends AppCompatActivity implements Observer{
+public class ConversationActivity extends AppCompatActivity implements Observer{
     private String id,ID_USER = Constants.ID_USER;
     private User user;
     private UserDAO userDAO;

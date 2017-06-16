@@ -36,7 +36,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".controller.activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -44,21 +44,21 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MapsActivity"
+            android:name=".controller.activities.MapsActivity"
             android:label="@string/title_activity_maps" />
-        <activity android:name=".ShowRidesActivity" />
-        <activity android:name=".RegisterRideActivity" />
+        <activity android:name=".controller.activities.ShowRidesActivity" />
+        <activity android:name=".controller.activities.RegisterRideActivity" />
         <activity
-            android:name=".ProfileUserActivity"
+            android:name=".controller.activities.ProfileUserActivity"
             android:label="@string/title_activity_profile_user"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".ShowNotificationActivity" />
+        <activity android:name=".controller.activities.ShowNotificationActivity" />
         <activity
-            android:name=".ShowProfileActivity"
+            android:name=".controller.activities.ShowProfileActivity"
             android:label="@string/title_activity_see_profile"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Conversation" />
-        <activity android:name=".ShowOneRideActivity"></activity>
+        <activity android:name=".controller.activities.ConversationActivity" />
+        <activity android:name=".controller.activities.ShowOneRideActivity"></activity>
     </application>
 
 </manifest>

@@ -1,4 +1,4 @@
-package br.com.valmirosjunior.caronafap;
+package br.com.valmirosjunior.caronafap.controller.activities;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -16,6 +16,7 @@ import com.facebook.login.widget.ProfilePictureView;
 
 import java.util.Calendar;
 
+import br.com.valmirosjunior.caronafap.R;
 import br.com.valmirosjunior.caronafap.model.Coment;
 import br.com.valmirosjunior.caronafap.model.User;
 import br.com.valmirosjunior.caronafap.model.dao.ComentDAO;

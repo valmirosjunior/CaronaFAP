@@ -1,4 +1,4 @@
-package br.com.valmirosjunior.caronafap.fragments;
+package br.com.valmirosjunior.caronafap.controller.fragments;
 
 import android.app.Dialog;
 import android.app.TimePickerDialog;

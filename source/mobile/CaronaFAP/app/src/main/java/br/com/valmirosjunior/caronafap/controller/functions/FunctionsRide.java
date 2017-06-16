@@ -5,11 +5,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 
-import br.com.valmirosjunior.caronafap.ProfileUserActivity;
+import br.com.valmirosjunior.caronafap.controller.activities.ProfileUserActivity;
 import br.com.valmirosjunior.caronafap.R;
-import br.com.valmirosjunior.caronafap.RegisterRideActivity;
-import br.com.valmirosjunior.caronafap.ShowOneRideActivity;
-import br.com.valmirosjunior.caronafap.ShowRidesActivity;
+import br.com.valmirosjunior.caronafap.controller.activities.RegisterRideActivity;
+import br.com.valmirosjunior.caronafap.controller.activities.ShowOneRideActivity;
+import br.com.valmirosjunior.caronafap.controller.activities.ShowRidesActivity;
 import br.com.valmirosjunior.caronafap.model.Notification;
 import br.com.valmirosjunior.caronafap.model.Ride;
 import br.com.valmirosjunior.caronafap.model.dao.NotificationDAO;
@@ -61,7 +61,6 @@ public class FunctionsRide {
         intent = new Intent(activity, RegisterRideActivity.class);
         intent.putExtra(Constants.ID_RIDE,ride.getId());
         activity.startActivity(intent);
-        activity.finish();
     }
 
     public void deleteRide(final Ride ride){

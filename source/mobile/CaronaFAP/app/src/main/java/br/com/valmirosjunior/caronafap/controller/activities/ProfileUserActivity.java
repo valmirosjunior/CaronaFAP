@@ -1,4 +1,4 @@
-package br.com.valmirosjunior.caronafap;
+package br.com.valmirosjunior.caronafap.controller.activities;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -23,6 +23,7 @@ import com.facebook.login.widget.ProfilePictureView;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.valmirosjunior.caronafap.R;
 import br.com.valmirosjunior.caronafap.controller.adapter.NotificationAdapter;
 import br.com.valmirosjunior.caronafap.model.Notification;
 import br.com.valmirosjunior.caronafap.pattern.Observable;

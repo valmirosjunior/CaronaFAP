@@ -154,7 +154,6 @@ public class UserDAO implements Observable {
         if (!observers.contains(o)){
             observers.add(o);
         }
-
     }
 
     @Override

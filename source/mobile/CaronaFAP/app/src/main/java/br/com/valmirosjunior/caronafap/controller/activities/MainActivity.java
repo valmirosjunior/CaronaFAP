@@ -1,4 +1,4 @@
-package br.com.valmirosjunior.caronafap;
+package br.com.valmirosjunior.caronafap.controller.activities;
 
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.facebook.CallbackManager;
 import com.facebook.login.widget.LoginButton;
 
+import br.com.valmirosjunior.caronafap.R;
 import br.com.valmirosjunior.caronafap.pattern.Observable;
 import br.com.valmirosjunior.caronafap.pattern.Observer;
 import br.com.valmirosjunior.caronafap.model.enums.Status;
