@@ -53,10 +53,12 @@
             android:label="@string/title_activity_profile_user"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".controller.activities.ShowNotificationActivity" />
-        <activity
+        <!--activity
             android:name=".controller.activities.ShowProfileActivity"
             android:label="@string/title_activity_see_profile"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar" /-->
+        <activity android:name=".controller.activities.ShowProfileActivity"
+            android:screenOrientation="portrait"/>
         <activity android:name=".controller.activities.ConversationActivity" />
         <activity android:name=".controller.activities.ShowOneRideActivity"></activity>
     </application>

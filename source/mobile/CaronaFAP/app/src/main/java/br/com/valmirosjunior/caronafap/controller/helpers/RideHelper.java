@@ -1,11 +1,11 @@
-package br.com.valmirosjunior.caronafap.controller.functions;
+package br.com.valmirosjunior.caronafap.controller.helpers;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 
-import br.com.valmirosjunior.caronafap.controller.activities.ProfileUserActivity;
 import br.com.valmirosjunior.caronafap.R;
 import br.com.valmirosjunior.caronafap.controller.activities.RegisterRideActivity;
 import br.com.valmirosjunior.caronafap.controller.activities.ShowOneRideActivity;
@@ -23,27 +23,27 @@ import br.com.valmirosjunior.caronafap.util.MessageUtil;
  * Created by junior on 15/06/17.
  */
 
-public class FunctionsRide {
+public class RideHelper {
     private Activity activity;
     private RideDAO rideDAO;
 
-    public FunctionsRide(Activity activity, RideDAO rideDAO) {
+    public RideHelper(Activity activity, RideDAO rideDAO) {
         this.activity = activity;
         this.rideDAO = rideDAO;
     }
 
-    public DialogInterface.OnClickListener requestRide(final Ride ride){
+    public DialogInterface.OnClickListener requestRide(final Context context, final Ride ride){
         return new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+
                 Notification notification = new Notification();
-                notification.setIdRide(ride.getId());
-                notification.setReceiver(ride.getUser());
+                notification.setRide(ride);
                 notification.setSend(Type.REQUEST);
                 notification.setSender(FaceBookManager.getCurrentUser());
                 NotificationDAO.getInstance().sendNotification(notification);
-                activity.startActivity(new Intent(activity, ProfileUserActivity.class));
-                activity.finish();
+                MessageUtil.showAlertDialogBuilder(context,
+                        "Sucesso","Solicitação efetuada com Sucesso!");
             }
         };
     }

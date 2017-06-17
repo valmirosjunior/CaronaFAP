@@ -70,7 +70,7 @@
     <string name="reject_ride">Você deseja Realmente rejeitar essa solicitação?</string>
     <string name="confirm_accept_request">Deseja confirmar solicitação</string>
     <string name="reject_accept_request">Deseja realmente Rejeitar solicitção?</string>
-    <string name="title_activity_see_profile">SeeProfile</string>
+    <string name="title_activity_see_profile">Perfil de Usuário</string>
     <string name="title_activity_conversation">Conversation</string>
     <string name="send">Enviar</string>
     <string name="solicitations">Solicitações</string>
@@ -78,5 +78,6 @@
     <string name="description">Descrição</string>
     <string name="confirm_send_coment">Deseja Enviar o Comentário?</string>
     <string name="send_coment_succes">Comentário enviado com susseo</string>
+    <string name="note">Reputação</string>
 
 </resources>

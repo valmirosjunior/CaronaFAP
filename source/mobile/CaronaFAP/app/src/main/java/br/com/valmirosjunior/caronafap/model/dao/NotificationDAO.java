@@ -53,19 +53,19 @@ public class NotificationDAO implements Observable{
 
     public void sendNotification(Notification notification){
         if(notification.getId() == null){
-            ref=refToSendNotification.child(notification.getReceiver().getId())
+            ref=refToSendNotification.child(notification.getRide().getUser().getId())
                     .child(notification.getSender().getId());
             notification.setId(ref.getKey());
             ref.setValue(notification);
         }else{
-            refToSendNotification.child(notification.getReceiver().getId()).
+            refToSendNotification.child(notification.getRide().getUser().getId()).
                     child(notification.getId()).setValue(notification);
         }
 
     }
 
     public void removeNotifications(Notification notification) {
-        refToNotification.child(notification.getReceiver().getId()).
+        refToNotification.child(notification.getRide().getUser().getId()).
                 child(notification.getId()).removeValue();
     }
 

@@ -6,10 +6,12 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import br.com.valmirosjunior.caronafap.model.Coment;
 import br.com.valmirosjunior.caronafap.model.User;
@@ -53,15 +55,32 @@ public class UserDAO implements Observable {
         this.user = user;
     }
 
-    public void saveUser(User user) {
-//        if (userMap.get(user.getId()) != null){
-//            Map<String,Object> nameMap = new HashMap<>();
-//            nameMap.put("name",user.getName());
-//            refToUsers.child(user.getId()).updateChildren(nameMap);
-//        }else{
-//            refToUsers.child(user.getId()).setValue(user);
-//        }
-        refToUsers.child(user.getId()).setValue(user);
+    public void saveUser(final User user) {
+        System.out.println(user);
+        if (userMap.get(user.getId()) != null){
+            Map<String,Object> nameMap = new HashMap<>();
+            nameMap.put("name",user.getName());
+            refToUsers.child(user.getId()).updateChildren(nameMap);
+        } else{
+            refToUsers.child(user.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    User userFinded = dataSnapshot.getValue(User.class);
+                    if (userFinded == null) {
+                        refToUsers.child(user.getId()).setValue(user);
+                    }else{
+                        Map<String,Object> nameMap = new HashMap<>();
+                        nameMap.put("name",user.getName());
+                        refToUsers.child(user.getId()).updateChildren(nameMap);
+                    }
+                }
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Log.d("Error","Ocoorreu um erro");
+
+                }
+            });
+        }
     }
 
     public void sendComment(User user, Coment coment){
@@ -71,8 +90,9 @@ public class UserDAO implements Observable {
         if (user.getComents()== null){
             user.setComents(new ArrayList<Coment>());
         }
+        refToUsers.child(user.getId()).child("coments").
+                child(""+user.getComents().size()).setValue(coment);
         user.getComents().add(coment);
-        saveUser(user);
     }
 
     private void addChildAddEventListener() {

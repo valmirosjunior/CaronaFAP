@@ -65,7 +65,7 @@ public class ShowNotificationActivity extends AppCompatActivity implements Obser
     }
 
     private void updateFields(Notification notification){
-        if(notification.getReceiver() != null){
+        if(notification.getRide() != null){
             layout.setVisibility(View.INVISIBLE);
             butSeeProfile.setVisibility(View.VISIBLE);
         }else if (layout.getVisibility() == View.INVISIBLE){

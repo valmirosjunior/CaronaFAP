@@ -1,35 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:facebook="http://schemas.android.com/apk/res-auto"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="br.com.valmirosjunior.caronafap.controller.activities.ShowProfileActivity"
+    tools:showIn="@layout/activity_show_profile"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="br.com.valmirosjunior.caronafap.controller.activities.ShowProfileActivity">
+    android:orientation="vertical"
+    >
 
-    <android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
-
-    </android.support.design.widget.AppBarLayout>
-
-    <include layout="@layout/content_show_profile" />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
+    <com.facebook.login.widget.ProfilePictureView
+        android:id="@+id/ppvUser"
+        facebook:com_facebook_preset_size="normal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:backgroundTint="@android:color/holo_blue_dark"
-        app:srcCompat="@drawable/ic_menu_send"
-        android:onClick="showDialog"/>
+        android:layout_gravity="center"
+        android:layout_margin="5dp"/>
 
-</android.support.design.widget.CoordinatorLayout>
+    <TextView
+        android:id="@+id/tvNote"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/note"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        />
+
+    <RatingBar
+        android:id="@+id/rbUser"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:isIndicator="true"
+        android:numStars="5"
+        android:layout_gravity="center"
+        />
+
+    <TextView
+        android:id="@+id/tvComent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cometários"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:layout_gravity="center"
+         android:layout_marginTop="5dp"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ListView
+            android:id="@+id/lvComents"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/fab_margin"
+            app:backgroundTint="@android:color/holo_blue_dark"
+            app:srcCompat="@drawable/ic_menu_send"
+            android:onClick="showDialog"/>
+
+    </FrameLayout>
+</LinearLayout>

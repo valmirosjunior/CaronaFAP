@@ -49,7 +49,8 @@ public class MessageUtil {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(title);
         builder.setMessage(message);
-        builder.show();
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     public static void showConfirm(Context context, String message,

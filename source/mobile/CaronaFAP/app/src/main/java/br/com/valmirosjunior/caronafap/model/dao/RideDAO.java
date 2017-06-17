@@ -153,7 +153,7 @@ public class RideDAO implements Observable,Observer {
         rides= new ArrayList<>();
         for (Map.Entry<String, Ride> rideEntry : rideMap.entrySet()){
             ride= rideEntry.getValue();
-            if(ride.getUser().equals(user)){
+            if(user.equals(ride.getUser())){
                 rides.add(rideEntry.getValue());
             }
         }
@@ -167,7 +167,7 @@ public class RideDAO implements Observable,Observer {
         rides= new ArrayList<>();
         for (Map.Entry<String, Ride> rideEntry : rideMap.entrySet()){
             ride= rideEntry.getValue();
-            if(!ride.getUser().equals(user)){
+            if(!user.equals(ride.getUser())){
                 if(ride.getType()!= myRide.getType()){
                     if (ride.diferenceTime(myRide)<30){
                         if(myRide.getOrigin().distanceToLocation(ride.getOrigin())< 1000 &&

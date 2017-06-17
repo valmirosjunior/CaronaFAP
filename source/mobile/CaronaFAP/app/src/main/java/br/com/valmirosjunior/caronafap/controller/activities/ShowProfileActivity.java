@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -45,8 +44,6 @@ public class ShowProfileActivity extends AppCompatActivity implements Observer{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_profile);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
         rbUser = (RatingBar) findViewById(R.id.rbUser);
         ppvUser =(ProfilePictureView) findViewById(R.id.ppvUser);
@@ -61,6 +58,7 @@ public class ShowProfileActivity extends AppCompatActivity implements Observer{
         lvComents = (ListView) findViewById(R.id.lvComents);
         lvComents.setAdapter(comentAdapter);
         ppvUser.setProfileId(idUser);
+        userDAO.addObserver(this);
         update(userDAO);
 
     }
@@ -86,6 +84,7 @@ public class ShowProfileActivity extends AppCompatActivity implements Observer{
     private Coment makeComent() {
         Coment coment = new Coment();
         coment.setAuthor(FaceBookManager.getCurrentUser());
+        coment.setIdAuthor(coment.getAuthor().getId());
         coment.setTimeInMillis(Calendar.getInstance().getTimeInMillis());
         coment.setComent(etComent.getText().toString());
         coment.setNote(rbDialog.getRating());

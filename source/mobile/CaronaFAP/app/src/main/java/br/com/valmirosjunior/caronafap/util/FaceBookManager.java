@@ -83,6 +83,7 @@ public class FaceBookManager implements Observable {
         try {
             LoginManager.getInstance().logOut();
             firebaseAuth.signOut();
+            user = null;
             this.notifyObservers(Status.SUCCESS);
         }catch (Exception e){
             this.notifyObservers(Status.ERROR);

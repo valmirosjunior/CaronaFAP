@@ -8,6 +8,9 @@ import android.widget.BaseAdapter;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.facebook.login.widget.ProfilePictureView;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import br.com.valmirosjunior.caronafap.R;
@@ -23,9 +26,10 @@ public class ComentAdapter extends BaseAdapter {
     private LayoutInflater inflater;
     private TextView textView;
     private RatingBar ratingBar;
+    private ProfilePictureView ppvUser;
 
     public ComentAdapter(Context context,List<Coment> coments) {
-        this.coments = coments;
+        setComents(coments);
         this.context = context;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -35,7 +39,7 @@ public class ComentAdapter extends BaseAdapter {
     }
 
     public void setComents(List<Coment> coments) {
-        this.coments = coments;
+        this.coments = (coments == null)? new ArrayList<Coment>() : coments;
     }
 
     @Override
@@ -55,12 +59,14 @@ public class ComentAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View view, ViewGroup viewGroup) {
-        Coment coment =coments.get(position);
+        Coment coment =coments.get(getCount()-position-1);
         View rowview = inflater.inflate(R.layout.row_coment,null);
         textView = (TextView) rowview.findViewById(R.id.tvComent);
         ratingBar = (RatingBar) rowview.findViewById(R.id.rbComent);
+        ppvUser = (ProfilePictureView) rowview.findViewById(R.id.ppvUser);
         textView.setText(coment.getComent());
         ratingBar.setRating(coment.getNote());
+        ppvUser.setProfileId(coment.getIdAuthor());
         return rowview;
     }
      public float getNote(){

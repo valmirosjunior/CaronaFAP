@@ -21,7 +21,6 @@ import br.com.valmirosjunior.caronafap.util.MessageUtil;
 public class MainActivity extends AppCompatActivity implements Observer {
     private CallbackManager callbackManager;
     private LoginButton loginButton;
-    private TextView tx;
     private FaceBookManager faceBookManager;
 
     @Override
@@ -38,7 +37,6 @@ public class MainActivity extends AppCompatActivity implements Observer {
         } else {
             loginButton = (LoginButton) findViewById(R.id.login_button);
             callbackManager = CallbackManager.Factory.create();
-            tx = (TextView) findViewById(R.id.text);
             faceBookManager.prepareLoginButton(loginButton, callbackManager);
         }
     }

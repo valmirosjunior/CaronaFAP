@@ -21,19 +21,18 @@ import android.widget.TextView;
 import com.facebook.login.widget.ProfilePictureView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import br.com.valmirosjunior.caronafap.R;
 import br.com.valmirosjunior.caronafap.controller.adapter.NotificationAdapter;
 import br.com.valmirosjunior.caronafap.model.Notification;
-import br.com.valmirosjunior.caronafap.pattern.Observable;
-import br.com.valmirosjunior.caronafap.pattern.Observer;
 import br.com.valmirosjunior.caronafap.model.User;
 import br.com.valmirosjunior.caronafap.model.dao.NotificationDAO;
 import br.com.valmirosjunior.caronafap.model.enums.Status;
 import br.com.valmirosjunior.caronafap.model.enums.Type;
-import br.com.valmirosjunior.caronafap.util.FaceBookManager;
+import br.com.valmirosjunior.caronafap.pattern.Observable;
+import br.com.valmirosjunior.caronafap.pattern.Observer;
 import br.com.valmirosjunior.caronafap.util.Constants;
+import br.com.valmirosjunior.caronafap.util.FaceBookManager;
 import br.com.valmirosjunior.caronafap.util.MessageUtil;
 
 public class ProfileUserActivity extends AppCompatActivity
@@ -71,53 +70,57 @@ public class ProfileUserActivity extends AppCompatActivity
             NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
             navigationView.setNavigationItemSelectedListener(this);
 
-            notificationAdapter = new NotificationAdapter(this,new ArrayList<Notification>());
-            ListView listView = (ListView) findViewById(R.id.listViewShowNotifications);
-            listView.setAdapter(notificationAdapter);
-
-            listView.setOnItemClickListener(new android.widget.AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
-                    Notification notification = (Notification) parent.getItemAtPosition(position);
-
-                    Intent intent = new Intent(ProfileUserActivity.this, ShowNotificationActivity.class);
-                    intent.putExtra(Constants.ID_NOTIFICATION, notification.getId());
-                    startActivity(intent);
-                }
-            });
-
-
-            faceBookManager = new FaceBookManager(this);
-            notificationDAO = NotificationDAO.getInstance();
-            faceBookManager.addObserver(this);
-
-            notificationDAO.addObserver(this);
-
-            user = faceBookManager.getCurrentUser();
-
-            textViewWelcome = (TextView) findViewById(R.id.textViewWelcome);
-            textViewUser = (TextView) navigationView.getHeaderView(0).findViewById(R.id.text_navHeader);
-
-            profilePictureMain = (ProfilePictureView) findViewById(R.id.profilePictureUser);
-            profilePictureNav = (ProfilePictureView)
-                    navigationView.getHeaderView(0).findViewById(R.id.profilePictureUserNavBar);
-
-            textViewWelcome.append(" " + user.getName());
-            textViewUser.setText(user.getName());
-            profilePictureMain.setProfileId(user.getId());
-            profilePictureNav.setProfileId(user.getId());
-
-
-
+            init(navigationView);
         }catch (Exception e){
             e.printStackTrace();
         }
 
     }
 
+    private void init(NavigationView navigationView){
+        notificationAdapter = new NotificationAdapter(this,new ArrayList<Notification>());
+        ListView listView = (ListView) findViewById(R.id.listViewShowNotifications);
+        listView.setAdapter(notificationAdapter);
+
+        listView.setOnItemClickListener(new android.widget.AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
+                Notification notification = (Notification) parent.getItemAtPosition(position);
+
+                Intent intent = new Intent(ProfileUserActivity.this, ShowNotificationActivity.class);
+                intent.putExtra(Constants.ID_NOTIFICATION, notification.getId());
+                startActivity(intent);
+            }
+        });
+
+
+        faceBookManager = new FaceBookManager(this);
+        notificationDAO = NotificationDAO.getInstance();
+        faceBookManager.addObserver(this);
+
+        notificationDAO.addObserver(this);
+
+        user = faceBookManager.getCurrentUser();
+
+        textViewWelcome = (TextView) findViewById(R.id.textViewWelcome);
+        textViewUser = (TextView) navigationView.getHeaderView(0).findViewById(R.id.text_navHeader);
+
+        profilePictureMain = (ProfilePictureView) findViewById(R.id.profilePictureUser);
+        profilePictureNav = (ProfilePictureView)
+                navigationView.getHeaderView(0).findViewById(R.id.profilePictureUserNavBar);
+
+        textViewWelcome.append(" " + user.getName());
+        textViewUser.setText(user.getName());
+        profilePictureMain.setProfileId(user.getId());
+        profilePictureNav.setProfileId(user.getId());
+
+        notificationDAO.notifyObservers();
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
+        notificationDAO = NotificationDAO.getInstance();
         notificationDAO.addObserver(this);
         update(notificationDAO,notificationDAO.getNotifications());
     }
@@ -222,10 +225,10 @@ public class ProfileUserActivity extends AppCompatActivity
                 buider.show();
             }
         }else {
-            List<Notification> notifications = (List<Notification>)o;
-            notificationAdapter.notifyDataSetInvalidated();
-            notificationAdapter.setNotifications(notifications);
-            notificationAdapter.notifyDataSetChanged();
+//            List<Notification> notifications = (List<Notification>)o;
+//            notificationAdapter.notifyDataSetInvalidated();
+//            notificationAdapter.setNotifications(notifications);
+//            notificationAdapter.notifyDataSetChanged();
         }
     }
 

@@ -17,7 +17,7 @@ import java.util.List;
 
 import br.com.valmirosjunior.caronafap.R;
 import br.com.valmirosjunior.caronafap.controller.adapter.RideAdapter;
-import br.com.valmirosjunior.caronafap.controller.functions.FunctionsRide;
+import br.com.valmirosjunior.caronafap.controller.helpers.RideHelper;
 import br.com.valmirosjunior.caronafap.model.Ride;
 import br.com.valmirosjunior.caronafap.model.dao.RideDAO;
 import br.com.valmirosjunior.caronafap.model.enums.Type;
@@ -29,7 +29,7 @@ import br.com.valmirosjunior.caronafap.util.MessageUtil;
 public class ShowRidesActivity extends AppCompatActivity implements Observer {
     private RideDAO rideDAO;
     private Ride ride;
-    private FunctionsRide functionsRide;
+    private RideHelper rideHelper;
     private RideAdapter rideAdapter;
     private TextView textViewMessage;
     private Type typeObserver;
@@ -43,7 +43,7 @@ public class ShowRidesActivity extends AppCompatActivity implements Observer {
         rideDAO =RideDAO.getInstance();
         rideDAO.addObserver(this);
         rideDAO.notifyObservers();
-        functionsRide = new FunctionsRide(this,rideDAO);
+        rideHelper = new RideHelper(this,rideDAO);
     }
 
     private void init(){
@@ -128,28 +128,28 @@ public class ShowRidesActivity extends AppCompatActivity implements Observer {
         Ride ride = rideAdapter.getRides().get(info.position);
         switch (item.getItemId()) {
             case R.id.edit_ride:
-                functionsRide.editRide(ride);
+                rideHelper.editRide(ride);
                 return true;
 
             case R.id.delete:
-                functionsRide.deleteRide(ride);
+                rideHelper.deleteRide(ride);
                 return true;
 
             case R.id.viewOnmap :
-                functionsRide.seeRouteOnMap(ride);
+                rideHelper.seeRouteOnMap(ride);
                 return true;
 
             case R.id.viewProfile :
                 String idUSer= ride.getUser().getId();
-                functionsRide.seeProfile(idUSer);
+                rideHelper.seeProfile(idUSer);
                 return true;
 
             case R.id.findRide:
-                functionsRide.findPatner(ride);
+                rideHelper.findPatner(ride);
                 return true;
 
             case R.id.requestRide:
-                functionsRide.requestRide(ride);
+                rideHelper.requestRide(this,ride);
                 return true;
             default:
                 return super.onContextItemSelected(item);

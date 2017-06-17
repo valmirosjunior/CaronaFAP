@@ -125,7 +125,8 @@
                 android:text="@string/request_ride"
                 android:textColor="@android:color/background_light"
                 android:layout_weight="1"
-                android:layout_margin="2dp"/>
+                android:layout_margin="2dp"
+                android:onClick="requestRide"/>
 
         </LinearLayout>
 

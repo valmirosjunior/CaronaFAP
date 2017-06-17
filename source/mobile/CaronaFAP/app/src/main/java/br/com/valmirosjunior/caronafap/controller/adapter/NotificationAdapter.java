@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.facebook.login.widget.ProfilePictureView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import br.com.valmirosjunior.caronafap.R;
@@ -33,11 +34,12 @@ public class NotificationAdapter extends BaseAdapter {
     }
 
     public void setNotifications(List<Notification> notifications) {
-        this.notifications = notifications;
+        this.notifications = notifications== null ?
+                new ArrayList<Notification>():notifications;
     }
 
     public NotificationAdapter(Context context, List<Notification> notifications) {
-        this.notifications = notifications;
+        setNotifications(notifications);
         this.context = context;
         inflater = (LayoutInflater) context.
                 getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -67,7 +69,7 @@ public class NotificationAdapter extends BaseAdapter {
         textView =(TextView) rowView.findViewById(R.id.textViewDescriptoinRide);
         profilePictureView = (ProfilePictureView) rowView.findViewById(R.id.profilePictureUserListView);
 
-        textView.setText(notification.toString());
+        textView.setText((CharSequence) notification);
         profilePictureView.setProfileId(notification.getSender().getId());
         return rowView;
     }

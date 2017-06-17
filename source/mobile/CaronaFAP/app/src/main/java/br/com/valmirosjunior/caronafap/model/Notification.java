@@ -1,5 +1,7 @@
 package br.com.valmirosjunior.caronafap.model;
 
+import com.google.firebase.database.Exclude;
+
 import br.com.valmirosjunior.caronafap.model.enums.Type;
 
 /**
@@ -7,8 +9,9 @@ import br.com.valmirosjunior.caronafap.model.enums.Type;
  */
 
 public class Notification {
-    private String id;
-    private User sender,receiver;
+    private String id,idSender;
+    private Ride ride;
+    private User sender;
     private String idRide;
     private Type send, receive;
 
@@ -20,20 +23,35 @@ public class Notification {
         this.id = id;
     }
 
+    public Ride getRide() {
+        return ride;
+    }
+
+    public void setRide(Ride ride) {
+        if(ride != null){
+            setIdRide(ride.getId());
+        }
+        this.ride = ride;
+    }
+
+    public String getIdSender() {
+        return idSender;
+    }
+
+    public void setIdSender(String idSender) {
+        this.idSender = idSender;
+    }
+
+    @Exclude
     public User getSender() {
         return sender;
     }
 
     public void setSender(User sender) {
+        if(sender!=null){
+            setIdSender(sender.getId());
+        }
         this.sender = sender;
-    }
-
-    public User getReceiver() {
-        return receiver;
-    }
-
-    public void setReceiver(User receiver) {
-        this.receiver = receiver;
     }
 
     public String getIdRide() {
