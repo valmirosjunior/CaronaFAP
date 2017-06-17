@@ -24,9 +24,9 @@ import java.util.ArrayList;
 
 import br.com.valmirosjunior.caronafap.R;
 import br.com.valmirosjunior.caronafap.controller.adapter.NotificationAdapter;
-import br.com.valmirosjunior.caronafap.model.Notification;
+import br.com.valmirosjunior.caronafap.model.Solicitation;
 import br.com.valmirosjunior.caronafap.model.User;
-import br.com.valmirosjunior.caronafap.model.dao.NotificationDAO;
+import br.com.valmirosjunior.caronafap.model.dao.SolicitationDAO;
 import br.com.valmirosjunior.caronafap.model.enums.Status;
 import br.com.valmirosjunior.caronafap.model.enums.Type;
 import br.com.valmirosjunior.caronafap.pattern.Observable;
@@ -39,7 +39,7 @@ public class ProfileUserActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, Observer {
     private User user;
     private FaceBookManager faceBookManager;
-    private NotificationDAO notificationDAO;
+    private SolicitationDAO solicitationDAO;
     private NotificationAdapter notificationAdapter;
     private ProfilePictureView profilePictureNav,profilePictureMain;
     private TextView textViewUser, textViewWelcome,textViewMessage;
@@ -78,27 +78,27 @@ public class ProfileUserActivity extends AppCompatActivity
     }
 
     private void init(NavigationView navigationView){
-        notificationAdapter = new NotificationAdapter(this,new ArrayList<Notification>());
+        notificationAdapter = new NotificationAdapter(this,new ArrayList<Solicitation>());
         ListView listView = (ListView) findViewById(R.id.listViewShowNotifications);
         listView.setAdapter(notificationAdapter);
 
         listView.setOnItemClickListener(new android.widget.AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
-                Notification notification = (Notification) parent.getItemAtPosition(position);
+                Solicitation solicitation = (Solicitation) parent.getItemAtPosition(position);
 
                 Intent intent = new Intent(ProfileUserActivity.this, ShowNotificationActivity.class);
-                intent.putExtra(Constants.ID_NOTIFICATION, notification.getId());
+                intent.putExtra(Constants.ID_NOTIFICATION, solicitation.getId());
                 startActivity(intent);
             }
         });
 
 
         faceBookManager = new FaceBookManager(this);
-        notificationDAO = NotificationDAO.getInstance();
+        solicitationDAO = SolicitationDAO.getInstance();
         faceBookManager.addObserver(this);
 
-        notificationDAO.addObserver(this);
+        solicitationDAO.addObserver(this);
 
         user = faceBookManager.getCurrentUser();
 
@@ -114,21 +114,21 @@ public class ProfileUserActivity extends AppCompatActivity
         profilePictureMain.setProfileId(user.getId());
         profilePictureNav.setProfileId(user.getId());
 
-        notificationDAO.notifyObservers();
+        solicitationDAO.notifyObservers();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        notificationDAO = NotificationDAO.getInstance();
-        notificationDAO.addObserver(this);
-        update(notificationDAO,notificationDAO.getNotifications());
+        solicitationDAO = SolicitationDAO.getInstance();
+        solicitationDAO.addObserver(this);
+        update(solicitationDAO, solicitationDAO.getSolicitations());
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        notificationDAO.deleteObserver(this);
+        solicitationDAO.deleteObserver(this);
     }
 
     @Override
@@ -225,9 +225,9 @@ public class ProfileUserActivity extends AppCompatActivity
                 buider.show();
             }
         }else {
-//            List<Notification> notifications = (List<Notification>)o;
+//            List<Solicitation> notifications = (List<Solicitation>)o;
 //            notificationAdapter.notifyDataSetInvalidated();
-//            notificationAdapter.setNotifications(notifications);
+//            notificationAdapter.setSolicitations(notifications);
 //            notificationAdapter.notifyDataSetChanged();
         }
     }

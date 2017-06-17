@@ -8,8 +8,8 @@ import br.com.valmirosjunior.caronafap.model.enums.Type;
  * Created by junior on 10/05/17.
  */
 
-public class Notification {
-    private String id,idSender;
+public class Solicitation {
+    private String id;
     private Ride ride;
     private User sender;
     private String idRide;
@@ -23,6 +23,7 @@ public class Notification {
         this.id = id;
     }
 
+    @Exclude
     public Ride getRide() {
         return ride;
     }
@@ -34,13 +35,6 @@ public class Notification {
         this.ride = ride;
     }
 
-    public String getIdSender() {
-        return idSender;
-    }
-
-    public void setIdSender(String idSender) {
-        this.idSender = idSender;
-    }
 
     @Exclude
     public User getSender() {
@@ -48,9 +42,6 @@ public class Notification {
     }
 
     public void setSender(User sender) {
-        if(sender!=null){
-            setIdSender(sender.getId());
-        }
         this.sender = sender;
     }
 
@@ -61,6 +52,8 @@ public class Notification {
     public void setIdRide(String idRideReceiver) {
         this.idRide = idRideReceiver;
     }
+
+
 
 
     public Type getSend() {

@@ -11,6 +11,7 @@ public class User {
     private String id, name;
     private List<Map<String,String>> conversations;
     private List<Coment> coments;
+    private List<String> solitationsId;
 
     public String getId() {
         return id;
@@ -35,6 +36,15 @@ public class User {
     public void setComents(List<Coment> coments) {
         this.coments = coments;
     }
+
+    public List<String> getSolitationsId() {
+        return solitationsId;
+    }
+
+    public void setSolitationsId(List<String> solitationsId) {
+        this.solitationsId = solitationsId;
+    }
+
 
     @Override
     public boolean equals(Object obj) {

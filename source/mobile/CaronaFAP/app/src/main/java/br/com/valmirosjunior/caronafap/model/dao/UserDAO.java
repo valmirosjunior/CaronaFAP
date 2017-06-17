@@ -95,6 +95,19 @@ public class UserDAO implements Observable {
         user.getComents().add(coment);
     }
 
+    public void addSolicitation(User user, String solicitationId) {
+        if (user == null){
+            return;
+        }
+        if (user.getSolitationsId()== null){
+            user.setSolitationsId(new ArrayList<String>());
+        }
+        refToUsers.child(user.getId()).child("solicitations").
+                child(""+user.getSolitationsId().size()).setValue(solicitationId);
+        user.getSolitationsId().add(solicitationId);
+
+    }
+
     private void addChildAddEventListener() {
         ChildEventListener childEventListener = new ChildEventListener() {
             @Override
@@ -168,4 +181,6 @@ public class UserDAO implements Observable {
     public void deleteObserver(Observer o) {
         observers.remove(o);
     }
+
+
 }

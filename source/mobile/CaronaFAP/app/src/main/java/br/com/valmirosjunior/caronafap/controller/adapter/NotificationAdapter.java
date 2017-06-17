@@ -17,11 +17,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.valmirosjunior.caronafap.R;
-import br.com.valmirosjunior.caronafap.model.Notification;
+import br.com.valmirosjunior.caronafap.model.Solicitation;
 
 public class NotificationAdapter extends BaseAdapter {
 
-    private List<Notification> notifications;
+    private List<Solicitation> solicitations;
     private Context context;
     private TextView textView;
     private ProfilePictureView profilePictureView;
@@ -29,17 +29,17 @@ public class NotificationAdapter extends BaseAdapter {
     private static LayoutInflater inflater=null;
 
 
-    public List<Notification> getNotifications() {
-        return notifications;
+    public List<Solicitation> getSolicitations() {
+        return solicitations;
     }
 
-    public void setNotifications(List<Notification> notifications) {
-        this.notifications = notifications== null ?
-                new ArrayList<Notification>():notifications;
+    public void setSolicitations(List<Solicitation> solicitations) {
+        this.solicitations = solicitations == null ?
+                new ArrayList<Solicitation>(): solicitations;
     }
 
-    public NotificationAdapter(Context context, List<Notification> notifications) {
-        setNotifications(notifications);
+    public NotificationAdapter(Context context, List<Solicitation> solicitations) {
+        setSolicitations(solicitations);
         this.context = context;
         inflater = (LayoutInflater) context.
                 getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -47,12 +47,12 @@ public class NotificationAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return notifications.size();
+        return solicitations.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return notifications.get(position);
+        return solicitations.get(position);
     }
 
     @Override
@@ -63,14 +63,14 @@ public class NotificationAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        final Notification notification = notifications.get(position);
+        final Solicitation solicitation = solicitations.get(position);
         View rowView;
         rowView = inflater.inflate(R.layout.row_notication_list, null);
         textView =(TextView) rowView.findViewById(R.id.textViewDescriptoinRide);
         profilePictureView = (ProfilePictureView) rowView.findViewById(R.id.profilePictureUserListView);
 
-        textView.setText((CharSequence) notification);
-        profilePictureView.setProfileId(notification.getSender().getId());
+        textView.setText((CharSequence) solicitation);
+        profilePictureView.setProfileId(solicitation.getSender().getId());
         return rowView;
     }
 

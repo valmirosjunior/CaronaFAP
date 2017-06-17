@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import br.com.valmirosjunior.caronafap.model.Notification;
+import br.com.valmirosjunior.caronafap.model.Solicitation;
 import br.com.valmirosjunior.caronafap.model.User;
 import br.com.valmirosjunior.caronafap.model.enums.Type;
 import br.com.valmirosjunior.caronafap.util.FaceBookManager;
@@ -24,68 +24,71 @@ import br.com.valmirosjunior.caronafap.pattern.Observer;
  * Created by junior on 10/05/17.
  */
 
-public class NotificationDAO implements Observable{
+public class SolicitationDAO implements Observable{
 
-    private static NotificationDAO notificationDAO;
+    private static SolicitationDAO solicitationDAO;
     private DatabaseReference refToNotification,refToSendNotification,ref;
     private List<Observer> observers;
-    private HashMap<String,Notification> notificationMap;
-    private List<Notification> notifications;
+    private HashMap<String,Solicitation> solicitationMap;
+    private List<Solicitation> solicitations;
     private static  User user;
 
 
-    private NotificationDAO() {
+    private SolicitationDAO() {
         user = FaceBookManager.getCurrentUser();
-        refToNotification = FirebaseFactory.getInstance().getReference("Notifcations/"+user.getId());
-        refToSendNotification = FirebaseFactory.getInstance().getReference("Notifcations");
+        refToNotification = FirebaseFactory.getInstance().getReference("Solicitations/"+user.getId());
+        refToSendNotification = FirebaseFactory.getInstance().getReference("Solicitations");
         refToNotification.keepSynced(true);
-        notificationMap = new HashMap<>();
+        solicitationMap = new HashMap<>();
         observers = new ArrayList<>();
         addChildAddEventListenerToNotifications();
     }
 
-    public static NotificationDAO getInstance() {
-        if (notificationDAO == null) {
-            notificationDAO = new NotificationDAO();
+    public static SolicitationDAO getInstance() {
+        if (solicitationDAO == null) {
+            solicitationDAO = new SolicitationDAO();
         }
-        return notificationDAO;
+        return solicitationDAO;
     }
 
-    public void sendNotification(Notification notification){
-        if(notification.getId() == null){
-            ref=refToSendNotification.child(notification.getRide().getUser().getId())
-                    .child(notification.getSender().getId());
-            notification.setId(ref.getKey());
-            ref.setValue(notification);
+    public void sendNotification(Solicitation solicitation){
+        User receiver = solicitation.getRide().getUser();
+        User sender = solicitation.getSender();
+        if(solicitation.getId() == null){
+            ref=refToSendNotification.child(receiver.getId())
+                    .child(sender.getId());
+            solicitation.setId(ref.getKey());
+            ref.setValue(solicitation);
         }else{
-            refToSendNotification.child(notification.getRide().getUser().getId()).
-                    child(notification.getId()).setValue(notification);
+            refToSendNotification.child(solicitation.getRide().getUser().getId()).
+                    child(solicitation.getId()).setValue(solicitation);
         }
+        UserDAO.getInstance().addSolicitation(sender,receiver.getId());
 
     }
 
-    public void removeNotifications(Notification notification) {
-        refToNotification.child(notification.getRide().getUser().getId()).
-                child(notification.getId()).removeValue();
+    public void removeNotifications(Solicitation solicitation) {
+        refToNotification.child(solicitation.getRide().getUser().getId()).
+                child(solicitation.getId()).removeValue();
     }
 
     private void addChildAddEventListenerToNotifications() {
         ChildEventListener childEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                notificationMap.put(dataSnapshot.getKey(),dataSnapshot.getValue(Notification.class));
+                solicitationMap.put(dataSnapshot.getKey(),dataSnapshot.getValue(Solicitation.class));
                 notifyObservers();
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                notificationMap.put(dataSnapshot.getKey(), dataSnapshot.getValue(Notification.class));
+                solicitationMap.put(dataSnapshot.getKey(), dataSnapshot.getValue(Solicitation.class));
                 notifyObservers();
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                notificationMap.remove(dataSnapshot.getKey());
+                solicitationMap.remove(dataSnapshot.getKey());
                 notifyObservers();
 
             }
@@ -103,13 +106,13 @@ public class NotificationDAO implements Observable{
         refToNotification.addChildEventListener(childEventListener);
     }
 
-    public Notification getNotification(String idNotfication) {
-        return notificationMap.get(idNotfication);
+    public Solicitation getNotification(String idNotfication) {
+        return solicitationMap.get(idNotfication);
     }
 
     public void getNotification(String idNotification, final Observer observer) {
-        Notification notification = notificationMap.get(idNotification);
-        if (notification== null){
+        Solicitation solicitation = solicitationMap.get(idNotification);
+        if (solicitation == null){
             refToNotification.child(idNotification).addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -127,12 +130,12 @@ public class NotificationDAO implements Observable{
     }
 
 
-    public List<Notification> getNotifications() {
-        notifications = new ArrayList<>();
-        for (Map.Entry<String, Notification> notificationEntry : notificationMap.entrySet()){
-            notifications.add(notificationEntry.getValue());
+    public List<Solicitation> getSolicitations() {
+        solicitations = new ArrayList<>();
+        for (Map.Entry<String, Solicitation> notificationEntry : solicitationMap.entrySet()){
+            solicitations.add(notificationEntry.getValue());
         }
-        return notifications;
+        return solicitations;
     }
 
 
@@ -141,11 +144,11 @@ public class NotificationDAO implements Observable{
     @Override
     public void notifyObservers() {
         Type type = null;
-        List<Notification> notifications =null;
+        List<Solicitation> solicitations =null;
         for (Observer observer: observers){
-            if(notifications == null) {
-                notifications = getNotifications();
-                observer.update(this, notifications);
+            if(solicitations == null) {
+                solicitations = getSolicitations();
+                observer.update(this, solicitations);
             }
         }
     }

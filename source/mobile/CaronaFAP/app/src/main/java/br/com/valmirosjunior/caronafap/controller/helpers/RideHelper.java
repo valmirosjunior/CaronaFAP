@@ -10,10 +10,10 @@ import br.com.valmirosjunior.caronafap.R;
 import br.com.valmirosjunior.caronafap.controller.activities.RegisterRideActivity;
 import br.com.valmirosjunior.caronafap.controller.activities.ShowOneRideActivity;
 import br.com.valmirosjunior.caronafap.controller.activities.ShowRidesActivity;
-import br.com.valmirosjunior.caronafap.model.Notification;
 import br.com.valmirosjunior.caronafap.model.Ride;
-import br.com.valmirosjunior.caronafap.model.dao.NotificationDAO;
+import br.com.valmirosjunior.caronafap.model.Solicitation;
 import br.com.valmirosjunior.caronafap.model.dao.RideDAO;
+import br.com.valmirosjunior.caronafap.model.dao.SolicitationDAO;
 import br.com.valmirosjunior.caronafap.model.enums.Type;
 import br.com.valmirosjunior.caronafap.util.Constants;
 import br.com.valmirosjunior.caronafap.util.FaceBookManager;
@@ -37,11 +37,11 @@ public class RideHelper {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
-                Notification notification = new Notification();
-                notification.setRide(ride);
-                notification.setSend(Type.REQUEST);
-                notification.setSender(FaceBookManager.getCurrentUser());
-                NotificationDAO.getInstance().sendNotification(notification);
+                Solicitation solicitation = new Solicitation();
+                solicitation.setRide(ride);
+                solicitation.setSend(Type.REQUEST);
+                solicitation.setSender(FaceBookManager.getCurrentUser());
+                SolicitationDAO.getInstance().sendNotification(solicitation);
                 MessageUtil.showAlertDialogBuilder(context,
                         "Sucesso","Solicitação efetuada com Sucesso!");
             }
