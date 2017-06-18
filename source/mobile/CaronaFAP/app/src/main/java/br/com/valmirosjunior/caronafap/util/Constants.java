@@ -11,6 +11,5 @@ public class Constants {
     public static String TYPE_OBSERVER = "TYPE_OBSERVER";
     public static String ID_NOTIFICATION ="ID_NOTIFICATION";
     public static String ID_USER ="ID_USER";
-
-
+    public static String ID_SOLICITATION  = "ID_SOLICITATION";
 }

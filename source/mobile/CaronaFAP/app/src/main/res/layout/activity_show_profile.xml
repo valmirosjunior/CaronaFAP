@@ -6,7 +6,6 @@
     xmlns:facebook="http://schemas.android.com/apk/res-auto"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="br.com.valmirosjunior.caronafap.controller.activities.ShowProfileActivity"
-    tools:showIn="@layout/activity_show_profile"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"

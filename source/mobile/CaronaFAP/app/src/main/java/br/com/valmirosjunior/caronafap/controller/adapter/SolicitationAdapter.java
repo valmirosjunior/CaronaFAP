@@ -5,9 +5,12 @@ package br.com.valmirosjunior.caronafap.controller.adapter;
  */
 
 import android.content.Context;
+import android.content.Intent;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
@@ -17,9 +20,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.valmirosjunior.caronafap.R;
+import br.com.valmirosjunior.caronafap.controller.activities.ShowOneSolicitationActivity;
 import br.com.valmirosjunior.caronafap.model.Solicitation;
+import br.com.valmirosjunior.caronafap.util.Constants;
 
-public class NotificationAdapter extends BaseAdapter {
+public class SolicitationAdapter extends BaseAdapter implements AdapterView.OnItemClickListener {
 
     private List<Solicitation> solicitations;
     private Context context;
@@ -38,7 +43,7 @@ public class NotificationAdapter extends BaseAdapter {
                 new ArrayList<Solicitation>(): solicitations;
     }
 
-    public NotificationAdapter(Context context, List<Solicitation> solicitations) {
+    public SolicitationAdapter(Context context, List<Solicitation> solicitations) {
         setSolicitations(solicitations);
         this.context = context;
         inflater = (LayoutInflater) context.
@@ -65,14 +70,22 @@ public class NotificationAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
         final Solicitation solicitation = solicitations.get(position);
         View rowView;
-        rowView = inflater.inflate(R.layout.row_notication_list, null);
-        textView =(TextView) rowView.findViewById(R.id.textViewDescriptoinRide);
-        profilePictureView = (ProfilePictureView) rowView.findViewById(R.id.profilePictureUserListView);
+        rowView = inflater.inflate(R.layout.row_solicitation_list, null);
+        textView =(TextView) rowView.findViewById(R.id.tvDescriptoin);
+        profilePictureView = (ProfilePictureView) rowView.findViewById(R.id.ppvUser);
 
-        textView.setText((CharSequence) solicitation);
+        textView.setText(Html.fromHtml(solicitation.showDescription()));
         profilePictureView.setProfileId(solicitation.getSender().getId());
         return rowView;
     }
 
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+        Solicitation solicitation = (Solicitation) getItem(position);
+        Intent intent = new Intent(context, ShowOneSolicitationActivity.class);
+        intent.putExtra(Constants.ID_SOLICITATION,solicitation.getId());
+        context.startActivity(intent);
+    }
 
 }

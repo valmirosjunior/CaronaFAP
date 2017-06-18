@@ -117,15 +117,23 @@ public class Ride {
         String name = isMine()? "Você": user.getName();
         return  "<strong>"+name+"</strong> está: "+((type == Type.ORDERED) ?
                 "Pedindo " : "Oferecendo ")+" Carona!" +
-                "<br><strong>Horário: </strong>"+formaterTime()+"Hs"+
-                "<br><strong>Origem: </strong> "+origin.getAdress()+
-                "<br><strong>Para: </strong> "+destination.getAdress();
+               showRide();
     }
 
     public String showShortDescrpition(){
         return  getUser().getName()+" Está " + ((type == Type.ORDERED) ?
                 "Pedindo " : "Oferecendo ")+ "uma Carona! "+
-                "<br><strong>Horário:</strong> "+formaterTime()+"Hs"+
+                showRide();
+    }
+
+    public String showDescrpitionSolicitation(){
+        return  "<strong>Quero a carona que você está " + ((type == Type.ORDERED) ?
+                "Pedindo" : "Oferecendo")+"!</strong>"+
+                showRide();
+    }
+
+    private String showRide(){
+        return "<br><strong>Horário:</strong> "+formaterTime()+"Hs"+
                 "<br><strong>De: </strong> "+origin.shortAdress()+
                 "<br><strong>Para: </strong> "+destination.shortAdress();
     }

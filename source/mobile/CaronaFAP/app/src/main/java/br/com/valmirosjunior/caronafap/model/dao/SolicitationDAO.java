@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import br.com.valmirosjunior.caronafap.model.Ride;
 import br.com.valmirosjunior.caronafap.model.Solicitation;
 import br.com.valmirosjunior.caronafap.model.User;
 import br.com.valmirosjunior.caronafap.model.enums.Type;
@@ -24,24 +25,29 @@ import br.com.valmirosjunior.caronafap.pattern.Observer;
  * Created by junior on 10/05/17.
  */
 
-public class SolicitationDAO implements Observable{
+public class SolicitationDAO implements Observable,Observer{
 
     private static SolicitationDAO solicitationDAO;
-    private DatabaseReference refToNotification,refToSendNotification,ref;
+    private DatabaseReference refToSolitations,ref;
     private List<Observer> observers;
-    private HashMap<String,Solicitation> solicitationMap;
+    private HashMap<String,Solicitation> solicitationMap,auxMap;
     private List<Solicitation> solicitations;
+    private Solicitation solicitation;
+    private RideDAO rideDAO;
+    private UserDAO userDAO;
     private static  User user;
 
 
     private SolicitationDAO() {
         user = FaceBookManager.getCurrentUser();
-        refToNotification = FirebaseFactory.getInstance().getReference("Solicitations/"+user.getId());
-        refToSendNotification = FirebaseFactory.getInstance().getReference("Solicitations");
-        refToNotification.keepSynced(true);
+        refToSolitations = FirebaseFactory.getInstance().getReference("Solicitations");
+        refToSolitations.keepSynced(true);
         solicitationMap = new HashMap<>();
+        auxMap = new HashMap<>();
         observers = new ArrayList<>();
-        addChildAddEventListenerToNotifications();
+        rideDAO = RideDAO.getInstance();
+        userDAO = UserDAO.getInstance();
+        addValueEventListiner(refToSolitations);
     }
 
     public static SolicitationDAO getInstance() {
@@ -51,39 +57,67 @@ public class SolicitationDAO implements Observable{
         return solicitationDAO;
     }
 
-    public void sendNotification(Solicitation solicitation){
-        User receiver = solicitation.getRide().getUser();
-        User sender = solicitation.getSender();
+    public void sendSolicitation(Solicitation solicitation){
         if(solicitation.getId() == null){
-            ref=refToSendNotification.child(receiver.getId())
-                    .child(sender.getId());
+            ref= refToSolitations.push();
             solicitation.setId(ref.getKey());
             ref.setValue(solicitation);
         }else{
-            refToSendNotification.child(solicitation.getRide().getUser().getId()).
-                    child(solicitation.getId()).setValue(solicitation);
+            refToSolitations.child(solicitation.getId()).setValue(solicitation);
         }
-        UserDAO.getInstance().addSolicitation(sender,receiver.getId());
-
     }
 
-    public void removeNotifications(Solicitation solicitation) {
-        refToNotification.child(solicitation.getRide().getUser().getId()).
-                child(solicitation.getId()).removeValue();
+    private void updateMapSolicitation(DataSnapshot dataSnapshot){
+        try {
+            solicitation = dataSnapshot.getValue(Solicitation.class);
+            Ride ride = rideDAO.getRide(solicitation.getIdRide());
+            User user = userDAO.getUser(solicitation.getIdSender());
+            if (ride == null || user == null) {
+                auxMap.put(dataSnapshot.getKey(), solicitation);
+            }
+            solicitation.setSender(user);
+            solicitation.setRide(ride);
+            solicitationMap.put(dataSnapshot.getKey(), solicitation);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    private void addValueEventListiner(final DatabaseReference ref){
+        final ValueEventListener valueListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                try {
+                    if (dataSnapshot.exists()) {
+                        solicitationMap = new HashMap<>();
+                        for (DataSnapshot solitationSnapshot : dataSnapshot.getChildren()) {
+                            updateMapSolicitation(solitationSnapshot);
+                        }
+                        notifyObservers();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w("Cancelled Read Firebase", "loadPost:onCancelled", databaseError.toException());
+            }
+        };
+        ref.addValueEventListener(valueListener);
     }
 
     private void addChildAddEventListenerToNotifications() {
         ChildEventListener childEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                solicitationMap.put(dataSnapshot.getKey(),dataSnapshot.getValue(Solicitation.class));
-                notifyObservers();
+                updateMapSolicitation(dataSnapshot);
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                solicitationMap.put(dataSnapshot.getKey(), dataSnapshot.getValue(Solicitation.class));
-                notifyObservers();
+                updateMapSolicitation(dataSnapshot);
             }
 
             @Override
@@ -103,32 +137,12 @@ public class SolicitationDAO implements Observable{
                 Log.w("Cancelled Read Firebase", "loadPost:onCancelled", databaseError.toException());
             }
         };
-        refToNotification.addChildEventListener(childEventListener);
+        refToSolitations.addChildEventListener(childEventListener);
     }
 
-    public Solicitation getNotification(String idNotfication) {
+    public Solicitation getSolicitation(String idNotfication) {
         return solicitationMap.get(idNotfication);
     }
-
-    public void getNotification(String idNotification, final Observer observer) {
-        Solicitation solicitation = solicitationMap.get(idNotification);
-        if (solicitation == null){
-            refToNotification.child(idNotification).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    observer.update(dataSnapshot.getValue(User.class));
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-                    observer.update(null);
-                }
-            });
-        }else{
-            observer.update(user);
-        }
-    }
-
 
     public List<Solicitation> getSolicitations() {
         solicitations = new ArrayList<>();
@@ -138,25 +152,72 @@ public class SolicitationDAO implements Observable{
         return solicitations;
     }
 
+    public List<Solicitation> getSolicitationsReceived(){
+        User user = FaceBookManager.getCurrentUser();
+        solicitations= new ArrayList<>();
+        for (Map.Entry<String, Solicitation> solicitationEntry : solicitationMap.entrySet()){
+            solicitation= solicitationEntry.getValue();
+            if(user.equals(solicitation.getRide().getUser())){
+                solicitations.add(solicitationEntry.getValue());
+            }
+        }
+        return solicitations;
+
+    }
+
+    public List<Solicitation> getSolicitationsSended(){
+        User user = FaceBookManager.getCurrentUser();
+        solicitations= new ArrayList<>();
+        for (Map.Entry<String, Solicitation> solicitationEntry : solicitationMap.entrySet()){
+            solicitation= solicitationEntry.getValue();
+            if(user.equals(solicitation.getSender())){
+                solicitations.add(solicitationEntry.getValue());
+            }
+        }
+        return solicitations;
+
+    }
+
 
 
 
     @Override
     public void notifyObservers() {
-        Type type = null;
-        List<Solicitation> solicitations =null;
-        for (Observer observer: observers){
-            if(solicitations == null) {
-                solicitations = getSolicitations();
-                observer.update(this, solicitations);
+        if(auxMap.size()>0){
+            rideDAO.addObserver(this);
+            rideDAO.notifyObservers();
+            userDAO.addObserver(this);
+            userDAO.notifyObservers();
+        }else{
+            Type type = null;
+            List<Solicitation> send = null,receive = null;
+            for (Observer observer: observers){
+                if(solicitations == null) {
+                    solicitations = getSolicitations();
+                    observer.update(this, solicitations);
+                }
+                type = observer.getType();
+                if(type == Type.SEND){
+                    if( send == null){
+                        send = getSolicitationsSended();
+                    }
+                    observer.update(this,send);
+                } else {
+                    if (receive == null){
+                        receive = getSolicitationsReceived();
+                    }
+                    observer.update(this,receive);
+                }
             }
         }
     }
 
-    public synchronized void deleteObservers() {
+    @Override
+    public void deleteObservers() {
         observers = new ArrayList<>();
     }
 
+    @Override
     public void addObserver(Observer o) {
         if(!observers.contains(o)) {
             observers.add(o);
@@ -165,11 +226,41 @@ public class SolicitationDAO implements Observable{
 
     }
 
+    @Override
     public void deleteObserver(Observer o) {
         if (observers.contains(o)){
             observers.remove(o);
         }
     }
 
+    @Override
+    public void update(Object object) {
+        Ride ride;
+        User user;
+        for (Map.Entry<String, Solicitation> solicitationEntry : auxMap.entrySet()){
+            ride = rideDAO.getRide(solicitationEntry.getValue().getIdRide());
+            user = userDAO.getUser(solicitationEntry.getValue().getIdSender());
+            if(ride!= null){
+                solicitationEntry.getValue().setRide(ride);
+                return;
+            }
+            if(user!= null){
+                solicitationEntry.getValue().setSender(user);
+                return;
+            }
+            auxMap.remove(solicitationEntry.getKey());
+        }
+        notifyObservers();
+    }
+
+    @Override
+    public void update(Observable observable, Object object) {
+        update(object);
+    }
+
+    @Override
+    public Type getType() {
+        return null;
+    }
 }
 

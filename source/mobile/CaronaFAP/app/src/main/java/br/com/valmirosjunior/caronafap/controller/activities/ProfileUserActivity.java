@@ -14,19 +14,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.facebook.login.widget.ProfilePictureView;
 
-import java.util.ArrayList;
-
 import br.com.valmirosjunior.caronafap.R;
-import br.com.valmirosjunior.caronafap.controller.adapter.NotificationAdapter;
-import br.com.valmirosjunior.caronafap.model.Solicitation;
 import br.com.valmirosjunior.caronafap.model.User;
-import br.com.valmirosjunior.caronafap.model.dao.SolicitationDAO;
 import br.com.valmirosjunior.caronafap.model.enums.Status;
 import br.com.valmirosjunior.caronafap.model.enums.Type;
 import br.com.valmirosjunior.caronafap.pattern.Observable;
@@ -39,8 +32,6 @@ public class ProfileUserActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, Observer {
     private User user;
     private FaceBookManager faceBookManager;
-    private SolicitationDAO solicitationDAO;
-    private NotificationAdapter notificationAdapter;
     private ProfilePictureView profilePictureNav,profilePictureMain;
     private TextView textViewUser, textViewWelcome,textViewMessage;
 
@@ -78,28 +69,8 @@ public class ProfileUserActivity extends AppCompatActivity
     }
 
     private void init(NavigationView navigationView){
-        notificationAdapter = new NotificationAdapter(this,new ArrayList<Solicitation>());
-        ListView listView = (ListView) findViewById(R.id.listViewShowNotifications);
-        listView.setAdapter(notificationAdapter);
-
-        listView.setOnItemClickListener(new android.widget.AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
-                Solicitation solicitation = (Solicitation) parent.getItemAtPosition(position);
-
-                Intent intent = new Intent(ProfileUserActivity.this, ShowNotificationActivity.class);
-                intent.putExtra(Constants.ID_NOTIFICATION, solicitation.getId());
-                startActivity(intent);
-            }
-        });
-
-
         faceBookManager = new FaceBookManager(this);
-        solicitationDAO = SolicitationDAO.getInstance();
         faceBookManager.addObserver(this);
-
-        solicitationDAO.addObserver(this);
-
         user = faceBookManager.getCurrentUser();
 
         textViewWelcome = (TextView) findViewById(R.id.textViewWelcome);
@@ -114,22 +85,8 @@ public class ProfileUserActivity extends AppCompatActivity
         profilePictureMain.setProfileId(user.getId());
         profilePictureNav.setProfileId(user.getId());
 
-        solicitationDAO.notifyObservers();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        solicitationDAO = SolicitationDAO.getInstance();
-        solicitationDAO.addObserver(this);
-        update(solicitationDAO, solicitationDAO.getSolicitations());
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        solicitationDAO.deleteObserver(this);
-    }
 
     @Override
     public void onBackPressed() {
@@ -170,6 +127,8 @@ public class ProfileUserActivity extends AppCompatActivity
             startActivity(new Intent(this, RegisterRideActivity.class));
         } else if (id == R.id.nav_seeRides) {
             startActivity(new Intent(this, ShowRidesActivity.class));
+        }else if(id == R.id.nav_showSolicitation){
+            startActivity(new Intent(this,ShowSolicitationsActivity.class));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -202,39 +161,39 @@ public class ProfileUserActivity extends AppCompatActivity
 
     @Override
     public void update(Observable observable, Object o) {
-        if ( observable instanceof FaceBookManager ){
-            Status status;
-            AlertDialog.Builder buider = MessageUtil.createAlertDialogBuilder(this);
-            try {
-                status = (Status) o;
-                switch (status) {
-                    case SUCCESS:
-                        startActivity(new Intent(this,MainActivity.class));
-                        faceBookManager.deleteObserver(this);
-                        this.finish();
-                        break;
-                    case ERROR:
-                        buider.setTitle(R.string.error);
-                        buider.setMessage(R.string.internal_error);
-                        buider.show();
-                        break;
-                }
-            }catch (Exception e){
-                buider.setTitle(R.string.error);
-                buider.setMessage(R.string.internal_error);
-                buider.show();
+        Status status;
+        AlertDialog.Builder buider = MessageUtil.createAlertDialogBuilder(this);
+        try {
+            status = (Status) o;
+            switch (status) {
+                case SUCCESS:
+                    startActivity(new Intent(this,MainActivity.class));
+                    faceBookManager.deleteObserver(this);
+                    this.finish();
+                    break;
+                case ERROR:
+                    buider.setTitle(R.string.error);
+                    buider.setMessage(R.string.internal_error);
+                    buider.show();
+                    break;
             }
-        }else {
-//            List<Solicitation> notifications = (List<Solicitation>)o;
-//            notificationAdapter.notifyDataSetInvalidated();
-//            notificationAdapter.setSolicitations(notifications);
-//            notificationAdapter.notifyDataSetChanged();
+        }catch (Exception e){
+            buider.setTitle(R.string.error);
+            buider.setMessage(R.string.internal_error);
+            buider.show();
         }
+
     }
 
 
     @Override
     public Type getType() {
         return null;
+    }
+
+    public void seeReputation(View view) {
+        Intent intent = new Intent(this,ShowProfileActivity.class);
+        intent.putExtra(Constants.ID_USER, user.getId());
+        startActivity(intent);
     }
 }

@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,28 +40,37 @@ public class ShowProfileActivity extends AppCompatActivity implements Observer{
     private String idUser;
     private User user;
     private UserDAO userDAO;
+    private boolean updated =false;
+    private FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_profile);
 
-        rbUser = (RatingBar) findViewById(R.id.rbUser);
-        ppvUser =(ProfilePictureView) findViewById(R.id.ppvUser);
-
         Intent intent = getIntent();
         idUser=  intent.getStringExtra(Constants.ID_USER);
         userDAO = UserDAO.getInstance();
-        user = userDAO.getUser(idUser);
-        setTitle(user.getName());
+
+        rbUser = (RatingBar) findViewById(R.id.rbUser);
+        ppvUser =(ProfilePictureView) findViewById(R.id.ppvUser);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
 
         comentAdapter = new ComentAdapter(this,new ArrayList<Coment>());
         lvComents = (ListView) findViewById(R.id.lvComents);
         lvComents.setAdapter(comentAdapter);
         ppvUser.setProfileId(idUser);
-        userDAO.addObserver(this);
-        update(userDAO);
 
+        permitComent();
+
+        user = userDAO.getUser(idUser);
+        userDAO.addObserver(this);
+    }
+
+    private void permitComent() {
+        if(FaceBookManager.getCurrentUser().getId().equals(idUser)){
+            fab.setVisibility(View.GONE);
+        }
     }
 
     public void openProfile (View view){
@@ -130,14 +140,17 @@ public class ShowProfileActivity extends AppCompatActivity implements Observer{
     @Override
     public void update(Object object) {
         user = userDAO.getUser(idUser);
-        comentAdapter.notifyDataSetInvalidated();
-        comentAdapter.setComents(user.getComents());
-        comentAdapter.notifyDataSetChanged();
-        rbUser.setRating(comentAdapter.getNote());
+        if(user != null){
+            comentAdapter.notifyDataSetInvalidated();
+            comentAdapter.setComents(user.getComents());
+            comentAdapter.notifyDataSetChanged();
+            rbUser.setRating(comentAdapter.getNote());
+        }
     }
 
     @Override
     public void update(Observable observable, Object object) {
+        update(object);
 
     }
 

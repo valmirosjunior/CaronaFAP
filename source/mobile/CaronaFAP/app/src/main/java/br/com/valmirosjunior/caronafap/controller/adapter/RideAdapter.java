@@ -83,7 +83,6 @@ public class RideAdapter extends BaseAdapter implements AdapterView.OnItemClickL
         Ride ride = (Ride) getItem(position);
         Intent intent = new Intent(context, ShowOneRideActivity.class);
         intent.putExtra(Constants.ID_RIDE,ride.getId());
-        Log.d("Ride", ride.toString());
         context.startActivity(intent);
     }
 }

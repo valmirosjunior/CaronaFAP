@@ -10,7 +10,7 @@
 
     <com.facebook.login.widget.ProfilePictureView
         android:id="@+id/ppvUser"
-        facebook:com_facebook_preset_size="small"
+        facebook:com_facebook_preset_size="normal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

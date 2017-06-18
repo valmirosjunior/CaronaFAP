@@ -10,14 +10,17 @@
             android:id="@+id/nav_seeRides"
             android:icon="@android:drawable/ic_menu_search"
             android:title="@string/see_rides" />
+
+        <item
+            android:id="@+id/nav_showSolicitation"
+            android:icon="@android:drawable/ic_dialog_alert"
+            android:title="@string/solicitations" />
+
         <item
             android:id="@+id/nav_seeMessages"
             android:icon="@android:drawable/ic_dialog_email"
             android:title="@string/messages" />
-        <item
-            android:id="@+id/nav_seeSolicitation"
-            android:icon="@android:drawable/ic_dialog_alert"
-            android:title="@string/solicitations" />
+
     </group>
 
 

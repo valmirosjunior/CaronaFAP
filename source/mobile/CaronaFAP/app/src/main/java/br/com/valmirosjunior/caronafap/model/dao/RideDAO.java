@@ -41,7 +41,8 @@ public class RideDAO implements Observable,Observer {
         rideMap = new HashMap<>();
         auxMap= new HashMap<>();
         observers = new ArrayList<>();
-        addChildAddEventListenerToRides();
+        //addChildAddEventListenerToRides();
+        addValueEventListiner(refToRides);
     }
 
     public static RideDAO getInstance() {
@@ -81,7 +82,32 @@ public class RideDAO implements Observable,Observer {
         }
         ride.setUser(user);
         rideMap.put(dataSnapshot.getKey(),ride);
-        notifyObservers();
+    }
+
+
+    private void addValueEventListiner(final DatabaseReference ref){
+        final ValueEventListener valueListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                try {
+                    if (dataSnapshot.exists()) {
+                        rideMap = new HashMap<>();
+                        for (DataSnapshot rideSnapshot : dataSnapshot.getChildren()) {
+                            updateMapRide(rideSnapshot);
+                        }
+                        notifyObservers();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w("Cancelled Read Firebase", "loadPost:onCancelled", databaseError.toException());
+            }
+        };
+        ref.addValueEventListener(valueListener);
     }
 
     private void addChildAddEventListenerToRides() {
@@ -216,7 +242,8 @@ public class RideDAO implements Observable,Observer {
     @Override
     public void addObserver(Observer o) {
         if (!observers.contains(o)){
-        observers.add(o);
+            observers.add(o);
+            notifyObservers();
         }
 
     }
@@ -232,10 +259,11 @@ public class RideDAO implements Observable,Observer {
         User user;
         for (Map.Entry<String, Ride> rideEntry : auxMap.entrySet()){
             user = userDAO.getUser(rideEntry.getValue().getIdUser());
-            if(user!= null){
-                rideEntry.getValue().setUser(user);
-                auxMap.remove(rideEntry.getKey());
+            if(user== null){
+                return;
             }
+            rideEntry.getValue().setUser(user);
+            auxMap.remove(rideEntry.getKey());
         }
         notifyObservers();
     }

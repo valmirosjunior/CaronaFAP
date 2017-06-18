@@ -13,6 +13,8 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
+import br.com.valmirosjunior.caronafap.model.Ride;
+
 /**
  * Created by junior on 10/04/17.
  */
@@ -67,4 +69,13 @@ public class Util {
     }
 
 
+    public static void seeOnMap(Context contex,Ride ride) {
+        String origin, dest;
+        origin = ride.getOrigin().getAdress();
+        dest = ride.getDestination().getAdress();
+        Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                Uri.parse("http://maps.google.com/maps?saddr=" +
+                        origin+"&daddr=" +dest));
+        contex.startActivity(intent);
+    }
 }

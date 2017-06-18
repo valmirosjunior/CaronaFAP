@@ -29,6 +29,7 @@ public class UserDAO implements Observable {
     private List<User> users;
     private User user;
     private static UserDAO userDAO;
+    private ValueEventListener valueListener;
 
 
     private UserDAO() {
@@ -37,7 +38,7 @@ public class UserDAO implements Observable {
         userMap = new HashMap<>();
         users = new ArrayList<>();
         observers = new ArrayList<>();
-        addChildAddEventListener();
+        addValueEventListiner(refToUsers);
     }
 
     public static UserDAO getInstance() {
@@ -56,7 +57,6 @@ public class UserDAO implements Observable {
     }
 
     public void saveUser(final User user) {
-        System.out.println(user);
         if (userMap.get(user.getId()) != null){
             Map<String,Object> nameMap = new HashMap<>();
             nameMap.put("name",user.getName());
@@ -108,6 +108,34 @@ public class UserDAO implements Observable {
 
     }
 
+    private void addValueEventListiner(final DatabaseReference ref){
+        valueListener = new ValueEventListener() {
+
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                try {
+                    if (dataSnapshot.exists()) {
+                        userMap = new HashMap<>();
+                        for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                            userMap.put(userSnapshot.getKey(), userSnapshot.getValue(User.class));
+                        }
+                        notifyObservers();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w("Cancelled Read Firebase", "loadPost:onCancelled", databaseError.toException());
+            }
+        };
+        ref.addValueEventListener(valueListener);
+
+    }
+
     private void addChildAddEventListener() {
         ChildEventListener childEventListener = new ChildEventListener() {
             @Override
@@ -154,7 +182,6 @@ public class UserDAO implements Observable {
         user = dataSnapshot.getValue(User.class);
         userMap.put(dataSnapshot.getKey(),user);
         users.add(user);
-        notifyObservers();
     }
 
     @Override

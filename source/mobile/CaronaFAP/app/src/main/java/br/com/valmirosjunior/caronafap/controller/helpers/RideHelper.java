@@ -39,9 +39,9 @@ public class RideHelper {
 
                 Solicitation solicitation = new Solicitation();
                 solicitation.setRide(ride);
-                solicitation.setSend(Type.REQUEST);
+                solicitation.setMessageSended(Type.REQUEST);
                 solicitation.setSender(FaceBookManager.getCurrentUser());
-                SolicitationDAO.getInstance().sendNotification(solicitation);
+                SolicitationDAO.getInstance().sendSolicitation(solicitation);
                 MessageUtil.showAlertDialogBuilder(context,
                         "Sucesso","Solicitação efetuada com Sucesso!");
             }

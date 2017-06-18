@@ -52,7 +52,7 @@
             android:name=".controller.activities.ProfileUserActivity"
             android:label="@string/title_activity_profile_user"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".controller.activities.ShowNotificationActivity" />
+        <activity android:name=".controller.activities.ShowOneSolicitationActivity" />
         <!--
             activity
             android:name=".controller.activities.ShowProfileActivity"
@@ -64,7 +64,7 @@
             android:screenOrientation="portrait" />
         <activity android:name=".controller.activities.ConversationActivity" />
         <activity android:name=".controller.activities.ShowOneRideActivity" />
-        <activity android:name=".controller.activities.ShowSolicitations"></activity>
+        <activity android:name=".controller.activities.ShowSolicitationsActivity"></activity>
     </application>
 
 </manifest>

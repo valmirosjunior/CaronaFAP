@@ -79,5 +79,12 @@
     <string name="confirm_send_coment">Deseja Enviar o Comentário?</string>
     <string name="send_coment_succes">Comentário enviado com susseo</string>
     <string name="note">Reputação</string>
+    <string name="sended">Enviadas</string>
+    <string name="all">Tudo</string>
+    <string name="received">Recebidas</string>
+    <string name="reputation">Reputação</string>
+    <string name="solicitations_receiveds">Solicitações Recebidas</string>
+    <string name="solicitations_sendeds">Solicitações enviadas</string>
+    <string name="see_reputation">Veja Sua reputação</string>
 
 </resources>

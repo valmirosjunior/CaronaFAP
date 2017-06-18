@@ -1,9 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="br.com.valmirosjunior.caronafap.controller.activities.ShowSolicitations">
+    tools:context="br.com.valmirosjunior.caronafap.controller.activities.ShowSolicitationsActivity"
+    android:orientation="vertical">
 
-</android.support.constraint.ConstraintLayout>
+
+    <!--TextView
+        android:id="@+id/tvMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:gravity="center"
+        android:text="@string/received"
+        /-->
+
+    <!--LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="5dp">
+        <Button
+            android:background="@color/colorPrimary"
+            android:id="@+id/btSolicitationsAll"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            style="@style/TextAppearance.AppCompat.Large"
+            android:text="@string/all"
+            android:textColor="@android:color/background_light"
+            />
+
+        <Button
+            android:background="@color/colorPrimary"
+            android:id="@+id/btSolicitationsreceiveds"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            style="@style/TextAppearance.AppCompat.Large"
+            android:text="@string/received"
+            android:textColor="@android:color/background_light"
+            />
+
+        <Button
+            android:background="@color/colorPrimary"
+            android:id="@+id/btSolicitationsSend"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            style="@style/TextAppearance.AppCompat.Large"
+            android:text="@string/sended"
+            android:textColor="@android:color/background_light"
+            />
+    </LinearLayout-->
+
+    <Button
+        android:background="@color/colorPrimary"
+        android:id="@+id/btChange"
+        android:layout_height="wrap_content"
+        android:layout_margin="2dp"
+        android:layout_width="match_parent"
+        style="@style/TextAppearance.AppCompat.Large"
+        android:text="@string/solicitations_sendeds"
+        android:textColor="@android:color/background_light"
+        android:onClick="changeType"
+        />
+    <ListView
+            android:id="@+id/lvSolicitations"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+</LinearLayout>

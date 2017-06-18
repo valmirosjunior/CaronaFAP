@@ -9,7 +9,7 @@ android:layout_marginTop="5sp"
 android:layout_marginBottom="5sp">
 
 <com.facebook.login.widget.ProfilePictureView
-    android:id="@+id/profilePictureUserListView"
+    android:id="@+id/ppvUser"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     facebook:com_facebook_preset_size="small"
@@ -19,7 +19,7 @@ android:layout_marginBottom="5sp">
     />
 
 <TextView
-    android:id="@+id/textViewDescriptoinRide"
+    android:id="@+id/tvDescriptoin"
     android:layout_gravity="center"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"

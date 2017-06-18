@@ -41,8 +41,6 @@ public class ShowRidesActivity extends AppCompatActivity implements Observer {
         init();
         updateMessage();
         rideDAO =RideDAO.getInstance();
-        rideDAO.addObserver(this);
-        rideDAO.notifyObservers();
         rideHelper = new RideHelper(this,rideDAO);
     }
 
@@ -73,17 +71,9 @@ public class ShowRidesActivity extends AppCompatActivity implements Observer {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        rideDAO.addObserver(this);
-        rideDAO.notifyObservers();
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
         rideDAO.addObserver(this);
-        rideDAO.notifyObservers();
     }
 
     @Override
@@ -92,11 +82,6 @@ public class ShowRidesActivity extends AppCompatActivity implements Observer {
         rideDAO.deleteObserver(this);
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        rideDAO.deleteObserver(this);
-    }
 
     private void changeTypeObserver() {
         updateMessage();

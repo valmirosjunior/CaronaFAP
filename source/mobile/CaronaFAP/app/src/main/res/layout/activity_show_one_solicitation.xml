@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:facebook="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="br.com.valmirosjunior.caronafap.controller.activities.ShowOneSolicitationActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_margin="2dp"
+        android:layout_gravity="center_horizontal"
+        >
+        <com.facebook.login.widget.ProfilePictureView
+            android:id="@+id/profilePictureUser"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:onClick="seeComents"/>
+
+        <TextView
+            android:id="@+id/tvDescriptoinSolicitation"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/description"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:layout_margin="10dp"/>
+
+
+    </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvDescriptoinRide"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/description"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:layout_margin="5dp"/>
+
+            <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_margin="2dp"
+            >
+
+            <Button
+                android:id="@+id/butSeeProfile"
+                style="@style/Base.TextAppearance.AppCompat.Large"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/colorPrimary"
+                android:onClick="seeProfile"
+                android:layout_margin="2dp"
+                android:padding="2dp"
+                android:text="@string/see_profile_on_facebook"
+                android:textColor="@android:color/background_light"
+                />
+
+            <Button
+                android:id="@+id/butSeeMap"
+                style="@style/Base.TextAppearance.AppCompat.Large"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/colorPrimary"
+                android:onClick="seeRoute"
+                android:layout_margin="2dp"
+                android:padding="2dp"
+                android:text="@string/see_on_map"
+                android:textColor="@android:color/background_light"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layoutButtons"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_margin="2dp"
+           >
+            <Button
+                android:id="@+id/btAccept"
+                style="@style/Base.TextAppearance.AppCompat.Large"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/colorPrimary"
+                android:onClick="respondSolicitation"
+                android:text="@string/accept"
+                android:textColor="@android:color/background_light"
+                android:layout_margin="2dp"
+                android:padding="2dp"
+                />
+
+            <Button
+                android:id="@+id/btReject"
+                style="@style/Base.TextAppearance.AppCompat.Large"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@android:color/holo_red_dark"
+                android:onClick="respondSolicitation"
+                android:text="@string/reject"
+                android:textColor="@android:color/background_light"
+                android:layout_margin="2dp"
+                android:padding="2dp"
+                />
+        </LinearLayout>
+
+        </LinearLayout>
+
+
+</ScrollView>

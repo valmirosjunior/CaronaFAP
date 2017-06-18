@@ -47,7 +47,6 @@ public class ShowOneRideActivity extends AppCompatActivity {
     }
 
     private void updateFields(Ride ride){
-
         ppvUser.setProfileId(ride.getUser().getId());
         tvdescription.setText(Html.fromHtml(ride.showDescription()));
     }

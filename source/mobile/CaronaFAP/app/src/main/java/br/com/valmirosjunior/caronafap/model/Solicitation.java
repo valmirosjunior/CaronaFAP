@@ -3,17 +3,18 @@ package br.com.valmirosjunior.caronafap.model;
 import com.google.firebase.database.Exclude;
 
 import br.com.valmirosjunior.caronafap.model.enums.Type;
+import br.com.valmirosjunior.caronafap.util.FaceBookManager;
 
 /**
  * Created by junior on 10/05/17.
  */
 
 public class Solicitation {
-    private String id;
+    private String id,idSender;
     private Ride ride;
     private User sender;
     private String idRide;
-    private Type send, receive;
+    private Type messageSended, messageResponse;
 
     public String getId() {
         return id;
@@ -35,6 +36,13 @@ public class Solicitation {
         this.ride = ride;
     }
 
+    public String getIdSender() {
+        return idSender;
+    }
+
+    public void setIdSender(String idSender) {
+        this.idSender = idSender;
+    }
 
     @Exclude
     public User getSender() {
@@ -42,6 +50,9 @@ public class Solicitation {
     }
 
     public void setSender(User sender) {
+        if(sender != null){
+            setIdSender(sender.getId());
+        }
         this.sender = sender;
     }
 
@@ -55,26 +66,42 @@ public class Solicitation {
 
 
 
-
-    public Type getSend() {
-        return send;
+    public Type getMessageSended() {
+        return messageSended;
     }
 
-    public void setSend(Type send) {
-        this.send = send;
+    public void setMessageSended(Type messageSended) {
+        this.messageSended = messageSended;
     }
 
-    public Type getReceive() {
-        return receive;
+    public Type getMessageResponse() {
+        return messageResponse;
     }
 
-    public void setReceive(Type receive) {
-        this.receive = receive;
+    public void setMessageResponse(Type messageResponse) {
+        this.messageResponse = messageResponse;
     }
 
     @Override
     public String toString() {
-        return sender.getName()+ "\n"+((send == Type.REQUEST)? "Enviou uma solicitação" :
-                ((send == Type.CONFIRM)? "Aceitou sua solicitação" :"Rejeitou sua  Solicitação"));
+        return  "Solitation "+id;
+//        return sender.getName()+ "\n"+((messageSended == Type.REQUEST)? "Enviou uma solicitação" :
+//                ((messageSended == Type.CONFIRM)? "Aceitou sua solicitação" :"Rejeitou sua  Solicitação"));
+    }
+
+    private boolean isMine(){
+        return FaceBookManager.getCurrentUser().equals(getSender());
+    }
+
+    public String showDescription() {
+        String senderName = isMine()? "Você": getSender().getName();
+        String receiveName = !senderName.equals("Você")? "Você" : getRide().getUser().getName();
+        return  "<strong>"+senderName+"</strong> "+
+                "Enviou Uma solicitação!</strong> <br><strong>" +
+                 ((messageResponse == null) ? "No entanto "+receiveName+" ainda não respondeu" :
+                  ((messageResponse == Type.REJECT) ?
+                                 "Porém "+ receiveName+" Não aceitou!" : receiveName+" Confirmou a solicitação!"))
+                +"</strong>";
+
     }
 }
