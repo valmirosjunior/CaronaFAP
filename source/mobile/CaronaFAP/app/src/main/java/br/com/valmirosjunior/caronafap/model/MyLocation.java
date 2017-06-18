@@ -11,7 +11,7 @@ import java.io.Serializable;
 public class MyLocation implements Serializable{
 
     private double latitude,longitude;
-    private String idPlace, name, adress;
+    private String adress;
 
     public double getLatitude() {
 
@@ -28,22 +28,6 @@ public class MyLocation implements Serializable{
 
     public void setLongitude(double longitude) {
         this.longitude = longitude;
-    }
-
-    public String getIdPlace() {
-        return idPlace;
-    }
-
-    public void setIdPlace(String idPlace) {
-        this.idPlace = idPlace;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getAdress() {

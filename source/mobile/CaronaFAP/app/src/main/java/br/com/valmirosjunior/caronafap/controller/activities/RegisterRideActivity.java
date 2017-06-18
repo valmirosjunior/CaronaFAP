@@ -92,10 +92,8 @@ public class RegisterRideActivity extends AppCompatActivity {
             if (requestCode == PLACE_PICKER_REQUEST) {
                 if (resultCode == RESULT_OK) {
                     Place place = PlacePicker.getPlace(this, data);
-                    locationAdress.setIdPlace(place.getId());
                     locationAdress.setLatitude(place.getLatLng().latitude);
                     locationAdress.setLongitude(place.getLatLng().longitude);
-                    locationAdress.setName(place.getName().toString());
                     locationAdress.setAdress(place.getAddress().toString());
                     editAdress.setText(place.getAddress());
                 }
